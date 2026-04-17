@@ -1,0 +1,3174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meow Bot</title>
+    <script>
+        (function () {
+            var storageKey = "meow-bot-theme";
+            var savedTheme = localStorage.getItem(storageKey);
+            document.documentElement.setAttribute("data-theme", savedTheme || "light");
+        }());
+    </script>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #dbe7f0;
+            --shell: #fffdfb;
+            --surface: #ffffff;
+            --surface-soft: #f1ebff;
+            --surface-warm: #fff2e6;
+            --surface-lime: #edf7de;
+            --surface-dark: #121212;
+            --text: #231819;
+            --muted: #6d6161;
+            --line: rgba(35, 24, 25, 0.12);
+            --accent: #6f35ff;
+            --accent-2: #8c6cff;
+            --shadow: 0 20px 50px rgba(35, 24, 25, 0.08);
+            --radius-xl: 30px;
+            --radius-lg: 24px;
+            --radius-md: 18px;
+            --max-width: 1280px;
+        }
+
+        html[data-theme="dark"] {
+            color-scheme: dark;
+            --bg: #0b1020;
+            --shell: #121a30;
+            --surface: #18233b;
+            --surface-soft: #2a2250;
+            --surface-warm: #3a2747;
+            --surface-lime: #1e3550;
+            --surface-dark: #060914;
+            --text: #fff6fb;
+            --muted: #d8cbe3;
+            --line: rgba(184, 191, 255, 0.14);
+            --accent: #9a7cff;
+            --accent-2: #ff8fcf;
+            --shadow: 0 28px 70px rgba(0, 0, 0, 0.42);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            background:
+                radial-gradient(circle at 12% 10%, rgba(111, 53, 255, 0.22), transparent 22%),
+                radial-gradient(circle at 86% 14%, rgba(140, 108, 255, 0.18), transparent 24%),
+                radial-gradient(circle at 50% 78%, rgba(255, 157, 108, 0.14), transparent 28%),
+                linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 74%, #ffffff 26%) 100%);
+            color: var(--text);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: clamp(0px, calc((100vw - 1280px) / 2), 200px);
+            pointer-events: none;
+            opacity: 0.22;
+            z-index: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='280' viewBox='0 0 180 280'%3E%3Cg fill='none' stroke='%239f84ff' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M51 80c0-24 16-39 35-39s35 15 35 39c0 27-19 45-35 45S51 107 51 80Z'/%3E%3Cpath d='M61 53 43 22l5 33M111 53l18-31-5 33'/%3E%3Cpath d='M73 81h1M97 81h1M78 98c4 4 11 7 15 0'/%3E%3Cpath d='M68 92 36 87M68 101 34 103M104 92l32-5M104 101l34 2'/%3E%3C/g%3E%3Cg fill='%23c8b8ff'%3E%3Ccircle cx='36' cy='170' r='10'/%3E%3Ccircle cx='24' cy='158' r='5'/%3E%3Ccircle cx='48' cy='158' r='5'/%3E%3Ccircle cx='19' cy='175' r='5'/%3E%3Ccircle cx='53' cy='175' r='5'/%3E%3C/g%3E%3Cg fill='%23ffb48f'%3E%3Ccircle cx='139' cy='226' r='10'/%3E%3Ccircle cx='127' cy='214' r='5'/%3E%3Ccircle cx='151' cy='214' r='5'/%3E%3Ccircle cx='122' cy='231' r='5'/%3E%3Ccircle cx='156' cy='231' r='5'/%3E%3C/g%3E%3C/svg%3E");
+            background-repeat: repeat-y;
+            background-position: center top;
+            background-size: 140px auto;
+        }
+
+        body::before {
+            left: 0;
+        }
+
+        body::after {
+            right: 0;
+            transform: scaleX(-1);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        .app-shell {
+            width: min(100% - 20px, var(--max-width));
+            margin: 14px auto;
+            background: var(--shell);
+            border-radius: 34px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--line);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 18px 28px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+        }
+
+        .brand-mark {
+            width: 30px;
+            height: 30px;
+            border-radius: 999px;
+            display: block;
+            object-fit: cover;
+            border: none;
+        }
+
+        .nav-tabs {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+
+        .tab-link {
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--muted);
+            padding: 10px 14px;
+            border-radius: 999px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.84rem;
+            letter-spacing: 0.04em;
+            font-weight: 700;
+        }
+
+        .tab-link.active {
+            color: var(--text);
+            border-color: var(--line);
+            background: color-mix(in srgb, var(--surface-soft) 62%, transparent);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent);
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            min-height: 44px;
+            min-width: 44px;
+            padding: 0 14px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--text);
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+
+        .pill-button,
+        .theme-toggle {
+            min-height: 44px;
+            padding: 0 18px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--text);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+        }
+
+        .page {
+            display: none;
+            padding: 0 14px 14px;
+        }
+
+        .page.active {
+            display: block;
+            animation: pageFade 0.24s ease;
+        }
+
+        .is-hidden {
+            display: none !important;
+        }
+
+        .grid {
+            display: grid;
+            gap: 14px;
+        }
+
+        .hero-grid {
+            grid-template-columns: 1.2fr 0.8fr;
+        }
+
+        .two-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .three-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .four-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .panel {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--line);
+            overflow: hidden;
+            min-height: 100%;
+        }
+
+        .panel-inner {
+            padding: 28px 26px;
+        }
+
+        .hero-title {
+            margin: 0;
+            font-size: clamp(3rem, 8vw, 6.2rem);
+            line-height: 0.9;
+            letter-spacing: -0.08em;
+            text-transform: uppercase;
+        }
+
+        .hero-title .thin {
+            display: block;
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        .intro-box {
+            margin-top: 28px;
+            background: var(--surface-soft);
+            border-radius: 26px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .intro-box::after {
+            content: "";
+            position: absolute;
+            right: -30px;
+            bottom: -10px;
+            width: 240px;
+            height: 160px;
+            opacity: 0.2;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 280 220'%3E%3Cg fill='none' stroke='%236f35ff' stroke-width='10' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M92 108c0-39 24-64 54-64s54 25 54 64c0 43-29 70-54 70s-54-27-54-70Z'/%3E%3Cpath d='M107 63 80 22l7 44M185 63l27-41-7 44'/%3E%3Cpath d='M125 110h1M164 110h1M132 136c7 7 18 10 25 0'/%3E%3Cpath d='M118 126 68 118M118 139 62 141M174 126l50-8M174 139l56 2'/%3E%3C/g%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+
+        .intro-box::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.22) 35%, transparent 60%);
+            transform: translateX(-120%);
+            animation: heroSweep 7s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .intro-box p,
+        .metric-card p,
+        .info-card p,
+        .discord-card p,
+        .doc-card p,
+        .legal-card p,
+        .legal-card li,
+        .section-copy,
+        .footer-text,
+        .table td,
+        .small-note {
+            color: var(--muted);
+        }
+
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-primary,
+        .cta-secondary {
+            min-height: 46px;
+            padding: 0 20px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cta-primary {
+            background: var(--surface-dark);
+            color: #ffffff;
+            border-color: transparent;
+        }
+
+        html[data-theme="dark"] .cta-primary {
+            color: #101216;
+            background: #f4ecec;
+        }
+
+        .hero-art {
+            background: linear-gradient(180deg, var(--surface-warm) 0%, var(--surface) 100%);
+            position: relative;
+        }
+
+        .hero-art .panel-inner {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .discord-card {
+            background: color-mix(in srgb, var(--surface) 92%, transparent);
+            border: 1px solid var(--line);
+            border-radius: 26px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .discord-head {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--line);
+            background: color-mix(in srgb, var(--surface-soft) 50%, var(--surface));
+        }
+
+        .discord-head strong {
+            display: block;
+            font-size: 1.25rem;
+        }
+
+        .discord-messages {
+            padding: 16px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .message {
+            display: grid;
+            grid-template-columns: 42px 1fr;
+            gap: 10px;
+            align-items: start;
+            padding: 12px;
+            border-radius: 18px;
+            background: color-mix(in srgb, var(--surface-soft) 35%, var(--surface));
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .message strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .cat-badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        .cat-badge {
+            padding: 10px 12px;
+            border-radius: 16px;
+            background: color-mix(in srgb, var(--surface) 86%, transparent);
+            border: 1px solid var(--line);
+            font-weight: 600;
+        }
+
+        .metric-card {
+            text-align: center;
+            padding: 24px 18px;
+        }
+
+        .metric-card strong {
+            display: block;
+            font-size: clamp(2.3rem, 6vw, 4.4rem);
+            line-height: 0.95;
+            letter-spacing: -0.07em;
+        }
+
+        .metric-card span {
+            display: block;
+            margin-top: 6px;
+            text-transform: uppercase;
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            line-height: 1.05;
+            font-style: italic;
+        }
+
+        .section-title {
+            margin: 0 0 12px;
+            font-size: clamp(2.1rem, 5vw, 4rem);
+            line-height: 0.94;
+            letter-spacing: -0.07em;
+            text-transform: uppercase;
+        }
+
+        .section-subtitle {
+            margin: 0 0 24px;
+            font-size: clamp(1.2rem, 2.4vw, 1.9rem);
+            line-height: 1.05;
+            font-style: italic;
+        }
+
+        .info-card,
+        .doc-card,
+        .legal-card,
+        .command-card,
+        .game-card {
+            padding: 22px;
+            border-radius: 24px;
+            border: 1px solid var(--line);
+            background: var(--surface);
+        }
+
+        .info-card.soft,
+        .doc-card.soft,
+        .command-card.soft,
+        .game-card.soft {
+            background: var(--surface-soft);
+        }
+
+        .info-card.warm,
+        .doc-card.warm,
+        .command-card.warm,
+        .game-card.warm,
+        .legal-card.warm {
+            background: var(--surface-warm);
+        }
+
+        .info-card.lime,
+        .doc-card.lime,
+        .command-card.lime,
+        .game-card.lime {
+            background: var(--surface-lime);
+        }
+
+        .card-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            display: grid;
+            place-items: center;
+            border: 1px solid var(--line);
+            margin-bottom: 18px;
+        }
+
+        .card-title {
+            margin: 0 0 10px;
+            font-size: 1.8rem;
+            line-height: 1;
+            letter-spacing: -0.05em;
+            text-transform: uppercase;
+        }
+
+        .doc-card .card-title,
+        .command-card .card-title,
+        .game-card .card-title,
+        .legal-card .card-title {
+            font-size: 1.2rem;
+            letter-spacing: -0.03em;
+        }
+
+        .wide-dark {
+            background: var(--surface-dark);
+            color: #ffffff;
+        }
+
+        .wide-dark .panel-inner {
+            padding: 30px 26px;
+        }
+
+        .wide-dark .mega-title {
+            margin: 0;
+            font-size: clamp(3rem, 9vw, 7rem);
+            line-height: 0.88;
+            letter-spacing: -0.09em;
+            text-transform: uppercase;
+        }
+
+        .wide-dark .small-note {
+            margin-top: 18px;
+            color: rgba(255, 255, 255, 0.78);
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            background: var(--surface);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            text-align: left;
+            vertical-align: top;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .table th {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            background: color-mix(in srgb, var(--surface-soft) 30%, var(--surface));
+        }
+
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .search-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .search-input {
+            width: min(100%, 440px);
+            min-height: 46px;
+            padding: 0 16px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: var(--surface);
+            color: var(--text);
+            font: inherit;
+        }
+
+        .search-note {
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .faq-list,
+        .update-list,
+        .permissions-grid,
+        .quickstart-grid,
+        .contact-actions {
+            display: grid;
+            gap: 14px;
+        }
+
+        .faq-list,
+        .permissions-grid,
+        .quickstart-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .update-list {
+            grid-template-columns: 1fr;
+        }
+
+        .faq-item,
+        .update-item,
+        .permission-item,
+        .quickstart-item,
+        .contact-box {
+            padding: 22px;
+            border-radius: 24px;
+            border: 1px solid var(--line);
+            background: var(--surface);
+        }
+
+        .faq-item.soft,
+        .permission-item.soft,
+        .quickstart-item.soft,
+        .contact-box.soft,
+        .update-item.soft {
+            background: var(--surface-soft);
+        }
+
+        .faq-item.warm,
+        .permission-item.warm,
+        .quickstart-item.warm,
+        .contact-box.warm,
+        .update-item.warm {
+            background: var(--surface-warm);
+        }
+
+        .faq-item.lime,
+        .permission-item.lime,
+        .quickstart-item.lime,
+        .contact-box.lime,
+        .update-item.lime {
+            background: var(--surface-lime);
+        }
+
+        .faq-item h3,
+        .update-item h3,
+        .permission-item h3,
+        .quickstart-item h3,
+        .contact-box h3 {
+            margin: 0 0 10px;
+            font-size: 1.14rem;
+            line-height: 1.2;
+        }
+
+        .faq-item p,
+        .update-item p,
+        .permission-item p,
+        .quickstart-item p,
+        .contact-box p,
+        .contact-box li {
+            color: var(--muted);
+        }
+
+        .contact-actions {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .copy-button {
+            min-height: 42px;
+            padding: 0 16px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        .copy-status {
+            color: var(--muted);
+            font-size: 0.9rem;
+            min-height: 1.2em;
+        }
+
+        @keyframes pageFade {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .legal-card ul,
+        .command-card ul,
+        .game-card ul {
+            margin: 10px 0 0;
+            padding-left: 18px;
+        }
+
+        .legal-card li + li,
+        .command-card li + li,
+        .game-card li + li {
+            margin-top: 8px;
+        }
+
+        .footer {
+            padding: 10px 28px 28px;
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .home-stack {
+            display: grid;
+            gap: 18px;
+        }
+
+        .slideshow-panel {
+            background: var(--surface-soft);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--line);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slideshow-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 22px 24px 0;
+            flex-wrap: wrap;
+        }
+
+        .slideshow-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .slideshow-head h3 {
+            margin: 0;
+            font-size: 1.7rem;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+        }
+
+        .slideshow-window {
+            position: relative;
+            min-height: 500px;
+            padding: 18px 24px 24px;
+            overflow: hidden;
+            transition: height 0.35s ease;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 18px 24px 24px;
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 18px;
+            align-items: stretch;
+            opacity: 0;
+            transform: translateX(36px) scale(0.985);
+            pointer-events: none;
+            transition: opacity 0.55s ease, transform 0.55s ease;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .slide-copy,
+        .slide-shot {
+            border-radius: 24px;
+            border: 1px solid var(--line);
+            background: color-mix(in srgb, var(--surface) 94%, transparent);
+            overflow: hidden;
+        }
+
+        .slide-copy {
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .slide-kicker {
+            display: inline-flex;
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: color-mix(in srgb, var(--surface-soft) 42%, var(--surface));
+            color: var(--muted);
+            font-size: 0.84rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+        }
+
+        .slide-copy h4 {
+            margin: 16px 0 10px;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            line-height: 0.96;
+            letter-spacing: -0.06em;
+            text-transform: uppercase;
+        }
+
+        .slide-copy p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 1rem;
+        }
+
+        .slide-points {
+            margin-top: 18px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .slide-points div {
+            padding: 12px 14px;
+            border-radius: 16px;
+            border: 1px solid var(--line);
+            background: color-mix(in srgb, var(--surface-warm) 40%, var(--surface));
+            color: var(--muted);
+        }
+
+        .slide-shot {
+            min-height: 420px;
+            display: flex;
+            align-items: stretch;
+            background: linear-gradient(180deg, color-mix(in srgb, var(--surface-soft) 65%, var(--surface)) 0%, color-mix(in srgb, var(--surface-warm) 45%, var(--surface)) 100%);
+        }
+
+        .feature-preview {
+            width: 100%;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .feature-preview-title {
+            margin: 0;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            line-height: 0.96;
+            letter-spacing: -0.05em;
+            text-transform: uppercase;
+        }
+
+        .feature-preview-sub {
+            margin: 0;
+            color: var(--muted);
+            font-size: 1rem;
+        }
+
+        .feature-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .feature-preview-card {
+            min-height: 118px;
+            padding: 18px;
+            border-radius: 20px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.72);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        html[data-theme="dark"] .feature-preview-card {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .feature-preview-card.soft { background: #e6defd; }
+        .feature-preview-card.warm { background: #f9ead7; }
+        .feature-preview-card.lime { background: #e5f2ce; }
+
+        html[data-theme="dark"] .feature-preview-card.soft { background: #382d64; }
+        html[data-theme="dark"] .feature-preview-card.warm { background: #4b3158; }
+        html[data-theme="dark"] .feature-preview-card.lime { background: #274666; }
+
+        .feature-preview-card strong {
+            font-size: 1rem;
+        }
+
+        .feature-preview-card span {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .feature-preview-wide {
+            min-height: 152px;
+            padding: 24px;
+            border-radius: 22px;
+            border: 1px solid var(--line);
+            background: #232836;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        html[data-theme="dark"] .feature-preview-wide {
+            background: #151d33;
+        }
+
+        .feature-preview-wide p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 1rem;
+            line-height: 1.55;
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .slide-arrow {
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .slide-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            border: none;
+            background: color-mix(in srgb, var(--muted) 40%, transparent);
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .slide-dot.active {
+            background: var(--accent);
+        }
+
+        .screenshot-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .long-stack {
+            display: grid;
+            gap: 18px;
+        }
+
+        .feature-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .feature-pill {
+            padding: 12px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: color-mix(in srgb, var(--surface-soft) 32%, var(--surface));
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .story-panel {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--line);
+            overflow: hidden;
+        }
+
+        .story-band {
+            padding: 30px 26px;
+        }
+
+        .story-band.soft { background: var(--surface-soft); }
+        .story-band.warm { background: var(--surface-warm); }
+        .story-band.lime { background: var(--surface-lime); }
+        .story-band.dark {
+            background: var(--surface-dark);
+            color: #ffffff;
+        }
+
+        html[data-theme="dark"] .story-band.dark {
+            color: #f8eff0;
+        }
+
+        .story-band h3 {
+            margin: 0 0 10px;
+            font-size: clamp(2rem, 5vw, 3.4rem);
+            line-height: 0.95;
+            letter-spacing: -0.06em;
+            text-transform: uppercase;
+        }
+
+        .story-band p,
+        .story-band li {
+            color: inherit;
+            opacity: 0.82;
+        }
+
+        .story-band ul {
+            margin: 14px 0 0;
+            padding-left: 18px;
+        }
+
+        .story-band li + li {
+            margin-top: 8px;
+        }
+
+        .story-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .story-mini-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .showcase-band {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 14px;
+        }
+
+        .showcase-copy {
+            padding: 30px 26px;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-xl);
+        }
+
+        .showcase-copy h3 {
+            margin: 0 0 12px;
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            line-height: 0.92;
+            letter-spacing: -0.07em;
+            text-transform: uppercase;
+        }
+
+        .showcase-copy p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 1.02rem;
+        }
+
+        .showcase-collage {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 14px;
+        }
+
+        .collage-card {
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            background: var(--surface);
+        }
+
+        .collage-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .collage-stack {
+            display: grid;
+            gap: 14px;
+        }
+
+        .shot-tile {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .shot-tile img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .shot-tile .tile-copy {
+            padding: 16px 18px 18px;
+        }
+
+        .shot-tile strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1rem;
+        }
+
+        .spacer-copy {
+            padding-right: 8%;
+        }
+
+        .home-premium > * + * {
+            margin-top: clamp(88px, 14vh, 180px);
+        }
+
+        .home-landing {
+            min-height: calc(100vh - 132px);
+            padding: clamp(28px, 5vw, 60px);
+            display: grid;
+            grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+            align-items: start;
+            gap: clamp(28px, 4vw, 54px);
+            background:
+                radial-gradient(circle at top right, rgba(111, 53, 255, 0.16), transparent 24%),
+                linear-gradient(180deg, color-mix(in srgb, var(--surface-soft) 36%, var(--surface)) 0%, var(--surface) 100%);
+            position: relative;
+        }
+
+        .home-landing > div:first-child {
+            align-self: start;
+            position: relative;
+        }
+
+        .home-landing > div:first-child::after {
+            content: none;
+        }
+
+        .home-left-decor {
+            margin-top: clamp(26px, 5vh, 56px);
+            min-height: 132px;
+            display: flex;
+            align-items: flex-end;
+            gap: 18px;
+            opacity: 0.72;
+        }
+
+        .home-whiskers {
+            flex: 1;
+            height: 84px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='120' viewBox='0 0 420 120'%3E%3Cg fill='none' stroke='%238c6cff' stroke-width='5' stroke-linecap='round'%3E%3Cpath d='M12 26c42 14 84 14 132-1'/%3E%3Cpath d='M12 54c42 14 84 14 132-1'/%3E%3Cpath d='M12 82c42 14 84 14 132-1'/%3E%3Cpath d='M276 26c42 14 84 14 132-1'/%3E%3Cpath d='M276 54c42 14 84 14 132-1'/%3E%3Cpath d='M276 82c42 14 84 14 132-1'/%3E%3C/g%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: left center;
+        }
+
+        .home-landing > *,
+        .slideshow-panel > *,
+        .home-section-panel > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        html[data-theme="dark"] .home-landing {
+            background:
+                radial-gradient(circle at top right, rgba(159, 132, 255, 0.18), transparent 24%),
+                linear-gradient(180deg, color-mix(in srgb, var(--surface-soft) 28%, var(--surface)) 0%, var(--surface) 100%);
+        }
+
+        .home-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: color-mix(in srgb, var(--surface-soft) 40%, var(--surface));
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .home-lead {
+            max-width: 760px;
+            margin: 18px 0 0;
+            font-size: clamp(1.05rem, 1.5vw, 1.22rem);
+            line-height: 1.65;
+            color: var(--muted);
+        }
+
+        .home-hero-visual {
+            max-width: 860px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            justify-self: end;
+            width: 100%;
+        }
+
+        .hero-side-icon {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .hero-side-icon img {
+            display: block;
+            width: clamp(96px, 14vw, 148px);
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.14));
+        }
+
+        .home-section-panel {
+            padding: clamp(28px, 4vw, 54px);
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius-xl);
+            position: relative;
+        }
+
+        .home-section-panel.soft { background: var(--surface-soft); }
+        .home-section-panel.warm { background: var(--surface-warm); }
+        .home-section-panel.lime { background: var(--surface-lime); }
+        .home-section-panel.dark {
+            background: var(--surface-dark);
+            color: #ffffff;
+        }
+
+        html[data-theme="dark"] .home-section-panel.dark {
+            color: #f8eff0;
+        }
+
+        .home-section-panel.dark .section-copy,
+        .home-section-panel.dark p,
+        .home-section-panel.dark .home-metric span {
+            color: rgba(255, 255, 255, 0.78);
+        }
+
+        .home-metrics-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 28px;
+        }
+
+        .home-metric {
+            flex: 1 1 220px;
+            min-width: 180px;
+            padding: 20px 18px;
+            border-radius: 22px;
+            border: 1px solid var(--line);
+            background: color-mix(in srgb, var(--surface-soft) 26%, var(--surface));
+        }
+
+        .home-metric strong {
+            display: block;
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            line-height: 0.94;
+            letter-spacing: -0.07em;
+        }
+
+        .home-metric span {
+            display: block;
+            margin-top: 8px;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            letter-spacing: 0.04em;
+            color: var(--muted);
+        }
+
+        .home-feature-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 26px;
+        }
+
+        .home-tab-handoff {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .home-landing::before,
+        .home-section-panel.soft::before,
+        .slideshow-panel::after,
+        .home-section-panel.dark::after {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.14;
+            background-repeat: no-repeat;
+            background-size: contain;
+            z-index: 0;
+        }
+
+        .home-landing::before {
+            top: 28px;
+            right: 34px;
+            width: 120px;
+            height: 120px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cg fill='%236f35ff'%3E%3Ccircle cx='70' cy='78' r='22'/%3E%3Ccircle cx='44' cy='48' r='12'/%3E%3Ccircle cx='64' cy='32' r='12'/%3E%3Ccircle cx='92' cy='32' r='12'/%3E%3Ccircle cx='108' cy='52' r='12'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .home-section-panel.soft::before {
+            top: 22px;
+            right: 26px;
+            width: 132px;
+            height: 88px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='90' viewBox='0 0 180 90'%3E%3Cg fill='none' stroke='%238c6cff' stroke-width='5' stroke-linecap='round'%3E%3Cpath d='M18 44c22-9 40-9 62 0'/%3E%3Cpath d='M18 58c22-9 40-9 62 0'/%3E%3Cpath d='M100 44c22-9 40-9 62 0'/%3E%3Cpath d='M100 58c22-9 40-9 62 0'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .slideshow-panel::after {
+            left: 22px;
+            bottom: 20px;
+            width: 108px;
+            height: 108px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cg fill='%23ff8fcf'%3E%3Ccircle cx='70' cy='78' r='22'/%3E%3Ccircle cx='44' cy='48' r='12'/%3E%3Ccircle cx='64' cy='32' r='12'/%3E%3Ccircle cx='92' cy='32' r='12'/%3E%3Ccircle cx='108' cy='52' r='12'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .home-section-panel.dark::after {
+            right: 28px;
+            bottom: 24px;
+            width: 170px;
+            height: 92px;
+            opacity: 0.18;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='100' viewBox='0 0 190 100'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='5' stroke-linecap='round'%3E%3Cpath d='M12 30c26 11 46 11 72 0'/%3E%3Cpath d='M12 50c26 11 46 11 72 0'/%3E%3Cpath d='M106 30c26 11 46 11 72 0'/%3E%3Cpath d='M106 50c26 11 46 11 72 0'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .footer-nav {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            color: var(--muted);
+            font-size: 0.94rem;
+        }
+
+        .footer-nav-page {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-nav-toggle {
+            display: none;
+            min-height: 42px;
+            min-width: 42px;
+            padding: 0 12px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        @media (max-width: 1180px) {
+            .four-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .screenshot-grid,
+            .story-mini-grid,
+            .faq-list,
+            .permissions-grid,
+            .quickstart-grid,
+            .contact-actions {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 1080px) {
+            .hero-grid,
+            .two-grid,
+            .three-grid,
+            .slide,
+            .showcase-band,
+            .showcase-collage {
+                grid-template-columns: 1fr;
+            }
+
+            .home-landing {
+                grid-template-columns: 1fr;
+            }
+
+            .home-hero-visual {
+                justify-self: stretch;
+                max-width: none;
+                align-items: center;
+            }
+
+            .story-columns {
+                grid-template-columns: 1fr;
+            }
+
+            .slideshow-window {
+                min-height: 0;
+            }
+
+            .slide-shot {
+                min-height: 320px;
+            }
+
+            .feature-preview-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .slide-shot img {
+                width: min(100%, 720px);
+            }
+        }
+
+        @media (max-width: 820px) {
+            .topbar {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) auto auto auto;
+                align-items: center;
+                padding: 18px 18px;
+                justify-content: initial;
+            }
+
+            .mobile-menu-toggle {
+                display: inline-flex;
+                width: auto;
+                min-width: 44px;
+                justify-self: end;
+            }
+
+            .brand {
+                min-width: 0;
+            }
+
+            .top-actions {
+                display: flex;
+                width: auto;
+                grid-column: auto;
+                flex-direction: row;
+                align-items: center;
+                justify-self: end;
+                padding-top: 0;
+                gap: 8px;
+            }
+
+            .nav-tabs {
+                display: none;
+                order: 4;
+                width: 100%;
+                grid-column: 1 / -1;
+                justify-content: flex-start;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+                padding-top: 8px;
+            }
+
+            .topbar.menu-open .nav-tabs {
+                display: flex;
+            }
+
+            .tab-link {
+                width: 100%;
+                text-align: left;
+            }
+
+            .slide {
+                inset: 18px 18px 18px;
+            }
+
+            .slideshow-window {
+                padding: 18px;
+                min-height: 0;
+            }
+
+            .app-shell {
+                margin-bottom: 92px;
+            }
+
+            .footer {
+                position: fixed;
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+                z-index: 40;
+                padding: 10px 12px;
+                border: 1px solid var(--line);
+                border-radius: 22px;
+                background: var(--shell);
+                box-shadow: var(--shadow);
+            }
+
+            .footer-text {
+                display: none;
+            }
+
+            .footer-nav {
+                width: 100%;
+                justify-content: space-between;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .footer-nav-page {
+                display: none;
+                width: 100%;
+                gap: 6px;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: nowrap;
+            }
+
+            .footer-nav-page.active {
+                display: flex;
+            }
+
+            .footer-nav .tab-link {
+                flex: 0 0 auto;
+                text-align: center;
+                padding: 10px 6px;
+                font-size: 0.72rem;
+                min-width: 0;
+            }
+
+            .footer-nav-page .tab-link {
+                flex: 1 1 0;
+            }
+
+            .footer-nav-toggle {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .topbar,
+            .footer {
+                padding-left: 18px;
+                padding-right: 18px;
+            }
+
+            .page {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .panel-inner,
+            .info-card,
+            .doc-card,
+            .command-card,
+            .game-card,
+            .legal-card,
+            .wide-dark .panel-inner {
+                padding: 22px 18px;
+            }
+
+            .hero-title {
+                font-size: clamp(2.5rem, 15vw, 4.3rem);
+            }
+
+            .section-title {
+                font-size: clamp(1.8rem, 11vw, 3rem);
+            }
+
+            .slide-copy h4 {
+                font-size: clamp(1.7rem, 10vw, 2.5rem);
+            }
+
+            .screenshot-grid,
+            .four-grid,
+            .story-mini-grid,
+            .faq-list,
+            .permissions-grid,
+            .quickstart-grid,
+            .contact-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .showcase-copy {
+                padding: 24px 20px;
+            }
+
+            .search-row {
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .search-note {
+                width: 100%;
+                font-size: 0.88rem;
+            }
+
+            .table-wrap {
+                border: none;
+                background: transparent;
+                overflow: visible;
+            }
+
+            .table,
+            .table tbody,
+            .table tr,
+            .table td {
+                display: block;
+                width: 100%;
+            }
+
+            .table thead {
+                display: none;
+            }
+
+            .table tr {
+                margin-bottom: 12px;
+                border: 1px solid var(--line);
+                border-radius: 18px;
+                background: var(--surface);
+                overflow: hidden;
+            }
+
+            .table td {
+                border-bottom: 1px solid var(--line);
+                padding: 12px 14px;
+            }
+
+            .table td:last-child {
+                border-bottom: none;
+            }
+
+            .table td:nth-child(1)::before,
+            .table td:nth-child(2)::before,
+            .table td:nth-child(3)::before {
+                display: block;
+                margin-bottom: 6px;
+                font-size: 0.74rem;
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                color: var(--muted);
+                font-weight: 700;
+            }
+
+            .table td:nth-child(1)::before {
+                content: 'Command';
+            }
+
+            .table td:nth-child(2)::before {
+                content: 'Purpose';
+            }
+
+            .table td:nth-child(3)::before {
+                content: 'Notes';
+            }
+
+            .slideshow-head {
+                padding: 20px 18px 0;
+            }
+
+            .slideshow-window {
+                min-height: auto;
+                height: auto;
+                padding: 16px;
+                overflow: visible;
+            }
+
+            .slide {
+                position: relative;
+                inset: auto;
+                opacity: 0;
+                max-height: 0;
+                overflow: hidden;
+                transform: none;
+                pointer-events: none;
+                transition: opacity 0.35s ease;
+            }
+
+            .slide.active {
+                opacity: 1;
+                max-height: none;
+                overflow: visible;
+                pointer-events: auto;
+            }
+
+            .slide-copy,
+            .slide-shot {
+                border-radius: 20px;
+            }
+
+            .slide-shot {
+                min-height: 220px;
+            }
+
+            .cta-row {
+                align-items: stretch;
+            }
+
+            .cta-primary,
+            .cta-secondary {
+                width: auto;
+                flex: 0 0 auto;
+                min-height: 42px;
+                padding: 0 14px;
+                font-size: 0.9rem;
+            }
+
+            .topbar {
+                grid-template-columns: minmax(0, 1fr) auto auto auto;
+                gap: 8px;
+            }
+
+            .top-actions {
+                gap: 6px;
+            }
+
+            .top-actions .pill-button,
+            .top-actions .theme-toggle,
+            .mobile-menu-toggle {
+                width: auto;
+                min-height: 38px;
+                padding: 0 10px;
+                font-size: 0.78rem;
+            }
+
+            .top-actions .pill-button,
+            .top-actions .theme-toggle {
+                white-space: nowrap;
+            }
+
+            .slideshow-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .home-landing {
+                min-height: auto;
+            }
+
+            .home-left-decor {
+                min-height: 104px;
+                margin-top: 22px;
+            }
+
+            .home-whiskers {
+                height: 66px;
+            }
+
+            .hero-side-icon {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .hero-side-icon img {
+                width: clamp(72px, 22vw, 110px);
+            }
+
+            .home-tab-handoff {
+                align-items: center;
+            }
+
+            .home-tab-handoff .cta-secondary {
+                width: auto;
+            }
+
+            .home-landing::before,
+            .home-section-panel.soft::before,
+            .slideshow-panel::after,
+            .home-section-panel.dark::after {
+                transform: scale(0.8);
+                transform-origin: center;
+            }
+        }
+
+        @media (max-width: 560px) {
+            body::before,
+            body::after {
+                display: none;
+            }
+
+            .app-shell {
+                width: min(100% - 10px, var(--max-width));
+                margin: 5px auto;
+                margin-bottom: 86px;
+                border-radius: 24px;
+            }
+
+            .topbar,
+            .footer {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .topbar {
+                grid-template-columns: minmax(0, 1fr) auto auto auto;
+                gap: 6px;
+            }
+
+            .page {
+                padding-left: 6px;
+                padding-right: 6px;
+            }
+
+            .nav-tabs {
+                gap: 6px;
+            }
+
+            .tab-link {
+                padding: 9px 12px;
+                font-size: 0.76rem;
+            }
+
+            .top-actions .pill-button,
+            .top-actions .theme-toggle,
+            .mobile-menu-toggle {
+                min-height: 36px;
+                padding: 0 8px;
+                font-size: 0.74rem;
+            }
+
+            .cta-primary,
+            .cta-secondary {
+                min-height: 40px;
+                padding: 0 12px;
+                font-size: 0.84rem;
+            }
+
+            .brand {
+                gap: 8px;
+                font-size: 0.96rem;
+            }
+
+            .brand-mark {
+                width: 28px;
+                height: 28px;
+            }
+
+            .hero-side-icon img {
+                width: clamp(64px, 24vw, 92px);
+            }
+
+            .home-left-decor {
+                min-height: 0;
+                justify-content: center;
+                margin-top: 14px;
+            }
+
+            .home-whiskers {
+                display: none;
+            }
+
+            .home-landing::before,
+            .home-section-panel.soft::before,
+            .slideshow-panel::after,
+            .home-section-panel.dark::after {
+                display: none;
+            }
+
+            .slideshow-window {
+                min-height: auto;
+            }
+
+            .home-tab-handoff .cta-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .footer {
+                left: 6px;
+                right: 6px;
+                bottom: 6px;
+                padding: 8px;
+                border-radius: 18px;
+            }
+
+            .footer-nav .tab-link {
+                padding: 9px 4px;
+                font-size: 0.68rem;
+            }
+
+            .footer-nav-page {
+                gap: 4px;
+            }
+
+            .footer-nav-toggle {
+                min-height: 36px;
+                min-width: 36px;
+                padding: 0 10px;
+                font-size: 0.76rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <header class="topbar">
+            <div class="brand">
+                <img class="brand-mark" src="2.png" alt="Meow Bot icon" />
+                <div>MEOW BOT</div>
+            </div>
+
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+
+            <nav class="nav-tabs" aria-label="Primary">
+                <button class="tab-link active" data-target="home">Home</button>
+                <button class="tab-link" data-target="commands">Commands</button>
+                <button class="tab-link" data-target="howtoplay">Games</button>
+                <button class="tab-link" data-target="faq">FAQ</button>
+                <button class="tab-link" data-target="updates">Updates</button>
+                <button class="tab-link" data-target="terms">Terms</button>
+                <button class="tab-link" data-target="privacy">Privacy</button>
+                <button class="tab-link" data-target="contact">Contact</button>
+            </nav>
+
+            <div class="top-actions">
+                <button class="theme-toggle" id="themeToggle" type="button">Dark mode</button>
+                <a class="pill-button" href="https://discord.com/oauth2/authorize?client_id=1488940777190199386&permissions=8&integration_type=0&scope=bot+applications.commands" target="_blank" rel="noopener noreferrer">Invite Bot</a>
+            </div>
+        </header>
+
+        <main>
+            <section class="page active" id="page-home">
+                <div class="home-premium">
+                    <section class="home-landing panel">
+                        <div>
+                            <div class="home-eyebrow">Discord bot for playful communities</div>
+                            <h1 class="hero-title" style="margin-top:22px;">ENTER THE<span class="thin">MEOWVERSE</span></h1>
+                            <p class="home-lead">Meow Bot brings cat-personality chat, party games, daily progression, movie picks, public events, and a deep pet system into one Discord bot built for active communities.</p>
+                            <div class="cta-row">
+                                <a class="cta-primary" href="https://discord.com/oauth2/authorize?client_id=1488940777190199386&permissions=8&integration_type=0&scope=bot+applications.commands" target="_blank" rel="noopener noreferrer">Invite Meow Bot</a>
+                                <button class="cta-secondary tab-link" data-target="commands" type="button">Explore Commands</button>
+                                <button class="cta-secondary tab-link" data-target="howtoplay" type="button">Read Game Guide</button>
+                            </div>
+                            <div class="home-left-decor" aria-hidden="true">
+                                <div class="home-whiskers"></div>
+                            </div>
+                        </div>
+                        <div class="home-hero-visual">
+                            <div class="hero-side-icon">
+                                <img src="1.png" alt="Meow Bot icon" />
+                            </div>
+                            <div class="discord-card">
+                                <div class="discord-head">
+                                    <strong># meow-lounge</strong>
+                                    <span class="section-copy">Where the bot talks back</span>
+                                </div>
+                                <div class="discord-messages">
+                                    <div class="message">
+                                        <div class="avatar">🐱</div>
+                                        <div><strong>Meow Bot</strong><p>Current mood pool: Sleepy, Hungry, Playful, Grumpy, Judgy, and Sassy. Ask for a game, a movie pick, or a little controlled chaos.</p></div>
+                                    </div>
+                                    <div class="message">
+                                        <div class="avatar">🎮</div>
+                                        <div><strong>Game Pulse</strong><p>Trivia, riddles, Wordle, scramble, story chain, reaction speed, Pokemon silhouettes, and blackjack are ready.</p></div>
+                                    </div>
+                                    <div class="message">
+                                        <div class="avatar">🐾</div>
+                                        <div><strong>Pet System</strong><p>Hatch, care for, evolve, battle with, and manage one long-term pet while your server gets weirder in the best way.</p></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cat-badges">
+                                <div class="cat-badge" data-live-badge="commands">67 slash commands</div>
+                                <div class="cat-badge" data-live-badge="servers">Server-ready</div>
+                                <div class="cat-badge" data-live-badge="players">Players tracked</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="home-section-panel soft">
+                        <h2 class="section-title">Built To Live Inside A Server</h2>
+                        <p class="section-copy">Meow Bot is built for repeat use. Members can chat with it, claim rewards, run game nights, hatch pets, trigger server boosts, and keep systems like counting and anonymous drops active every day.</p>
+                        <div class="home-metrics-row">
+                            <div class="home-metric"><strong data-live-stat="commands">67</strong><span>Slash Commands</span></div>
+                            <div class="home-metric"><strong data-live-stat="servers">0</strong><span>Servers</span></div>
+                            <div class="home-metric"><strong data-live-stat="players">0</strong><span>Players</span></div>
+                        </div>
+                    </section>
+
+                    <section class="slideshow-panel">
+                        <div class="slideshow-head">
+                            <div>
+                                <h3>Core Systems</h3>
+                                <p class="section-copy" style="margin: 8px 0 0; max-width: 720px;">Chat, progression, games, social features, and server-wide activity in one bot.</p>
+                            </div>
+                            <div class="slideshow-controls">
+                                <button class="slide-arrow" id="prevSlide" type="button" aria-label="Previous slide">&#8592;</button>
+                                <div class="slide-dots" id="slideDots"></div>
+                                <button class="slide-arrow" id="nextSlide" type="button" aria-label="Next slide">&#8594;</button>
+                            </div>
+                        </div>
+                        <div class="slideshow-window" id="slideshowWindow">
+                            <div class="slide active" data-slide>
+                                <div class="slide-copy">
+                                    <div class="slide-kicker">Feature 01</div>
+                                    <h4>AI Cat Personality</h4>
+                                    <p>Dedicated talk channels let Meow Bot feel like part of the server instead of a silent command menu. Six rotating moods shape its replies, reactions, and overall vibe.</p>
+                                    <div class="slide-points">
+                                        <div>AI-powered replies with six distinct mood states</div>
+                                        <div>Works naturally alongside normal conversation</div>
+                                        <div>Best used as a dedicated lounge or bot-chat channel</div>
+                                    </div>
+                                </div>
+                                <div class="slide-shot">
+                                    <div class="feature-preview">
+                                        <div>
+                                            <h5 class="feature-preview-title">AI Cat Personality</h5>
+                                            <p class="feature-preview-sub">A bot voice that feels present, playful, and recognisable in the server.</p>
+                                        </div>
+                                        <div class="feature-preview-grid">
+                                            <div class="feature-preview-card soft"><strong>Mood</strong><span>Sleepy, Hungry, Playful, Grumpy, Judgy, and Sassy all change reply tone.</span></div>
+                                            <div class="feature-preview-card warm"><strong>Presence</strong><span>Talk channels, tag replies, and cat reactions keep it active in chat.</span></div>
+                                            <div class="feature-preview-card lime"><strong>Emoji Layer</strong><span>Adaptive custom emoji replies reinforce the personality instead of plain text only.</span></div>
+                                        </div>
+                                        <div class="feature-preview-wide">
+                                            <strong style="font-size:1.15rem;">The bot should feel like it belongs in the room.</strong>
+                                            <p>That is what turns a utility bot into something people keep using.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="slide" data-slide>
+                                <div class="slide-copy">
+                                    <div class="slide-kicker">Feature 02</div>
+                                    <h4>Progression And Daily Loops</h4>
+                                    <p>Coins, XP, quests, lotteries, mystery boxes, and the evolving pet system give servers a reason to keep coming back.</p>
+                                    <div class="slide-points">
+                                        <div>Daily quests keep members returning regularly</div>
+                                        <div>Achievements and profiles give visible status</div>
+                                        <div>Economy systems connect games, pets, lotteries, events, and high-cost progression rewards</div>
+                                    </div>
+                                </div>
+                                <div class="slide-shot">
+                                    <div class="feature-preview">
+                                        <div>
+                                            <h5 class="feature-preview-title">Progression Layer</h5>
+                                            <p class="feature-preview-sub">Progress systems that stay valuable even when nobody is actively starting a new game.</p>
+                                        </div>
+                                        <div class="feature-preview-grid">
+                                            <div class="feature-preview-card soft"><strong>Coins</strong><span>Earn, spend, gamble, gift, and invest coins across multiple systems.</span></div>
+                                            <div class="feature-preview-card warm"><strong>Quests</strong><span>Daily objectives and collection loops keep activity structured and rewarding.</span></div>
+                                            <div class="feature-preview-card lime"><strong>Pets</strong><span>Hatch, care for, evolve, battle with, and collect from one long-term companion.</span></div>
+                                        </div>
+                                        <div class="feature-preview-wide">
+                                            <strong style="font-size:1.15rem;">Retention is built into the design.</strong>
+                                            <p>Profiles, achievements, inventory, and passive loops help the bot stay relevant between bursts of chaos.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="slide" data-slide>
+                                <div class="slide-copy">
+                                    <div class="slide-kicker">Feature 03</div>
+                                    <h4>Games, Chaos, And Variety</h4>
+                                    <p>Party games, PvP, movie picks, counting, anonymous drops, XP events, and pets all live in one bot.</p>
+                                    <div class="slide-points">
+                                        <div>Trivia, Wordle, riddles, reaction speed, and story chain</div>
+                                        <div>Roast battles, time travel, anonymous drops, and social prompts</div>
+                                        <div>Guessing games, pet battles, tournaments, events, and movie picks</div>
+                                    </div>
+                                </div>
+                                <div class="slide-shot">
+                                    <div class="feature-preview">
+                                        <div>
+                                            <h5 class="feature-preview-title">Games + Chaos + Variety</h5>
+                                            <p class="feature-preview-sub">From party games to social chaos to passive server systems, it covers more than one kind of fun.</p>
+                                        </div>
+                                        <div class="feature-preview-grid">
+                                            <div class="feature-preview-card soft"><strong>Word Games</strong><span>Wordle, daily word loops, scramble, hangman, and chain play.</span></div>
+                                            <div class="feature-preview-card warm"><strong>Social Chaos</strong><span>Roasts, truth or dare, would-you-rather, time travel, and anonymous drops.</span></div>
+                                            <div class="feature-preview-card lime"><strong>Battle Layer</strong><span>Pet fights, tournaments, lotteries, and event boosts feed into progression.</span></div>
+                                        </div>
+                                        <div class="feature-preview-wide">
+                                            <strong style="font-size:1.15rem;">One bot should cover multiple moods.</strong>
+                                            <p>Trivia. Counting. Movie picks. XP boosts. Anonymous drops. Pet battles. Story chain.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="home-section-panel warm">
+                        <h2 class="section-title">One Bot, Many Roles</h2>
+                        <p class="section-copy">Game nights, chat energy, progression, events, movies, counting, and pets all live in the same place.</p>
+                    </section>
+
+                    <section class="home-section-panel soft">
+                        <h2 class="section-title">Pet System</h2>
+                        <p class="section-copy">The pet system is a long-term progression loop instead of a simple pet shop. Users hatch one pet at a time, care for it, evolve it across major stages, manage mood, jobs, items, abilities, equipment, battle progression, and late-stage stones, and face consequences if they neglect it.</p>
+                        <div class="home-feature-stack">
+                            <article class="info-card soft">
+                                <div class="card-icon">🥚</div>
+                                <h3 class="card-title">Egg To Divine</h3>
+                                <p>Pets begin as eggs, hatch over time, and evolve through a long-form progression ladder with XP, day gates, and late-game evolution stones.</p>
+                            </article>
+                            <article class="info-card warm">
+                                <div class="card-icon">🐾</div>
+                                <h3 class="card-title">Care + Personality</h3>
+                                <p>Mood, greetings, rebellious phases, ghost consequences, and passive pet dialogue give the system personality beyond raw stat grinding.</p>
+                            </article>
+                            <article class="info-card lime">
+                                <div class="card-icon">⚔️</div>
+                                <h3 class="card-title">Systems Layer</h3>
+                                <p>Jobs, items, abilities, equipment, PvE, PvP, durability, and stone-gated late evolution create a deeper progression track for active members.</p>
+                            </article>
+                        </div>
+                    </section>
+
+                    <section class="home-section-panel dark">
+                        <h2 class="section-title">Everything In One Place</h2>
+                        <p class="section-copy">AI chat, games, progression, public XP and coin events, pets, movies, profiles, and social commands work together in one server bot.</p>
+                    </section>
+
+                    <section class="home-section-panel">
+                        <h2 class="section-title">Why It Stays Active</h2>
+                        <div class="home-feature-stack">
+                            <article class="info-card soft">
+                                <div class="card-icon">🐱</div>
+                                <h3 class="card-title">Cat Personality</h3>
+                                <p>Rotating moods, memory, funny cat content, roast energy, and dedicated talk channels make the bot feel alive.</p>
+                            </article>
+                            <article class="info-card warm">
+                                <div class="card-icon">🎮</div>
+                                <h3 class="card-title">Big Game Stack</h3>
+                                <p>Trivia, riddles, Wordle, Daily Wordle, scramble, hangman, reaction speed, guess image, story chain, and more.</p>
+                            </article>
+                            <article class="info-card lime">
+                                <div class="card-icon">🪙</div>
+                                <h3 class="card-title">Progression</h3>
+                                <p>Coins, XP, levels, quests, achievements, inventory, pet progression, and long-term member retention loops.</p>
+                            </article>
+                            <article class="info-card">
+                                <div class="card-icon">⚙️</div>
+                                <h3 class="card-title">Server Setup</h3>
+                                <p>Configure talk channels, pet channels, logs, event announcements, anonymous statement drops, counting, XP rate, and other guild-specific features.</p>
+                            </article>
+                        </div>
+                    </section>
+
+                    <section class="home-section-panel lime">
+                        <h2 class="section-title">Explore More</h2>
+                        <p class="section-copy">Open the command list, game guide, FAQ, updates, policies, or contact details.</p>
+                        <div class="home-tab-handoff">
+                            <button class="cta-secondary tab-link" data-target="commands" type="button">Open Commands</button>
+                            <button class="cta-secondary tab-link" data-target="howtoplay" type="button">Open Game Guide</button>
+                            <button class="cta-secondary tab-link" data-target="faq" type="button">Read FAQ</button>
+                            <button class="cta-secondary tab-link" data-target="updates" type="button">See Updates</button>
+                            <button class="cta-secondary tab-link" data-target="privacy" type="button">Read Privacy</button>
+                            <button class="cta-secondary tab-link" data-target="terms" type="button">Read Terms</button>
+                            <button class="cta-secondary tab-link" data-target="contact" type="button">Contact</button>
+                        </div>
+                    </section>
+                </div>
+            </section>
+
+            <section class="page" id="page-commands">
+                <div class="grid two-grid">
+                    <article class="panel">
+                        <div class="panel-inner">
+                            <h1 class="section-title">Command Guide</h1>
+                            <p class="section-subtitle">Core categories and quick lookup</p>
+                            <p class="section-copy">Browse the main command groups first, then use the table below to find specific commands fast.</p>
+                        </div>
+                    </article>
+                    <article class="command-card soft">
+                        <h3 class="card-title">Main categories</h3>
+                        <ul>
+                            <li>Core and profile</li>
+                            <li>Economy and progression</li>
+                            <li>Games and competition</li>
+                            <li>Pets, lotteries, and tournaments</li>
+                            <li>Movies, social tools, and setup</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="grid four-grid" style="margin-top:14px;">
+                    <article class="command-card soft" data-command-item>
+                        <h3 class="card-title">Core</h3>
+                        <p><code>/help</code>, <code>/start</code>, <code>/ping</code>, <code>/mood</code>, <code>/profile</code>, <code>/achievements</code>, <code>/inventory</code>, <code>/wordlestats</code>, <code>/reminder</code>, <code>/clearmemory</code>, <code>/mydata</code></p>
+                    </article>
+                    <article class="command-card warm" data-command-item>
+                        <h3 class="card-title">Economy</h3>
+                        <p><code>/balance</code>, <code>/daily</code>, <code>/gamble</code>, <code>/give</code>, <code>/shop</code>, <code>/leaderboard</code>, <code>/trade</code>, <code>/quests</code>, <code>/collect</code>, <code>/lottery</code>, <code>/mysterybox</code></p>
+                    </article>
+                    <article class="command-card lime" data-command-item>
+                        <h3 class="card-title">Games</h3>
+                        <p><code>/trivia</code>, <code>/riddle</code>, <code>/hangman</code>, <code>/wordchain</code>, <code>/scramble</code>, <code>/wordle</code>, <code>/dailywordle</code>, <code>/guessthenumber</code>, <code>/wtp</code>, <code>/storychain</code>, <code>/reactionspeed</code>, <code>/blackjack</code></p>
+                    </article>
+                    <article class="command-card" data-command-item>
+                        <h3 class="card-title">Social + Setup</h3>
+                        <p><code>/roast</code>, <code>/ship</code>, <code>/hug</code>, <code>/kiss</code>, <code>/catfact</code>, <code>/dadjoke</code>, <code>/meme</code>, <code>/anonymousstatement</code>, <code>/movie</code>, <code>/timetravel</code>, <code>/talkchannel</code>, <code>/petchannel</code>, <code>/eventchannel</code>, <code>/anonymouschannel</code>, <code>/counting</code>, <code>/event</code>, <code>/setup</code>, <code>/resetuser</code></p>
+                    </article>
+                    <article class="command-card soft" data-command-item>
+                        <h3 class="card-title">Prefixes</h3>
+                        <p><code>!cat</code>, <code>!catch</code>, <code>!hint</code>, <code>!reveal</code></p>
+                    </article>
+                </div>
+
+                <div class="panel" style="margin-top:14px;">
+                    <div class="panel-inner">
+                        <h2 class="section-title">Command Lookup</h2>
+                        <div class="search-row">
+                            <input class="search-input" id="commandSearch" type="search" placeholder="Search commands, categories, or features" />
+                            <div class="search-note">Search the cards and table instantly.</div>
+                        </div>
+                        <div class="table-wrap">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Command</th>
+                                        <th>Purpose</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-command-row>
+                                        <td><code>/help</code>, <code>/start</code>, <code>/ping</code>, <code>/mood</code>, <code>/reminder</code></td>
+                                        <td>Core</td>
+                                        <td>Start here for the bot overview, main command groups, mood status, and lightweight utility settings like reminders.</td>
+                                    </tr>
+                                    <tr data-command-row>
+                                        <td><code>/profile</code>, <code>/inventory</code>, <code>/achievements</code>, <code>/wordlestats</code>, <code>/mydata</code>, <code>/clearmemory</code></td>
+                                        <td>Profile</td>
+                                        <td>Use these to check your stats, inventory, achievements, Wordle records, personal data, and saved memory settings.</td>
+                                    </tr>
+                                    <tr data-command-row>
+                                        <td><code>/balance</code>, <code>/daily</code>, <code>/gamble</code>, <code>/give</code>, <code>/shop</code>, <code>/leaderboard</code>, <code>/trade</code>, <code>/quests</code>, <code>/collect</code>, <code>/mysterybox</code></td>
+                                        <td>Economy</td>
+                                        <td>Handles coins, streak rewards, gambling, item buying, trading, quests, collection payouts, mystery rewards, and leaderboard competition.</td>
+                                    </tr>
+                                    <tr data-command-row>
+                                        <td><code>/lottery start|view|history</code></td>
+                                        <td>Lottery</td>
+                                        <td>Includes admin weekly lotteries and host-funded event lotteries with public ticket buying, visual dashboards, and automatic winner announcements.</td>
+                                    </tr>
+                                    <tr data-command-row>
+                                        <td><code>/trivia</code>, <code>/riddle</code>, <code>/hangman</code>, <code>/wordchain</code>, <code>/scramble</code>, <code>/wordle</code>, <code>/dailywordle</code>, <code>/guessthenumber</code>, <code>/reactionspeed</code>, <code>/storychain</code>, <code>/blackjack</code></td>
+                                        <td>Games</td>
+                                        <td>Includes quick party games, word games, collaborative sessions, and coin-based risk with blackjack.</td>
+                                    </tr>
+                                    <tr data-command-row>
+                                        <td><code>/guesschannel</code>, <code>/stopguess</code>, <code>/wtp</code>, <code>/stopgame</code>, <code>/howtoplay</code></td>
+                                        <td>Game setup</td>
+                                        <td>Use these to run channel-based guessing, stop active sessions, start Pokemon silhouette games, and read rules without leaving Discord.</td>
+                                    </tr>
+                                    <tr data-command-row>
+                                        <td><code>/pet</code>, <code>/petimage</code>, <code>/petfuneral</code>, <code>!catch</code>, <code>/petfight</code>, <code>/tournament create|join|status</code></td>
+                                        <td>Pets</td>
+                                        <td>Covers pet care, images, evolutions, jobs, abilities, battles, tournament play, and ghost-pet cleanup.</td>
+                                    </tr>
+                                    <tr data-command-row>
+                                        <td><code>/movie like|genre|random|info|compare|top10|watchlist|history|foryou|rate|unrate|profile|poll|feedback|overlap</code></td>
+                                        <td>Movies</td>
+                                        <td>Provides movie discovery, comparisons, watchlists, watch history, ratings, overlap analysis, polls, and personalized recommendations.</td>
+                                    </tr>
+                                    <tr data-command-row>
+                                        <td><code>/roast</code>, <code>/ship</code>, <code>/hug</code>, <code>/kiss</code>, <code>/catfact</code>, <code>/dadjoke</code>, <code>/meme</code>, <code>/anonymousstatement</code>, <code>/timetravel</code></td>
+                                        <td>Social</td>
+                                        <td>Lightweight fun commands reinforce the bot's personality with jokes, anonymous messages, and time-travel chaos.</td>
+                                    </tr>
+                                    <tr data-command-row>
+                                        <td><code>/roastbattle</code>, <code>/pvp dice|coinflip|rps</code>, <code>/event</code>, <code>/counting setup|move|resume</code></td>
+                                        <td>Activity</td>
+                                        <td>Combines PvP bets, roast battles, event boosts, and managed counting into repeatable community activities.</td>
+                                    </tr>
+                                    <tr data-command-row>
+                                        <td><code>/talkchannel</code>, <code>/petchannel</code>, <code>/eventchannel</code>, <code>/anonymouschannel</code>, <code>/logschannel</code>, <code>/setup</code>, <code>/resetuser</code>, <code>/dictionary</code></td>
+                                        <td>Setup</td>
+                                        <td>Configures active channels, resets broken user states, tunes guild settings like XP rate, and includes utility lookups such as the dictionary command.</td>
+                                    </tr>
+                                    <tr data-command-row>
+                                        <td><code>!cat</code>, <code>!catch</code>, <code>!hint</code>, <code>!reveal</code></td>
+                                        <td>Prefixes</td>
+                                        <td><code>!cat</code> triggers the cat-spam reward behavior for top coin holders, <code>!catch</code> claims limited egg spawns in the pet channel, and <code>!hint</code> / <code>!reveal</code> are message-based helpers used in active silhouette guessing flows.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel" style="margin-top:14px;">
+                    <div class="panel-inner">
+                        <h2 class="section-title">Permissions</h2>
+                        <div class="permissions-grid">
+                            <article class="permission-item soft">
+                                <h3>Slash commands and visibility</h3>
+                                <p>The bot needs application command support and permission visibility so users can access its slash-command interface correctly in the server.</p>
+                            </article>
+                            <article class="permission-item warm">
+                                <h3>Message and channel interaction</h3>
+                                <p>Features like AI chat, logs, and channel-based games work best when the bot can read channel context, send replies, and post embeds where needed.</p>
+                            </article>
+                            <article class="permission-item lime">
+                                <h3>Game and moderation flow</h3>
+                                <p>Some game systems and server-management features may require broader permissions depending on where they are used and how the server is configured.</p>
+                            </article>
+                            <article class="permission-item">
+                                <h3>Recommended setup</h3>
+                                <p>Invite the bot with the permissions needed for your chosen features, then test talk channels, logs, and slash commands in a controlled setup channel first.</p>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page" id="page-howtoplay">
+                <div class="grid two-grid">
+                    <article class="panel">
+                        <div class="panel-inner">
+                            <h1 class="section-title">How to Play</h1>
+                            <p class="section-subtitle">Game rules and mode explanations</p>
+                            <p class="section-copy">A quick guide to the main game families in Meow Bot and how they work.</p>
+                        </div>
+                    </article>
+                    <article class="game-card soft">
+                        <h3 class="card-title">Main game families</h3>
+                        <ul>
+                            <li>Quiz and word games</li>
+                            <li>Visual, guessing, and channel-run games</li>
+                            <li>Social and party prompts</li>
+                            <li>PvP, roast battles, events, and battle systems</li>
+                            <li>Pets, counting, lotteries, and long-term progression loops</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="panel" style="margin-top:14px;">
+                    <div class="panel-inner">
+                        <h2 class="section-title">Quick Start Picks</h2>
+                        <div class="quickstart-grid">
+                            <article class="quickstart-item soft">
+                                <h3>Best daily routine</h3>
+                                <p>Use <code>/daily</code>, <code>/quests</code>, and <code>/dailywordle</code> together to create repeatable member activity.</p>
+                            </article>
+                            <article class="quickstart-item warm">
+                                <h3>Best for active chat</h3>
+                                <p>Run <code>/trivia</code>, <code>/truthordare</code>, and <code>/wouldyourather</code> when the server already has momentum.</p>
+                            </article>
+                            <article class="quickstart-item lime">
+                                <h3>Best chaos combo</h3>
+                                <p>Mix <code>/roastbattle</code>, <code>/timetravel</code>, <code>/anonymousstatement</code>, and <code>/storychain</code> for identity-heavy server moments.</p>
+                            </article>
+                            <article class="quickstart-item">
+                                <h3>Best long-term loop</h3>
+                                <p>Use pets, achievements, quests, counting, and economy systems together so members keep making progress outside of one-off sessions.</p>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid three-grid" style="margin-top:14px;">
+                    <article class="game-card soft">
+                        <h3 class="card-title">Trivia and silly trivia</h3>
+                        <ul>
+                            <li><code>/trivia</code> opens a setup flow for mode, rounds, timing, category, and auto-start.</li>
+                            <li>Hosts choose serious or silly mode, then set rounds, timer, category, and auto-start.</li>
+                            <li>Players answer in chat, and fast correct answers earn coins and placement bonuses.</li>
+                        </ul>
+                    </article>
+                    <article class="game-card warm">
+                        <h3 class="card-title">Riddles</h3>
+                        <ul>
+                            <li>Players type text answers directly into chat.</li>
+                            <li>Attempts are limited.</li>
+                            <li>Correct solves and top placements are rewarded.</li>
+                        </ul>
+                    </article>
+                    <article class="game-card lime">
+                        <h3 class="card-title">Hangman and scramble</h3>
+                        <ul>
+                            <li>Hangman uses letter or full-word guesses.</li>
+                            <li>Scramble challenges users to quickly solve jumbled words.</li>
+                            <li>Difficulty settings influence challenge and reward level.</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="grid three-grid" style="margin-top:14px;">
+                    <article class="game-card warm">
+                        <h3 class="card-title">Word chain</h3>
+                        <ul>
+                            <li>Each response must begin with the last letter of the previous valid word.</li>
+                            <li>Dictionary validation prevents fake entries.</li>
+                            <li>Turn timers eliminate stalled players.</li>
+                        </ul>
+                    </article>
+                    <article class="game-card soft">
+                        <h3 class="card-title">Wordle and Daily Wordle</h3>
+                        <ul>
+                            <li>Players have six attempts to solve the hidden word.</li>
+                            <li>Themed, random, and listed themes are supported.</li>
+                            <li>Daily Wordle runs one shared word per server per day.</li>
+                        </ul>
+                    </article>
+                    <article class="game-card lime">
+                        <h3 class="card-title">Who's That Pokemon and Guess the Number</h3>
+                        <ul>
+                            <li><code>/wtp</code> uses Pokemon silhouettes with setup and start flows.</li>
+                            <li><code>/guessthenumber</code> starts a one-off number round in the current channel.</li>
+                            <li><code>/guesschannel</code> keeps the dedicated persistent channel-based number game flow.</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="grid three-grid" style="margin-top:14px;">
+                    <article class="game-card soft">
+                        <h3 class="card-title">Would you rather and truth or dare</h3>
+                        <ul>
+                            <li>Social prompt-driven modes intended to keep conversation moving.</li>
+                            <li>Can use generated or chosen options depending on the command.</li>
+                        </ul>
+                    </article>
+                    <article class="game-card warm">
+                        <h3 class="card-title">Story chain and social prompts</h3>
+                        <ul>
+                                <li>Story Chain rewards collaborative storytelling over multiple rounds.</li>
+                            <li>Would You Rather and Truth or Dare keep conversation moving when the server already has momentum.</li>
+                        </ul>
+                    </article>
+                    <article class="game-card lime">
+                        <h3 class="card-title">Reaction speed</h3>
+                        <ul>
+                            <li>Reaction Speed focuses on quick response under time pressure.</li>
+                            <li>It works best as a short burst game when chat is already active.</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="grid two-grid" style="margin-top:14px;">
+                    <article class="game-card warm">
+                        <h3 class="card-title">Blackjack, PvP, and roast battle</h3>
+                        <ul>
+                            <li><code>/blackjack</code> provides a coin-based casino-style game against the dealer.</li>
+                            <li><code>/pvp</code> covers direct user-vs-user coinflip, dice, and RPS challenges.</li>
+                            <li><code>/roastbattle</code> turns direct social competition into a structured judged format.</li>
+                        </ul>
+                    </article>
+                    <article class="game-card soft">
+                        <h3 class="card-title">Pets, lotteries, events, and counting</h3>
+                        <ul>
+                            <li>Pets form a long-term progression system with care, mood, jobs, battles, and evolution gates.</li>
+                            <li>Lotteries support both admin weekly jackpots and host-funded event lotteries with public buttons and canvas dashboards.</li>
+                            <li>Server-wide XP and coin events, plus a managed counting channel, create passive activity outside direct game sessions.</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+
+            <section class="page" id="page-faq">
+                <div class="panel">
+                    <div class="panel-inner">
+                        <h1 class="section-title">FAQ</h1>
+                        <p class="section-subtitle">Common setup and usage questions</p>
+                        <div class="faq-list">
+                            <article class="faq-item soft">
+                                <h3>Why are slash commands not appearing?</h3>
+                                <p>Discord command registration can take a little time after invite. Re-inviting with the proper application command scope or waiting for propagation usually fixes it.</p>
+                            </article>
+                            <article class="faq-item warm">
+                                <h3>Why is the bot not replying in chat?</h3>
+                                <p>Check whether a talk channel is configured, whether the bot can send messages there, and whether you are using the chat features the way they are set up to work.</p>
+                            </article>
+                            <article class="faq-item lime">
+                                <h3>Why are some games not working?</h3>
+                                <p>Some game modes need active channels, proper timing, or enough participants. Others depend on setup commands such as dedicated game channels.</p>
+                            </article>
+                            <article class="faq-item">
+                                <h3>How do pets and progression connect?</h3>
+                                <p>Coins, quests, achievements, pets, and shop systems reinforce each other. Members earn through activity, then reinvest in collection and progression loops.</p>
+                            </article>
+                            <article class="faq-item warm">
+                                <h3>How do I reset a broken user state?</h3>
+                                <p>Use the administrative reset command if you have access, and be careful to target only the fields you intend to clear.</p>
+                            </article>
+                            <article class="faq-item soft">
+                                <h3>Where should I start as a new server?</h3>
+                                <p>Set the talk channel, pet channel, and event or counting channels you want first, confirm slash commands are available, then expand into pets, PvP, and larger progression systems.</p>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page" id="page-updates">
+                <div class="panel">
+                    <div class="panel-inner">
+                        <h1 class="section-title">Updates</h1>
+                        <p class="section-subtitle">Release notes, improvements, and what is coming next</p>
+                        <div class="update-list">
+                            <article class="update-item soft">
+                                <h3>v2.4 Pet Refactor - Apr 12, 2026</h3>
+                                <p>Pets were rebuilt into a one-pet progression system. Eggs can now be bought or caught, hatch over time, evolve through a long ladder, and support mood, greetings, items, rebellious behavior, jobs, abilities, equipment, PvE, PvP, durability, ghost consequences, and late-stage evolution stones.</p>
+                            </article>
+                            <article class="update-item warm">
+                                <h3>v2.5 Website + Command Refresh - Apr 12, 2026</h3>
+                                <p>The site was refreshed around the new pet system, retired legacy pet commands were removed, and progression pacing was rebalanced for clearer long-term growth.</p>
+                            </article>
+                            <article class="update-item lime">
+                                <h3>Coming Next - Roadmap</h3>
+                                <p>Planned next steps include richer pet abilities, more items and cosmetics, stronger lore-journal progression, more passive pet dialogue, and fuller stage 8-10 endgame systems.</p>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page" id="page-terms">
+                <div class="grid two-grid">
+                    <article class="panel">
+                        <div class="panel-inner">
+                            <h1 class="section-title">Terms of Service</h1>
+                            <p class="section-subtitle">Rules, access, and service limitations</p>
+                            <p class="section-copy">These terms outline the rules for using Meow Bot, including acceptable use, service limits, and general responsibilities when using the bot.</p>
+                        </div>
+                    </article>
+                    <article class="legal-card warm">
+                        <h3 class="card-title">Effective date</h3>
+                        <p>April 11, 2026</p>
+                        <h3 class="card-title">Summary</h3>
+                        <p>Use of Meow Bot is revocable and subject to platform rules, applicable law, and actions necessary to protect the service and its users.</p>
+                    </article>
+                </div>
+
+                <div class="grid two-grid" style="margin-top:14px;">
+                    <article class="legal-card soft">
+                        <h3 class="card-title">Use of the service</h3>
+                        <p>Meow Bot is provided as a Discord bot service on a limited, revocable, non-exclusive basis. Features, commands, systems, and availability may change over time.</p>
+                    </article>
+                    <article class="legal-card">
+                        <h3 class="card-title">Eligibility and authority</h3>
+                        <p>You may use the bot only if you are permitted to use Discord under applicable law and platform rules. If you add the bot to a server, you represent that you have authority to do so.</p>
+                    </article>
+                </div>
+
+                <div class="grid two-grid" style="margin-top:14px;">
+                    <article class="legal-card warm">
+                        <h3 class="card-title">Discord platform rules</h3>
+                        <p>Use of Meow Bot must also comply with Discord's Terms of Service, Community Guidelines, Developer Terms, and any applicable platform policies. If there is a conflict between use of the bot and Discord's platform rules, Discord's rules take priority.</p>
+                    </article>
+                    <article class="legal-card soft">
+                        <h3 class="card-title">Feature changes</h3>
+                        <p>Commands, systems, rewards, pricing, balancing, progression loops, and other gameplay or service features may be added, removed, rebalanced, or retired over time.</p>
+                    </article>
+                </div>
+
+                <div class="grid two-grid" style="margin-top:14px;">
+                    <article class="legal-card warm">
+                        <h3 class="card-title">Acceptable use</h3>
+                        <ul>
+                            <li>Do not use the bot for unlawful, abusive, fraudulent, or deceptive activity.</li>
+                            <li>Do not interfere with, overload, reverse engineer, or disrupt the service.</li>
+                            <li>Do not abuse scripts or automated behavior to degrade performance or spam commands.</li>
+                            <li>Do not use the bot in a way that violates Discord rules, third-party rights, or applicable regulations.</li>
+                        </ul>
+                    </article>
+                    <article class="legal-card soft">
+                        <h3 class="card-title">Availability and enforcement</h3>
+                        <p>Access may be restricted, suspended, or terminated if use creates operational, legal, safety, or moderation risk. The service may also be modified, paused, or discontinued at any time.</p>
+                    </article>
+                </div>
+
+                <div class="grid two-grid" style="margin-top:14px;">
+                    <article class="legal-card">
+                        <h3 class="card-title">Disclaimer</h3>
+                        <p>Meow Bot is provided on an “as is” and “as available” basis without warranties of availability, fitness, accuracy, or uninterrupted operation.</p>
+                    </article>
+                    <article class="legal-card warm">
+                        <h3 class="card-title">Limitation of liability</h3>
+                        <p>To the maximum extent permitted by law, the operator is not liable for indirect, incidental, special, consequential, or punitive damages arising out of use of or inability to use the bot.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="page" id="page-privacy">
+                <div class="grid two-grid">
+                    <article class="panel">
+                        <div class="panel-inner">
+                            <h1 class="section-title">Privacy Policy</h1>
+                            <p class="section-subtitle">Data, retention, and user rights</p>
+                            <p class="section-copy">This privacy policy explains what Meow Bot may process, why that information is used, how it may be retained, and what rights users may have regarding their data.</p>
+                        </div>
+                    </article>
+                    <article class="legal-card soft">
+                        <h3 class="card-title">Effective date</h3>
+                        <p>April 11, 2026</p>
+                        <h3 class="card-title">Summary</h3>
+                        <p>Meow Bot may process limited Discord-related data needed to provide features, maintain server settings, operate games, and protect service stability.</p>
+                    </article>
+                </div>
+
+                <div class="grid two-grid" style="margin-top:14px;">
+                    <article class="legal-card warm">
+                        <h3 class="card-title">What may be processed</h3>
+                        <ul>
+                            <li>Discord user IDs, guild IDs, channel IDs, role IDs, and message IDs</li>
+                            <li>Public profile details made available through Discord</li>
+                            <li>Guild-specific settings configured by administrators</li>
+                            <li>Command input, game interaction data, and message content used for supported gameplay or chat features</li>
+                            <li>Progression data such as coins, XP, levels, streaks, quests, achievements, and inventory</li>
+                            <li>Pet-related state such as egg ownership, pet lifecycle, mood, care timers, jobs, abilities, battles, and pet image links</li>
+                            <li>Movie-related state such as ratings, watched history, watchlists, overlap data, and poll participation</li>
+                            <li>Reminder preferences, lottery entries, and guild event participation</li>
+                            <li>Operational logs needed for debugging, moderation, abuse review, or security investigation</li>
+                        </ul>
+                    </article>
+                    <article class="legal-card">
+                        <h3 class="card-title">How it is used</h3>
+                        <ul>
+                            <li>To provide command responses and bot features</li>
+                            <li>To store progression, game, pet, or guild configuration state</li>
+                            <li>To manage channel-based systems such as talk channels, pet channels, logs channels, and game-specific workflows</li>
+                            <li>To send optional reminder DMs or public server notifications for configured features</li>
+                            <li>To investigate misuse, fraud, spam, or abuse</li>
+                            <li>To improve reliability, security, and service quality</li>
+                            <li>To comply with legal obligations when required</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="grid two-grid" style="margin-top:14px;">
+                    <article class="legal-card soft">
+                        <h3 class="card-title">Third-party services</h3>
+                        <p>Some Meow Bot features rely on external services such as Discord itself, hosting providers, TMDB for movie-related features, and AI or lookup services used to generate or support certain game and chat systems. Those providers may process request data needed to deliver those features.</p>
+                    </article>
+                    <article class="legal-card warm">
+                        <h3 class="card-title">Message content and feature scope</h3>
+                        <p>Meow Bot may read message content where necessary for active gameplay, AI chat features, answer handling, number guessing, pet catch events, or other interactive systems that depend on user text input.</p>
+                    </article>
+                </div>
+
+                <div class="grid two-grid" style="margin-top:14px;">
+                    <article class="legal-card soft">
+                        <h3 class="card-title">Sharing and retention</h3>
+                        <p>Meow Bot does not sell personal data. Information may be shared with hosting or infrastructure providers only when necessary to operate the service or when disclosure is legally required. Data is retained only as long as reasonably necessary for functionality, moderation, safety, diagnostics, and legal compliance.</p>
+                    </article>
+                    <article class="legal-card warm">
+                        <h3 class="card-title">User rights and security</h3>
+                        <p>Depending on applicable law, users may request access, correction, deletion, restriction, or objection regarding their data. Reasonable safeguards are used to protect stored information, though no internet-based system can guarantee absolute security.</p>
+                    </article>
+                </div>
+
+                <div class="panel" style="margin-top:14px;">
+                    <div class="panel-inner">
+                        <h2 class="section-title">Data We Store</h2>
+                        <div class="table-wrap">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Examples</th>
+                                        <th>Why It Is Stored</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Identity</td>
+                                        <td>Discord user IDs, guild IDs, channel IDs, usernames</td>
+                                        <td>Needed to link commands, progression, guild configuration, reminders, and feature access to the correct user or server.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Economy and progression</td>
+                                        <td>Coins, XP, levels, streaks, quests, achievements, inventory, owned cosmetics</td>
+                                        <td>Needed to preserve long-term progression, shop ownership, rankings, and gameplay rewards.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pets</td>
+                                        <td>Egg ownership, pet stage, care timers, jobs, abilities, mood, battles, pet image links</td>
+                                        <td>Needed to run the pet progression system, public evolution events, and pet-related profile displays.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Movies</td>
+                                        <td>Ratings, watchlists, watched history, overlap and profile data</td>
+                                        <td>Needed to provide recommendations, comparisons, movie profile summaries, and saved discovery history.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Games and events</td>
+                                        <td>Wordle stats, lottery entries, active game state, scoreboard information</td>
+                                        <td>Needed to operate commands, score systems, lotteries, and long-running game features.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Configuration</td>
+                                        <td>Talk channel, pet channel, logs channel, reminder preference, guild settings</td>
+                                        <td>Needed to make the bot behave correctly inside each server and respect feature preferences.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid two-grid" style="margin-top:14px;">
+                    <article class="legal-card">
+                        <h3 class="card-title">Deletion and reset requests</h3>
+                        <p>If you want stored data removed or reset, contact support and include the relevant server context, your Discord ID if needed, and the type of data or feature involved. Administrative reset tools may also exist for some server-managed states.</p>
+                    </article>
+                    <article class="legal-card soft">
+                        <h3 class="card-title">Server administrators</h3>
+                        <p>Server administrators are responsible for how they configure Meow Bot in their servers, including channel setup, feature use, and whether the bot is made available to server members in a given context.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="page" id="page-contact">
+                <div class="grid two-grid">
+                    <article class="panel">
+                        <div class="panel-inner">
+                            <h1 class="section-title">Contact</h1>
+                            <p class="section-subtitle">Support, questions, and bot-related requests</p>
+                            <p class="section-copy">Use this section if you need help with Meow Bot, want to report a bug, ask a policy question, or request support for a server-specific issue.</p>
+                        </div>
+                    </article>
+                    <article class="legal-card soft">
+                        <h3 class="card-title">Best ways to reach out</h3>
+                        <ul>
+                            <li>Use email for support requests, bug reports, and follow-up questions.</li>
+                            <li>Include your server context, the command involved, and what went wrong.</li>
+                            <li>Use the same contact for privacy, deletion, or policy-related requests.</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="grid two-grid" style="margin-top:14px;">
+                    <article class="legal-card warm">
+                        <h3 class="card-title">Support topics</h3>
+                        <ul>
+                            <li>Invite and permission issues</li>
+                            <li>Setup help for talk, pet, or logs channels</li>
+                            <li>Broken commands, missing replies, or game-state problems</li>
+                            <li>Profile, inventory, pet, movie, or economy questions</li>
+                            <li>Privacy, deletion, or policy requests</li>
+                        </ul>
+                    </article>
+                    <article class="legal-card">
+                        <h3 class="card-title">What to include</h3>
+                        <ul>
+                            <li>Your Discord username or user ID if relevant</li>
+                            <li>The server or channel where the issue happened</li>
+                            <li>The command or feature involved</li>
+                            <li>A short description of expected behavior versus actual behavior</li>
+                            <li>Screenshots or copied error text if available</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="grid two-grid" style="margin-top:14px;">
+                    <article class="legal-card soft">
+                        <h3 class="card-title">Response guidance</h3>
+                        <p>Response times may vary depending on issue type, severity, and availability. Critical service issues and bot-breaking problems are generally prioritized over general usage questions.</p>
+                    </article>
+                    <article class="legal-card warm">
+                        <h3 class="card-title">Official links</h3>
+                        <div class="contact-actions">
+                            <div class="contact-box soft">
+                                <h3>Email</h3>
+                                <p><a href="mailto:thepenguinfluffy@gmail.com">thepenguinfluffy@gmail.com</a></p>
+                            </div>
+                            <div class="contact-box warm">
+                                <h3>Quick action</h3>
+                                <button class="copy-button" id="copyEmailButton" type="button">Copy Email</button>
+                                <div class="copy-status" id="copyEmailStatus"></div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="grid two-grid" style="margin-top:14px;">
+                    <article class="legal-card soft">
+                        <h3 class="card-title">Deletion and policy requests</h3>
+                        <p>For deletion, privacy, or policy-related requests, include enough information to identify the affected server, user, and feature area so the request can be reviewed accurately.</p>
+                    </article>
+                    <article class="legal-card warm">
+                        <h3 class="card-title">Best support format</h3>
+                        <p>The fastest way to get useful help is to include the command or feature name, what you expected to happen, what actually happened, and any screenshot or copied error message you have.</p>
+                    </article>
+                </div>
+
+                <div class="grid two-grid" style="margin-top:14px;">
+                    <article class="legal-card soft">
+                        <h3 class="card-title">Verification and support server</h3>
+                        <p>If Meow Bot is submitted for broader Discord distribution or verification, a public-facing support route should remain available so users, server owners, and Discord reviewers can reach the operator for help, reporting, or policy questions.</p>
+                    </article>
+                    <article class="legal-card warm">
+                        <h3 class="card-title">Recommended support setup</h3>
+                        <p>Keep at least one reliable contact method active, and consider maintaining a dedicated support server or public help space where setup issues, verification questions, privacy requests, and service problems can be reviewed more efficiently.</p>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-text">MEOW BOT - by FLUFFY</div>
+            <div class="footer-nav">
+                <div class="footer-nav-page active" data-footer-page="0">
+                    <button class="tab-link active" data-target="home" type="button">Home</button>
+                    <button class="tab-link" data-target="commands" type="button">Commands</button>
+                    <button class="tab-link" data-target="howtoplay" type="button">Games</button>
+                    <button class="tab-link" data-target="faq" type="button">FAQ</button>
+                    <button class="footer-nav-toggle" type="button" id="footerNext" aria-label="Next navigation set">-&gt;</button>
+                </div>
+                <div class="footer-nav-page" data-footer-page="1">
+                    <button class="footer-nav-toggle" type="button" id="footerPrev" aria-label="Previous navigation set">&lt;-</button>
+                    <button class="tab-link" data-target="updates" type="button">Updates</button>
+                    <button class="tab-link" data-target="terms" type="button">Terms</button>
+                    <button class="tab-link" data-target="privacy" type="button">Privacy</button>
+                    <button class="tab-link" data-target="contact" type="button">Contact</button>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        (function () {
+            var storageKey = "meow-bot-theme";
+            var root = document.documentElement;
+            var themeToggle = document.getElementById("themeToggle");
+            var mobileMenuToggle = document.getElementById("mobileMenuToggle");
+            var topbar = document.querySelector(".topbar");
+            var footerPages = Array.prototype.slice.call(document.querySelectorAll("[data-footer-page]"));
+            var footerNext = document.getElementById("footerNext");
+            var footerPrev = document.getElementById("footerPrev");
+            var savedTheme = localStorage.getItem(storageKey);
+
+            function applyTheme(theme) {
+                root.setAttribute("data-theme", theme);
+                themeToggle.textContent = theme === "dark" ? "Light mode" : "Dark mode";
+                localStorage.setItem(storageKey, theme);
+            }
+
+            applyTheme(savedTheme || "light");
+
+            themeToggle.addEventListener("click", function () {
+                applyTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+            });
+
+            var tabLinks = Array.prototype.slice.call(document.querySelectorAll(".tab-link[data-target]"));
+            var pages = {
+                home: document.getElementById("page-home"),
+                commands: document.getElementById("page-commands"),
+                howtoplay: document.getElementById("page-howtoplay"),
+                faq: document.getElementById("page-faq"),
+                updates: document.getElementById("page-updates"),
+                terms: document.getElementById("page-terms"),
+                privacy: document.getElementById("page-privacy"),
+                contact: document.getElementById("page-contact")
+            };
+
+            var footerPageMap = {
+                home: 0,
+                commands: 0,
+                howtoplay: 0,
+                faq: 0,
+                updates: 1,
+                terms: 1,
+                privacy: 1,
+                contact: 1
+            };
+
+            function setFooterPage(index) {
+                footerPages.forEach(function (page, i) {
+                    page.classList.toggle("active", i === index);
+                });
+            }
+
+            function setActiveTab(target, options) {
+                var config = options || {};
+                var activePage = pages[target];
+
+                if (!activePage) {
+                    return;
+                }
+
+                Object.keys(pages).forEach(function (key) {
+                    pages[key].classList.toggle("active", key === target);
+                });
+
+                tabLinks.forEach(function (link) {
+                    link.classList.toggle("active", link.getAttribute("data-target") === target);
+                });
+
+                setFooterPage(footerPageMap[target] || 0);
+
+                requestAnimationFrame(function () {
+                    activePage.scrollIntoView({ behavior: "auto", block: "start" });
+                    window.scrollBy(0, -12);
+                });
+
+                if (config.updateHash !== false) {
+                    if (window.location.hash !== "#" + target) {
+                        history.pushState(null, "", "#" + target);
+                    }
+                }
+            }
+
+            document.addEventListener("click", function (event) {
+                var trigger = event.target.closest("[data-target]");
+
+                if (!trigger) {
+                    return;
+                }
+
+                var target = trigger.getAttribute("data-target");
+
+                if (!pages[target]) {
+                    return;
+                }
+
+                event.preventDefault();
+                setActiveTab(target, { updateHash: true });
+
+                if (window.innerWidth <= 820) {
+                    topbar.classList.remove("menu-open");
+                    mobileMenuToggle.setAttribute("aria-expanded", "false");
+                }
+            });
+
+            mobileMenuToggle.addEventListener("click", function () {
+                var isOpen = topbar.classList.toggle("menu-open");
+                mobileMenuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+            });
+
+            if (footerNext && footerPrev) {
+                footerNext.addEventListener("click", function () {
+                    setFooterPage(1);
+                });
+
+                footerPrev.addEventListener("click", function () {
+                    setFooterPage(0);
+                });
+            }
+
+            function applyHashTab() {
+                var hashTarget = window.location.hash.replace("#", "");
+
+                if (hashTarget && pages[hashTarget]) {
+                    setActiveTab(hashTarget, { updateHash: false });
+                }
+            }
+
+            window.addEventListener("hashchange", applyHashTab);
+            applyHashTab();
+
+            window.addEventListener("resize", function () {
+                if (window.innerWidth > 820) {
+                    topbar.classList.remove("menu-open");
+                    mobileMenuToggle.setAttribute("aria-expanded", "false");
+                }
+            });
+
+            var slides = Array.prototype.slice.call(document.querySelectorAll("[data-slide]"));
+            var slideDots = document.getElementById("slideDots");
+            var slideshowWindow = document.getElementById("slideshowWindow");
+            var prevSlideButton = document.getElementById("prevSlide");
+            var nextSlideButton = document.getElementById("nextSlide");
+            var activeSlide = 0;
+            var slideTimer = null;
+
+            function syncSlideshowHeight() {
+                if (!slideshowWindow || !slides.length) {
+                    return;
+                }
+
+                var activeSlideElement = slides[activeSlide];
+
+                if (!activeSlideElement) {
+                    return;
+                }
+
+                slideshowWindow.style.height = activeSlideElement.offsetHeight + 42 + "px";
+            }
+
+            function renderDots() {
+                slideDots.innerHTML = "";
+                slides.forEach(function (_, index) {
+                    var dot = document.createElement("button");
+                    dot.className = "slide-dot" + (index === activeSlide ? " active" : "");
+                    dot.type = "button";
+                    dot.addEventListener("click", function () {
+                        showSlide(index);
+                        restartSlides();
+                    });
+                    slideDots.appendChild(dot);
+                });
+            }
+
+            function showSlide(index) {
+                activeSlide = (index + slides.length) % slides.length;
+                slides.forEach(function (slide, i) {
+                    slide.classList.toggle("active", i === activeSlide);
+                });
+                renderDots();
+                requestAnimationFrame(syncSlideshowHeight);
+            }
+
+            function restartSlides() {
+                if (slideTimer) {
+                    clearInterval(slideTimer);
+                }
+                slideTimer = setInterval(function () {
+                    showSlide(activeSlide + 1);
+                }, 5200);
+            }
+
+            showSlide(0);
+            restartSlides();
+            window.addEventListener("resize", syncSlideshowHeight);
+
+            prevSlideButton.addEventListener("click", function () {
+                showSlide(activeSlide - 1);
+                restartSlides();
+            });
+
+            nextSlideButton.addEventListener("click", function () {
+                showSlide(activeSlide + 1);
+                restartSlides();
+            });
+
+            document.getElementById("slideshowWindow").addEventListener("mouseenter", function () {
+                if (slideTimer) {
+                    clearInterval(slideTimer);
+                }
+            });
+
+            document.getElementById("slideshowWindow").addEventListener("mouseleave", function () {
+                restartSlides();
+            });
+
+            var commandSearch = document.getElementById("commandSearch");
+
+            if (commandSearch) {
+                commandSearch.addEventListener("input", function () {
+                    var value = commandSearch.value.trim().toLowerCase();
+
+                    document.querySelectorAll("[data-command-item]").forEach(function (item) {
+                        item.classList.toggle("is-hidden", value !== "" && item.textContent.toLowerCase().indexOf(value) === -1);
+                    });
+
+                    document.querySelectorAll("[data-command-row]").forEach(function (row) {
+                        row.classList.toggle("is-hidden", value !== "" && row.textContent.toLowerCase().indexOf(value) === -1);
+                    });
+                });
+            }
+
+            var copyEmailButton = document.getElementById("copyEmailButton");
+            var copyEmailStatus = document.getElementById("copyEmailStatus");
+
+            if (copyEmailButton && copyEmailStatus) {
+                copyEmailButton.addEventListener("click", function () {
+                    var email = "thepenguinfluffy@gmail.com";
+
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(email).then(function () {
+                            copyEmailStatus.textContent = "Email copied.";
+                        }).catch(function () {
+                            copyEmailStatus.textContent = "Could not copy automatically.";
+                        });
+                    } else {
+                        copyEmailStatus.textContent = email;
+                    }
+                });
+            }
+
+            function getStatsEndpoints() {
+                var currentOrigin = window.location.origin;
+                var localStatsOrigin = "http://127.0.0.1:3001";
+                var customStatsOrigin = window.MEOW_STATS_API_BASE;
+                var endpoints = [];
+
+                function addEndpoint(url) {
+                    if (!url) {
+                        return;
+                    }
+                    var normalized = String(url);
+                    if (endpoints.indexOf(normalized) === -1) {
+                        endpoints.push(normalized);
+                    }
+                }
+
+                if (customStatsOrigin) {
+                    addEndpoint(String(customStatsOrigin).replace(/\/$/, "") + "/api/stats");
+                }
+
+                if (window.location.protocol !== "file:") {
+                    addEndpoint(currentOrigin.replace(/\/$/, "") + "/api/stats");
+                    addEndpoint(currentOrigin.replace(/\/$/, "") + "/.netlify/functions/stats");
+                }
+
+                if (window.location.protocol === "file:" || /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname)) {
+                    addEndpoint(localStatsOrigin + "/api/stats");
+                }
+
+                return endpoints;
+            }
+
+            function updateLiveStats(stats) {
+                var values = {
+                    commands: String(stats.commands),
+                    servers: String(stats.servers),
+                    players: String(stats.players)
+                };
+
+                document.querySelectorAll("[data-live-stat]").forEach(function (element) {
+                    var key = element.getAttribute("data-live-stat");
+                    if (values[key]) {
+                        element.textContent = values[key];
+                    }
+                });
+
+                var badgeText = {
+                    commands: values.commands + " slash commands",
+                    servers: values.servers + " servers live",
+                    players: values.players + " players tracked"
+                };
+
+                document.querySelectorAll("[data-live-badge]").forEach(function (element) {
+                    var key = element.getAttribute("data-live-badge");
+                    if (badgeText[key]) {
+                        element.textContent = badgeText[key];
+                    }
+                });
+            }
+
+            async function hydrateLiveStats() {
+                var endpoints = getStatsEndpoints();
+
+                for (var i = 0; i < endpoints.length; i += 1) {
+                    try {
+                        var response = await fetch(endpoints[i], { headers: { "Accept": "application/json" } });
+                        if (!response.ok) {
+                            continue;
+                        }
+
+                        var stats = await response.json();
+                        if (!stats || typeof stats.commands !== "number" || typeof stats.servers !== "number" || typeof stats.players !== "number") {
+                            continue;
+                        }
+
+                        updateLiveStats(stats);
+                        return;
+                    } catch (_) {}
+                }
+            }
+
+            hydrateLiveStats();
+        }());
+    </script>
+</body>
+</html>

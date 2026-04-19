@@ -1,6 +1,6 @@
 "use strict";
 
-const DEFAULT_STATS_URL = "http://de3.bot-hosting.net:20854/api/stats";
+const DEFAULT_STATS_URL = "http://fi6.bot-hosting.net:21448/api/stats";
 
 async function handler(req, res) {
   const targetUrl = process.env.BOT_STATS_API_URL || DEFAULT_STATS_URL;

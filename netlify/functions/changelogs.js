@@ -2,9 +2,11 @@
 
 const { fetchUpstreamJson, buildProxyError } = require("../../site-api-proxy");
 
-exports.handler = async function handler() {
+exports.handler = async function handler(event) {
+  const search = event?.rawQueryString ? `?${event.rawQueryString}` : "";
+
   try {
-    const { upstream } = await fetchUpstreamJson("/api/stats");
+    const { upstream } = await fetchUpstreamJson(`/api/changelogs${search}`);
 
     if (!upstream.ok) {
       return {
@@ -17,14 +19,14 @@ exports.handler = async function handler() {
       };
     }
 
-    const stats = await upstream.json();
+    const payload = await upstream.json();
     return {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         "Cache-Control": "public, max-age=15, stale-while-revalidate=45",
       },
-      body: JSON.stringify(stats),
+      body: JSON.stringify(payload),
     };
   } catch (error) {
     return {

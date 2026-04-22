@@ -179,6 +179,57 @@
             flex-wrap: wrap;
         }
 
+        .topbar.nav-collapsed {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto auto auto;
+            align-items: center;
+            justify-content: initial;
+            padding: 18px 18px;
+        }
+
+        .topbar.nav-collapsed .mobile-menu-toggle {
+            display: inline-flex;
+            width: auto;
+            min-width: 44px;
+            justify-self: end;
+        }
+
+        .topbar.nav-collapsed .brand {
+            min-width: 0;
+        }
+
+        .topbar.nav-collapsed .top-actions {
+            display: flex;
+            width: auto;
+            grid-column: auto;
+            flex-direction: row;
+            align-items: center;
+            justify-self: end;
+            padding-top: 0;
+            gap: 8px;
+        }
+
+        .topbar.nav-collapsed .nav-tabs {
+            display: none;
+            order: 4;
+            width: 100%;
+            grid-column: 1 / -1;
+            justify-content: flex-start;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
+            padding-top: 8px;
+        }
+
+        .topbar.nav-collapsed.menu-open .nav-tabs {
+            display: flex;
+        }
+
+        .topbar.nav-collapsed .tab-link {
+            width: 100%;
+            text-align: left;
+        }
+
         .mobile-menu-toggle {
             display: none;
             min-height: 44px;
@@ -208,6 +259,40 @@
             align-items: center;
             justify-content: center;
             white-space: nowrap;
+        }
+
+        .status-pill {
+            min-height: 44px;
+            padding: 0 16px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--text);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            white-space: nowrap;
+            font-weight: 700;
+        }
+
+        .status-pill-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            background: #f59e0b;
+            box-shadow: 0 0 0 4px color-mix(in srgb, #f59e0b 18%, transparent);
+            flex: 0 0 auto;
+        }
+
+        .status-pill.is-online .status-pill-dot {
+            background: #22c55e;
+            box-shadow: 0 0 0 4px color-mix(in srgb, #22c55e 18%, transparent);
+        }
+
+        .status-pill.is-offline .status-pill-dot {
+            background: #ef4444;
+            box-shadow: 0 0 0 4px color-mix(in srgb, #ef4444 18%, transparent);
         }
 
         .page {
@@ -632,6 +717,61 @@
             margin-top: 18px;
         }
 
+        .updates-section-block + .updates-section-block {
+            margin-top: 30px;
+        }
+
+        .updates-section-block {
+            display: none;
+        }
+
+        .updates-section-block.is-active {
+            display: block;
+        }
+
+        .updates-toggle-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 0 0 22px;
+        }
+
+        .updates-toggle-button {
+            min-height: 46px;
+            padding: 0 18px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: var(--surface);
+            color: var(--muted);
+            cursor: pointer;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .updates-toggle-button.is-active {
+            color: var(--text);
+            background: color-mix(in srgb, var(--surface-soft) 65%, var(--surface));
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent);
+        }
+
+        .updates-section-head {
+            margin-bottom: 16px;
+        }
+
+        .updates-section-title {
+            margin: 0;
+            font-size: clamp(1.6rem, 3vw, 2.25rem);
+            line-height: 1;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+        }
+
+        .updates-section-copy {
+            margin: 8px 0 0;
+            color: var(--muted);
+        }
+
         .faq-item,
         .update-item,
         .permission-item,
@@ -706,6 +846,13 @@
             flex-wrap: wrap;
         }
 
+        .update-meta-tags {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
         .update-type-pill {
             display: inline-flex;
             align-items: center;
@@ -722,6 +869,26 @@
             color: var(--text);
         }
 
+        .update-latest-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 30px;
+            padding: 0 12px;
+            border-radius: 999px;
+            font-size: 0.76rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-weight: 800;
+            background: var(--surface-dark);
+            color: #ffffff;
+        }
+
+        html[data-theme="dark"] .update-latest-pill {
+            background: #f4ecec;
+            color: #101216;
+        }
+
         .update-date {
             color: var(--muted);
             font-size: 0.88rem;
@@ -730,10 +897,21 @@
 
         .update-body {
             line-height: 1.65;
+            overflow-y: auto;
+            padding-right: 8px;
+            scrollbar-width: thin;
+            scrollbar-color: color-mix(in srgb, var(--accent) 45%, transparent) transparent;
+        }
+
+        .update-item.is-featured .update-body {
+            max-height: 16.5em;
+        }
+
+        .update-item:not(.is-featured) .update-body {
+            max-height: 10.5em;
         }
 
         .update-body.is-collapsed {
-            overflow: hidden;
             display: block;
         }
 
@@ -743,6 +921,19 @@
 
         .update-body.is-collapsed.regular {
             max-height: 6.6em;
+        }
+
+        .update-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .update-body::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .update-body::-webkit-scrollbar-thumb {
+            background: color-mix(in srgb, var(--accent) 42%, var(--line));
+            border-radius: 999px;
         }
 
         .update-item .update-actions {
@@ -1308,10 +1499,16 @@
                 linear-gradient(180deg, color-mix(in srgb, var(--surface-soft) 28%, var(--surface)) 0%, var(--surface) 100%);
         }
 
+        .home-eyebrow-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
         .home-eyebrow {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
             padding: 10px 14px;
             border-radius: 999px;
             border: 1px solid var(--line);
@@ -1321,6 +1518,17 @@
             letter-spacing: 0.06em;
             font-size: 0.8rem;
             font-weight: 700;
+        }
+
+        .home-eyebrow-status {
+            width: 132px;
+            min-width: 132px;
+            max-width: 132px;
+            flex: 0 0 132px;
+            min-height: 40px;
+            padding: 0 12px;
+            font-size: 0.74rem;
+            background: color-mix(in srgb, var(--surface) 78%, transparent);
         }
 
         .home-lead {
@@ -1614,6 +1822,11 @@
             .tab-link {
                 width: 100%;
                 text-align: left;
+            }
+
+            .cta-row .cta-secondary {
+                width: auto;
+                text-align: center;
             }
 
             .slide {
@@ -1933,7 +2146,7 @@
             .app-shell {
                 width: min(100% - 10px, var(--max-width));
                 margin: 5px auto;
-                margin-bottom: 86px;
+                margin-bottom: 112px;
                 border-radius: 24px;
             }
 
@@ -1944,13 +2157,15 @@
             }
 
             .topbar {
-                grid-template-columns: minmax(0, 1fr) auto auto auto;
+                grid-template-columns: minmax(0, 1fr) auto;
                 gap: 6px;
+                align-items: start;
             }
 
             .page {
                 padding-left: 6px;
                 padding-right: 6px;
+                padding-bottom: 24px;
             }
 
             .nav-tabs {
@@ -1968,6 +2183,44 @@
                 min-height: 36px;
                 padding: 0 8px;
                 font-size: 0.74rem;
+            }
+
+            .brand {
+                min-width: 0;
+                align-items: center;
+            }
+
+            .brand > div {
+                line-height: 0.92;
+            }
+
+            .mobile-menu-toggle {
+                grid-column: 2;
+                grid-row: 1;
+                justify-self: end;
+            }
+
+            .top-actions {
+                grid-column: 1 / -1;
+                width: 100%;
+                justify-content: stretch;
+                gap: 8px;
+            }
+
+            .status-pill {
+                flex: 1 1 100%;
+                width: 100%;
+                min-width: 0;
+                justify-content: center;
+                padding: 0 12px;
+                font-size: 0.76rem;
+            }
+
+            .top-actions .theme-toggle,
+            .top-actions .pill-button {
+                flex: 1 1 calc(50% - 4px);
+                min-width: 0;
+                justify-content: center;
             }
 
             .cta-primary,
@@ -2075,9 +2328,15 @@
                 <div class="home-premium">
                     <section class="home-landing panel">
                         <div>
-                            <div class="home-eyebrow">Discord bot for playful communities</div>
+                            <div class="home-eyebrow-row">
+                                <div class="status-pill home-eyebrow-status" id="botStatusBadge" aria-live="polite">
+                                    <span class="status-pill-dot" aria-hidden="true"></span>
+                                    <span id="botStatusText">Checking status</span>
+                                </div>
+                                <div class="home-eyebrow">Discord bot for playful communities</div>
+                            </div>
                             <h1 class="hero-title" style="margin-top:22px;">ENTER THE<span class="thin">MEOWVERSE</span></h1>
-                            <p class="home-lead">Meow Bot brings cat-personality chat, party games, daily progression, movie picks, public events, and a deep pet system into one Discord bot built for active communities.</p>
+                            <p class="home-lead">Meow Bot brings cat-personality chat, party games, daily progression, movie picks, quick lookups, server tools, public events, and a deep pet system into one Discord bot built for active communities.</p>
                             <div class="cta-row">
                                 <a class="cta-primary" href="https://discord.com/oauth2/authorize?client_id=1488940777190199386" target="_blank" rel="noopener noreferrer">Invite Meow Bot</a>
                                 <button class="cta-secondary tab-link" data-target="commands" type="button">Explore Commands</button>
@@ -2103,7 +2362,7 @@
                                     </div>
                                     <div class="message">
                                         <div class="avatar">🎮</div>
-                                        <div><strong>Game Pulse</strong><p>Trivia, riddles, Wordle, scramble, story chain, reaction speed, Pokemon silhouettes, and blackjack are ready.</p></div>
+                                        <div><strong>Game Pulse</strong><p>Trivia, riddles, Wordle, scramble, story chain, Guess The Nearest, Pokemon silhouettes, and blackjack are ready.</p></div>
                                     </div>
                                     <div class="message">
                                         <div class="avatar">🐾</div>
@@ -2206,11 +2465,11 @@
                                 <div class="slide-copy">
                                     <div class="slide-kicker">Feature 03</div>
                                     <h4>Games, Chaos, And Variety</h4>
-                                    <p>Party games, PvP, movie picks, counting, anonymous drops, XP events, and pets all live in one bot.</p>
+                                    <p>Party games, PvP, movie picks, wiki and dictionary lookups, counting, anonymous drops, XP events, and pets all live in one bot.</p>
                                     <div class="slide-points">
-                                        <div>Trivia, Wordle, riddles, reaction speed, and story chain</div>
-                                        <div>Roast battles, time travel, anonymous drops, and social prompts</div>
-                                        <div>Guessing games, pet battles, tournaments, events, and movie picks</div>
+                                        <div>Trivia, Wordle, riddles, reaction speed, Guess The Nearest, and story chain</div>
+                                        <div>Roast battles, time travel, memes, anonymous drops, and social prompts</div>
+                                        <div>Guessing games, pet battles, tournaments, events, movie picks, and quick lookups</div>
                                     </div>
                                 </div>
                                 <div class="slide-shot">
@@ -2277,7 +2536,7 @@
                             <article class="info-card warm">
                                 <div class="card-icon">🎮</div>
                                 <h3 class="card-title">Big Game Stack</h3>
-                                <p>Trivia, riddles, Wordle, Daily Wordle, scramble, hangman, reaction speed, guess image, story chain, and more.</p>
+                            <p>Trivia, riddles, Wordle, Daily Wordle, scramble, hangman, Guess The Nearest, reaction speed, story chain, WTP, and more.</p>
                             </article>
                             <article class="info-card lime">
                                 <div class="card-icon">🪙</div>
@@ -2287,7 +2546,7 @@
                             <article class="info-card">
                                 <div class="card-icon">⚙️</div>
                                 <h3 class="card-title">Server Setup</h3>
-                                <p>Configure talk channels, pet channels, logs, event announcements, anonymous statement drops, counting, XP rate, and other guild-specific features.</p>
+                                <p>Configure talk channels, pet channels, logs, update posts, event announcements, anonymous statement drops, Daily Wordle alerts, counting, reaction settings, XP rate, and other guild-specific features.</p>
                             </article>
                         </div>
                     </section>
@@ -2322,9 +2581,9 @@
                         <ul>
                             <li>Core and profile</li>
                             <li>Economy and progression</li>
-                            <li>Games and competition</li>
-                            <li>Pets, lotteries, and tournaments</li>
-                            <li>Movies, social tools, and setup</li>
+                            <li>Games, competition, and social prompts</li>
+                            <li>Pets, lotteries, tournaments, and events</li>
+                            <li>Movies, lookups, feedback, updates, and setup</li>
                         </ul>
                     </article>
                 </div>
@@ -2332,19 +2591,19 @@
                 <div class="grid four-grid" style="margin-top:14px;">
                     <article class="command-card soft" data-command-item>
                         <h3 class="card-title">Core</h3>
-                        <p><code>/help</code>, <code>/start</code>, <code>/ping</code>, <code>/mood</code>, <code>/profile</code>, <code>/achievements</code>, <code>/inventory</code>, <code>/wordlestats</code>, <code>/reminder</code>, <code>/clearmemory</code>, <code>/mydata</code></p>
+                        <p><code>/help</code>, <code>/start</code>, <code>/ping</code>, <code>/mood</code>, <code>/profile</code>, <code>/achievements</code>, <code>/inventory</code>, <code>/activitylog</code>, <code>/wordlestats</code>, <code>/reminder</code>, <code>/clearmemory</code>, <code>/mydata</code>, <code>/serverinfo</code></p>
                     </article>
                     <article class="command-card warm" data-command-item>
                         <h3 class="card-title">Economy</h3>
-                        <p><code>/balance</code>, <code>/daily</code>, <code>/gamble</code>, <code>/give</code>, <code>/shop</code>, <code>/leaderboard</code>, <code>/trade</code>, <code>/quests</code>, <code>/collect</code>, <code>/lottery</code>, <code>/mysterybox</code></p>
+                        <p><code>/balance</code>, <code>/daily</code>, <code>/gamble</code>, <code>/give</code>, <code>/shop</code>, <code>/leaderboard</code>, <code>/trade</code>, <code>/quests</code>, <code>/lottery</code>, <code>/mysterybox</code></p>
                     </article>
                     <article class="command-card lime" data-command-item>
                         <h3 class="card-title">Games</h3>
-                        <p><code>/trivia</code>, <code>/riddle</code>, <code>/hangman</code>, <code>/wordchain</code>, <code>/scramble</code>, <code>/wordle</code>, <code>/dailywordle</code>, <code>/guessthenumber</code>, <code>/wtp</code>, <code>/storychain</code>, <code>/reactionspeed</code>, <code>/blackjack</code></p>
+                        <p><code>/trivia</code>, <code>/riddle</code>, <code>/hangman</code>, <code>/wordchain</code>, <code>/guessthenearest</code>, <code>/scramble</code>, <code>/wordle</code>, <code>/dailywordle</code>, <code>/guessthenumber</code>, <code>/guesschannel</code>, <code>/wtp</code>, <code>/storychain</code>, <code>/reactionspeed</code>, <code>/blackjack</code></p>
                     </article>
                     <article class="command-card" data-command-item>
-                        <h3 class="card-title">Social + Setup</h3>
-                        <p><code>/roast</code>, <code>/ship</code>, <code>/hug</code>, <code>/kiss</code>, <code>/catfact</code>, <code>/dadjoke</code>, <code>/meme</code>, <code>/anonymousstatement</code>, <code>/movie</code>, <code>/timetravel</code>, <code>/talkchannel</code>, <code>/petchannel</code>, <code>/eventchannel</code>, <code>/anonymouschannel</code>, <code>/counting</code>, <code>/event</code>, <code>/setup</code>, <code>/resetuser</code></p>
+                        <h3 class="card-title">Social + Utility + Setup</h3>
+                        <p><code>/roast</code>, <code>/ship</code>, <code>/hug</code>, <code>/kiss</code>, <code>/catfact</code>, <code>/dadjoke</code>, <code>/meme</code>, <code>/anonymousstatement</code>, <code>/movie</code>, <code>/dictionary</code>, <code>/wikipedia</code>, <code>/timetravel</code>, <code>/talkchannel</code>, <code>/petchannel</code>, <code>/logschannel</code>, <code>/eventchannel</code>, <code>/announcechannel</code>, <code>/dailywordlechannel</code>, <code>/anonymouschannel</code>, <code>/counting</code>, <code>/event</code>, <code>/reactions</code>, <code>/setup</code>, <code>/resetuser</code></p>
                     </article>
                     <article class="command-card soft" data-command-item>
                         <h3 class="card-title">Prefixes</h3>
@@ -2380,7 +2639,7 @@
                                         <td>Use these to check your stats, inventory, achievements, Wordle records, personal data, and saved memory settings.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>/balance</code>, <code>/daily</code>, <code>/gamble</code>, <code>/give</code>, <code>/shop</code>, <code>/leaderboard</code>, <code>/trade</code>, <code>/quests</code>, <code>/collect</code>, <code>/mysterybox</code></td>
+                                        <td><code>/balance</code>, <code>/daily</code>, <code>/gamble</code>, <code>/give</code>, <code>/shop</code>, <code>/leaderboard</code>, <code>/trade</code>, <code>/quests</code>, <code>/mysterybox</code></td>
                                         <td>Economy</td>
                                         <td>Handles coins, streak rewards, gambling, item buying, trading, quests, collection payouts, mystery rewards, and leaderboard competition.</td>
                                     </tr>
@@ -2390,14 +2649,14 @@
                                         <td>Includes admin weekly lotteries and host-funded event lotteries with public ticket buying, visual dashboards, and automatic winner announcements.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>/trivia</code>, <code>/riddle</code>, <code>/hangman</code>, <code>/wordchain</code>, <code>/scramble</code>, <code>/wordle</code>, <code>/dailywordle</code>, <code>/guessthenumber</code>, <code>/reactionspeed</code>, <code>/storychain</code>, <code>/blackjack</code></td>
+                                        <td><code>/trivia</code>, <code>/riddle</code>, <code>/hangman</code>, <code>/wordchain</code>, <code>/guessthenearest</code>, <code>/scramble</code>, <code>/wordle</code>, <code>/dailywordle</code>, <code>/guessthenumber</code>, <code>/reactionspeed</code>, <code>/storychain</code>, <code>/blackjack</code></td>
                                         <td>Games</td>
-                                        <td>Includes quick party games, word games, collaborative sessions, and coin-based risk with blackjack.</td>
+                                        <td>Includes quick party games, word games, nearest-number matches, collaborative sessions, and coin-based risk with blackjack.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>/guesschannel</code>, <code>/stopguess</code>, <code>/wtp</code>, <code>/stopgame</code>, <code>/howtoplay</code></td>
+                                        <td><code>/guesschannel</code>, <code>/guessthenumber</code>, <code>/stopguess</code>, <code>/wtp</code>, <code>/stopgame</code>, <code>/howtoplay</code></td>
                                         <td>Game setup</td>
-                                        <td>Use these to run channel-based guessing, stop active sessions, start Pokemon silhouette games, and read rules without leaving Discord.</td>
+                                        <td>Use these to run one-off or persistent guess games, stop active sessions, start Pokemon silhouette games, and read rules without leaving Discord.</td>
                                     </tr>
                                     <tr data-command-row>
                                         <td><code>/pet</code>, <code>/petimage</code>, <code>/petfuneral</code>, <code>!catch</code>, <code>/petfight</code>, <code>/tournament create|join|status</code></td>
@@ -2415,14 +2674,19 @@
                                         <td>Lightweight fun commands reinforce the bot's personality with jokes, anonymous messages, and time-travel chaos.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>/roastbattle</code>, <code>/pvp dice|coinflip|rps</code>, <code>/event</code>, <code>/counting setup|move|resume</code></td>
+                                        <td><code>/roastbattle</code>, <code>/pvp dice|coinflip|rps</code>, <code>/petfight</code>, <code>/tournament create|join|status</code>, <code>/event</code>, <code>/counting setup|move|resume</code></td>
                                         <td>Activity</td>
-                                        <td>Combines PvP bets, roast battles, event boosts, and managed counting into repeatable community activities.</td>
+                                        <td>Combines PvP bets, roast battles, pet battles, tournaments, event boosts, and managed counting into repeatable community activities.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>/talkchannel</code>, <code>/petchannel</code>, <code>/eventchannel</code>, <code>/anonymouschannel</code>, <code>/logschannel</code>, <code>/setup</code>, <code>/resetuser</code>, <code>/dictionary</code></td>
+                                        <td><code>/talkchannel</code>, <code>/petchannel</code>, <code>/logschannel</code>, <code>/eventchannel</code>, <code>/announcechannel</code>, <code>/dailywordlechannel</code>, <code>/anonymouschannel</code>, <code>/reactions</code>, <code>/setup</code>, <code>/resetuser</code>, <code>/serverinfo</code></td>
                                         <td>Setup</td>
-                                        <td>Configures active channels, resets broken user states, tunes guild settings like XP rate, and includes utility lookups such as the dictionary command.</td>
+                                        <td>Configures active channels, update posts, Daily Wordle alerts, reaction controls, server settings like XP rate, and admin recovery tools.</td>
+                                    </tr>
+                                    <tr data-command-row>
+                                        <td><code>/movie</code>, <code>/dictionary</code>, <code>/wikipedia</code>, <code>/changelog</code>, <code>/announcements</code>, <code>/featureandbug</code>, <code>/myrequests</code></td>
+                                        <td>Utility and updates</td>
+                                        <td>Covers movie discovery, dictionary and Wikipedia lookups, public update feeds, and the built-in feature request and bug-report workflow.</td>
                                     </tr>
                                     <tr data-command-row>
                                         <td><code>!cat</code>, <code>!catch</code>, <code>!hint</code>, <code>!reveal</code></td>
@@ -2476,7 +2740,7 @@
                             <li>Visual, guessing, and channel-run games</li>
                             <li>Social and party prompts</li>
                             <li>PvP, roast battles, events, and battle systems</li>
-                            <li>Pets, counting, lotteries, and long-term progression loops</li>
+                            <li>Pets, counting, lotteries, tournaments, and long-term progression loops</li>
                         </ul>
                     </article>
                 </div>
@@ -2550,11 +2814,12 @@
                         </ul>
                     </article>
                     <article class="game-card lime">
-                        <h3 class="card-title">Who's That Pokemon and Guess the Number</h3>
+                        <h3 class="card-title">Who's That Pokemon and number games</h3>
                         <ul>
                             <li><code>/wtp</code> uses Pokemon silhouettes with setup and start flows.</li>
                             <li><code>/guessthenumber</code> starts a one-off number round in the current channel.</li>
-                            <li><code>/guesschannel</code> keeps the dedicated persistent channel-based number game flow.</li>
+                            <li><code>/guesschannel</code> keeps a dedicated persistent channel-based guess flow.</li>
+                            <li><code>/guessthenearest</code> runs a multiplayer nearest-number match with host controls and round scoring.</li>
                         </ul>
                     </article>
                 </div>
@@ -2570,8 +2835,9 @@
                     <article class="game-card warm">
                         <h3 class="card-title">Story chain and social prompts</h3>
                         <ul>
-                                <li>Story Chain rewards collaborative storytelling over multiple rounds.</li>
+                            <li>Story Chain rewards collaborative storytelling over multiple rounds.</li>
                             <li>Would You Rather and Truth or Dare keep conversation moving when the server already has momentum.</li>
+                            <li>Dad Joke and anonymous statement flows work well as lighter social breaks between larger games.</li>
                         </ul>
                     </article>
                     <article class="game-card lime">
@@ -2619,7 +2885,7 @@
                             </article>
                             <article class="faq-item lime">
                                 <h3>Why are some games not working?</h3>
-                                <p>Some game modes need active channels, proper timing, or enough participants. Others depend on setup commands such as dedicated game channels.</p>
+                                <p>Some game modes need active channels, enough participants, or no other active game already running in that channel. Others depend on setup commands such as dedicated game channels.</p>
                             </article>
                             <article class="faq-item">
                                 <h3>How do pets and progression connect?</h3>
@@ -2643,14 +2909,41 @@
                     <div class="panel-inner">
                         <h1 class="section-title">Updates</h1>
                         <p class="section-subtitle">Release notes and announcements pulled directly from the bot feed</p>
-                        <div class="updates-featured" id="updatesFeatured">
-                            <article class="update-item soft is-featured">
-                                <h3>Loading updates...</h3>
-                                <p>The site is fetching the latest changelogs and announcements from the bot.</p>
-                            </article>
+
+                        <div class="updates-toggle-bar" role="tablist" aria-label="Updates feed selector">
+                            <button class="updates-toggle-button is-active" type="button" data-updates-view="announcements" aria-pressed="true">Announcements</button>
+                            <button class="updates-toggle-button" type="button" data-updates-view="changelogs" aria-pressed="false">Changelogs</button>
                         </div>
-                        <div class="update-list" id="updatesFeed"></div>
-                        <div class="updates-pagination" id="updatesPagination"></div>
+
+                        <div class="updates-section-block" id="updatesSectionChangelogs">
+                            <div class="updates-section-head">
+                                <h2 class="updates-section-title">Changelogs</h2>
+                                <p class="updates-section-copy">Product changes, fixes, and feature rollout notes.</p>
+                            </div>
+                            <div class="updates-featured" id="changelogsFeatured">
+                                <article class="update-item soft is-featured">
+                                    <h3>Loading changelogs...</h3>
+                                    <p>The site is fetching the latest saved changelog entries from the bot.</p>
+                                </article>
+                            </div>
+                            <div class="update-list" id="changelogsFeed"></div>
+                            <div class="updates-pagination" id="changelogsPagination"></div>
+                        </div>
+
+                        <div class="updates-section-block is-active" id="updatesSectionAnnouncements">
+                            <div class="updates-section-head">
+                                <h2 class="updates-section-title">Announcements</h2>
+                                <p class="updates-section-copy">Broadcasts, notices, and public heads-up posts.</p>
+                            </div>
+                            <div class="updates-featured" id="announcementsFeatured">
+                                <article class="update-item warm is-featured">
+                                    <h3>Loading announcements...</h3>
+                                    <p>The site is fetching the latest saved announcements from the bot.</p>
+                                </article>
+                            </div>
+                            <div class="update-list" id="announcementsFeed"></div>
+                            <div class="updates-pagination" id="announcementsPagination"></div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -2666,7 +2959,7 @@
                     </article>
                     <article class="legal-card warm">
                         <h3 class="card-title">Effective date</h3>
-                        <p>April 11, 2026</p>
+                        <p>April 22, 2026</p>
                         <h3 class="card-title">Summary</h3>
                         <p>Use of Meow Bot is revocable and subject to platform rules, applicable law, and actions necessary to protect the service and its users.</p>
                     </article>
@@ -2733,7 +3026,7 @@
                     </article>
                     <article class="legal-card soft">
                         <h3 class="card-title">Effective date</h3>
-                        <p>April 11, 2026</p>
+                        <p>April 22, 2026</p>
                         <h3 class="card-title">Summary</h3>
                         <p>Meow Bot may process limited Discord-related data needed to provide features, maintain server settings, operate games, and protect service stability.</p>
                     </article>
@@ -2748,8 +3041,9 @@
                             <li>Guild-specific settings configured by administrators</li>
                             <li>Command input, game interaction data, and message content used for supported gameplay or chat features</li>
                             <li>Progression data such as coins, XP, levels, streaks, quests, achievements, and inventory</li>
-                            <li>Pet-related state such as egg ownership, pet lifecycle, mood, care timers, jobs, abilities, battles, and pet image links</li>
+                            <li>Pet-related state such as egg ownership, pet lifecycle, mood, care timers, jobs, abilities, battles, pet image paths, and optional uploaded pet images</li>
                             <li>Movie-related state such as ratings, watched history, watchlists, overlap data, and poll participation</li>
+                            <li>Feature requests, utility requests, bug reports, review status, and related update-delivery history</li>
                             <li>Reminder preferences, lottery entries, and guild event participation</li>
                             <li>Operational logs needed for debugging, moderation, abuse review, or security investigation</li>
                         </ul>
@@ -2761,6 +3055,7 @@
                             <li>To store progression, game, pet, or guild configuration state</li>
                             <li>To manage channel-based systems such as talk channels, pet channels, logs channels, and game-specific workflows</li>
                             <li>To send optional reminder DMs or public server notifications for configured features</li>
+                            <li>To support AI replies, movie recommendations, dictionary lookups, Wikipedia lookups, and media-backed game prompts</li>
                             <li>To investigate misuse, fraud, spam, or abuse</li>
                             <li>To improve reliability, security, and service quality</li>
                             <li>To comply with legal obligations when required</li>
@@ -2771,7 +3066,7 @@
                 <div class="grid two-grid" style="margin-top:14px;">
                     <article class="legal-card soft">
                         <h3 class="card-title">Third-party services</h3>
-                        <p>Some Meow Bot features rely on external services such as Discord itself, hosting providers, TMDB for movie-related features, and AI or lookup services used to generate or support certain game and chat systems. Those providers may process request data needed to deliver those features.</p>
+                        <p>Some Meow Bot features rely on external services such as Discord, hosting and deployment providers, Groq for AI generation, TMDB for movie-related features, dictionaryapi.dev and Datamuse for word validation or dictionary support, Wikipedia for article lookups, PokeAPI for Pokemon-based game data, TheCatAPI and meme providers for media-backed content, and related infrastructure needed to serve the website update feed. Those providers may process request data needed to deliver those features.</p>
                     </article>
                     <article class="legal-card warm">
                         <h3 class="card-title">Message content and feature scope</h3>
@@ -2815,7 +3110,7 @@
                                     </tr>
                                     <tr>
                                         <td>Pets</td>
-                                        <td>Egg ownership, pet stage, care timers, jobs, abilities, mood, battles, pet image links</td>
+                                        <td>Egg ownership, pet stage, care timers, jobs, abilities, mood, battles, pet image paths or uploaded pet image references</td>
                                         <td>Needed to run the pet progression system, public evolution events, and pet-related profile displays.</td>
                                     </tr>
                                     <tr>
@@ -2825,13 +3120,13 @@
                                     </tr>
                                     <tr>
                                         <td>Games and events</td>
-                                        <td>Wordle stats, lottery entries, active game state, scoreboard information</td>
-                                        <td>Needed to operate commands, score systems, lotteries, and long-running game features.</td>
+                                        <td>Wordle stats, lottery entries, tournament participation, active game state, scoreboards, feature requests, and update delivery records</td>
+                                        <td>Needed to operate commands, score systems, feedback workflows, lotteries, tournaments, and long-running game features.</td>
                                     </tr>
                                     <tr>
                                         <td>Configuration</td>
-                                        <td>Talk channel, pet channel, logs channel, reminder preference, guild settings</td>
-                                        <td>Needed to make the bot behave correctly inside each server and respect feature preferences.</td>
+                                        <td>Talk channel, pet channel, logs channel, announcement channel, Daily Wordle channel, reminder preference, reaction settings, guild settings</td>
+                                        <td>Needed to make the bot behave correctly inside each server and respect feature preferences, update routing, and server controls.</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -2971,6 +3266,48 @@
             var footerPrev = document.getElementById("footerPrev");
             var savedTheme = localStorage.getItem(storageKey);
 
+            function closeMobileMenu() {
+                topbar.classList.remove("menu-open");
+                mobileMenuToggle.setAttribute("aria-expanded", "false");
+            }
+
+            function countNavRows() {
+                var hadCollapsed = topbar.classList.contains("nav-collapsed");
+                var hadOpen = topbar.classList.contains("menu-open");
+
+                if (hadCollapsed) {
+                    topbar.classList.remove("nav-collapsed");
+                    topbar.classList.remove("menu-open");
+                    mobileMenuToggle.setAttribute("aria-expanded", "false");
+                }
+
+                var rows = [];
+                Array.prototype.slice.call(document.querySelectorAll(".nav-tabs .tab-link")).forEach(function (link) {
+                    var top = Math.round(link.getBoundingClientRect().top);
+                    if (!rows.some(function (value) { return Math.abs(value - top) <= 2; })) {
+                        rows.push(top);
+                    }
+                });
+
+                if (hadCollapsed) {
+                    topbar.classList.add("nav-collapsed");
+                    if (hadOpen) {
+                        topbar.classList.add("menu-open");
+                        mobileMenuToggle.setAttribute("aria-expanded", "true");
+                    }
+                }
+
+                return rows.length;
+            }
+
+            function syncNavCollapse() {
+                var shouldCollapse = window.innerWidth <= 820 || countNavRows() > 2;
+                topbar.classList.toggle("nav-collapsed", shouldCollapse);
+                if (!shouldCollapse) {
+                    closeMobileMenu();
+                }
+            }
+
             function applyTheme(theme) {
                 root.setAttribute("data-theme", theme);
                 themeToggle.textContent = theme === "dark" ? "Light mode" : "Dark mode";
@@ -3058,9 +3395,8 @@
                 event.preventDefault();
                 setActiveTab(target, { updateHash: true });
 
-                if (window.innerWidth <= 820) {
-                    topbar.classList.remove("menu-open");
-                    mobileMenuToggle.setAttribute("aria-expanded", "false");
+                if (topbar.classList.contains("nav-collapsed") || window.innerWidth <= 820) {
+                    closeMobileMenu();
                 }
             });
 
@@ -3091,11 +3427,10 @@
             applyHashTab();
 
             window.addEventListener("resize", function () {
-                if (window.innerWidth > 820) {
-                    topbar.classList.remove("menu-open");
-                    mobileMenuToggle.setAttribute("aria-expanded", "false");
-                }
+                syncNavCollapse();
             });
+
+            syncNavCollapse();
 
             var slides = Array.prototype.slice.call(document.querySelectorAll("[data-slide]"));
             var slideDots = document.getElementById("slideDots");
@@ -3232,7 +3567,6 @@
 
                 if (window.location.protocol !== "file:") {
                     addEndpoint(currentOrigin.replace(/\/$/, "") + pathname);
-                    addEndpoint(currentOrigin.replace(/\/$/, "") + "/.netlify/functions" + pathname.replace(/^\/api/, ""));
                 }
 
                 if (window.location.protocol === "file:" || /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname)) {
@@ -3246,16 +3580,54 @@
                 return getApiEndpoints("/api/stats");
             }
 
-            function getUpdatesEndpoints() {
-                return getApiEndpoints("/api/updates?limit=48");
+            function getHealthEndpoints() {
+                return getApiEndpoints("/api/health");
             }
 
-            var updatesState = {
-                items: [],
-                page: 0,
-                pageSize: 8,
-                expanded: Object.create(null)
+            function getChangelogsEndpoints() {
+                return getApiEndpoints("/api/changelogs?limit=48");
+            }
+
+            function getAnnouncementsEndpoints() {
+                return getApiEndpoints("/api/announcements?limit=48");
+            }
+
+            var updateSections = {
+                changelogs: {
+                    items: [],
+                    page: 0,
+                    pageSize: 8,
+                    expanded: Object.create(null),
+                    label: "changelog",
+                    emptyTitle: "No changelogs yet",
+                    emptyMessage: "New changelog entries will appear here automatically once they are posted from the bot.",
+                    loadingTitle: "Loading changelogs...",
+                    loadingMessage: "The site is fetching the latest saved changelog entries from the bot."
+                },
+                announcements: {
+                    items: [],
+                    page: 0,
+                    pageSize: 8,
+                    expanded: Object.create(null),
+                    label: "announcement",
+                    emptyTitle: "No announcements yet",
+                    emptyMessage: "New announcements will appear here automatically once they are posted from the bot.",
+                    loadingTitle: "Loading announcements...",
+                    loadingMessage: "The site is fetching the latest saved announcements from the bot."
+                }
             };
+
+            function setActiveUpdatesView(sectionKey) {
+                document.querySelectorAll(".updates-section-block").forEach(function (element) {
+                    element.classList.toggle("is-active", element.id === "updatesSection" + sectionKey.charAt(0).toUpperCase() + sectionKey.slice(1));
+                });
+
+                document.querySelectorAll("[data-updates-view]").forEach(function (button) {
+                    var isActive = button.getAttribute("data-updates-view") === sectionKey;
+                    button.classList.toggle("is-active", isActive);
+                    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+                });
+            }
 
             function animateLiveCount(element, targetValue, formatter) {
                 if (!element) {
@@ -3304,6 +3676,18 @@
                 }
 
                 element._liveCountFrame = requestAnimationFrame(step);
+            }
+
+            function updateBotStatus(isOnline, label) {
+                var badge = document.getElementById("botStatusBadge");
+                var text = document.getElementById("botStatusText");
+                if (!badge || !text) {
+                    return;
+                }
+
+                badge.classList.remove("is-online", "is-offline");
+                badge.classList.add(isOnline ? "is-online" : "is-offline");
+                text.textContent = label;
             }
 
             function updateLiveStats(stats) {
@@ -3359,92 +3743,89 @@
                 });
             }
 
-            function renderSingleUpdateCard(item, index, isFeatured) {
+            function renderSingleUpdateCard(item, index, isFeatured, sectionKey) {
+                var sectionState = updateSections[sectionKey] || { expanded: Object.create(null) };
                 var type = String(item && item.type || "update");
                 var label = type === "announcement" ? "Announcement" : "Changelog";
                 var title = String(item && item.title || "Untitled update").trim() || "Untitled update";
                 var message = String(item && item.message || "").trim() || "No details provided.";
                 var id = String(item && item.id || "update-" + index);
+                var isLatest = index === 0;
                 var dateLabel = formatUpdateDate(item && item.createdAt);
                 var link = item && item.link ? String(item.link) : "";
                 var cardClass = ["soft", "warm", "lime"][index % 3];
-                var isExpanded = !!updatesState.expanded[id];
+                var isExpanded = !!sectionState.expanded[id];
                 var bodyClass = "update-body" + (isExpanded ? "" : " is-collapsed " + (isFeatured ? "featured" : "regular"));
                 var toggleLabel = isExpanded ? "Read less" : "Read more";
                 var linkHtml = link ? '<a class="update-link" href="' + escapeHtml(link) + '" target="_blank" rel="noopener noreferrer">Open link</a>' : "";
+                var latestHtml = isLatest ? '<span class="update-latest-pill">Latest</span>' : "";
 
                 return '<article class="update-item ' + cardClass + (isFeatured ? ' is-featured' : '') + '">' +
                     '<div class="update-meta">' +
-                        '<span class="update-type-pill">' + escapeHtml(label) + '</span>' +
+                        '<div class="update-meta-tags">' +
+                            '<span class="update-type-pill">' + escapeHtml(label) + '</span>' +
+                            latestHtml +
+                        '</div>' +
                         '<span class="update-date">' + escapeHtml(dateLabel) + '</span>' +
                     '</div>' +
                     '<h3>' + escapeHtml(title) + '</h3>' +
                     '<p class="' + bodyClass + '">' + escapeHtml(message).replace(/\n/g, '<br>') + '</p>' +
                     '<div class="update-actions">' +
-                        '<button class="update-more-button" type="button" data-update-toggle="' + escapeHtml(id) + '">' + escapeHtml(toggleLabel) + '</button>' +
+                        '<button class="update-more-button" type="button" data-update-section="' + escapeHtml(sectionKey) + '" data-update-toggle="' + escapeHtml(id) + '">' + escapeHtml(toggleLabel) + '</button>' +
                         linkHtml +
                     '</div>' +
                 '</article>';
             }
 
-            function renderUpdates(items) {
-                updatesState.items = Array.isArray(items) ? items : [];
+            function renderUpdateSection(sectionKey, items) {
+                var sectionState = updateSections[sectionKey];
+                if (!sectionState) {
+                    return;
+                }
 
-                var updatesFeatured = document.getElementById("updatesFeatured");
-                var updatesFeed = document.getElementById("updatesFeed");
-                var updatesPagination = document.getElementById("updatesPagination");
+                sectionState.items = Array.isArray(items) ? items : [];
+
+                var updatesFeatured = document.getElementById(sectionKey + "Featured");
+                var updatesFeed = document.getElementById(sectionKey + "Feed");
+                var updatesPagination = document.getElementById(sectionKey + "Pagination");
                 if (!updatesFeed || !updatesFeatured || !updatesPagination) {
                     return;
                 }
 
-                if (!updatesState.items.length) {
-                    updatesFeatured.innerHTML = '<article class="update-item soft is-featured"><h3>No updates yet</h3><p>New changelogs and announcements will appear here automatically once they are posted from the bot.</p></article>';
+                if (!sectionState.items.length) {
+                    updatesFeatured.innerHTML = '<article class="update-item soft is-featured"><h3>' + escapeHtml(sectionState.emptyTitle) + '</h3><p>' + escapeHtml(sectionState.emptyMessage) + '</p></article>';
                     updatesFeed.innerHTML = "";
                     updatesPagination.innerHTML = "";
                     return;
                 }
 
-                var totalPages = Math.max(1, Math.ceil(updatesState.items.length / updatesState.pageSize));
-                if (updatesState.page >= totalPages) {
-                    updatesState.page = totalPages - 1;
+                var totalPages = Math.max(1, Math.ceil(sectionState.items.length / sectionState.pageSize));
+                if (sectionState.page >= totalPages) {
+                    sectionState.page = totalPages - 1;
                 }
-                if (updatesState.page < 0) {
-                    updatesState.page = 0;
-                }
-
-                var start = updatesState.page * updatesState.pageSize;
-                var pageItems = updatesState.items.slice(start, start + updatesState.pageSize);
-                var featured = pageItems.filter(function (item) {
-                    return String(item && item.type || "") === "changelog";
-                }).slice(0, 2);
-
-                if (featured.length < 2) {
-                    pageItems.forEach(function (item) {
-                        if (featured.length >= 2) {
-                            return;
-                        }
-                        if (featured.indexOf(item) === -1) {
-                            featured.push(item);
-                        }
-                    });
+                if (sectionState.page < 0) {
+                    sectionState.page = 0;
                 }
 
+                var start = sectionState.page * sectionState.pageSize;
+                var pageItems = sectionState.items.slice(start, start + sectionState.pageSize);
+                var featured = pageItems.slice(0, 2);
                 var gridItems = pageItems.filter(function (item) {
                     return featured.indexOf(item) === -1;
                 });
 
                 updatesFeatured.innerHTML = featured.map(function (item, index) {
-                    return renderSingleUpdateCard(item, start + index, true);
+                    return renderSingleUpdateCard(item, start + index, true, sectionKey);
                 }).join("");
 
                 updatesFeed.innerHTML = gridItems.map(function (item, index) {
-                    return renderSingleUpdateCard(item, start + featured.length + index, false);
+                    return renderSingleUpdateCard(item, start + featured.length + index, false, sectionKey);
                 }).join("");
 
                 updatesPagination.innerHTML = totalPages > 1
-                    ? '<button class="updates-page-button" type="button" data-updates-page="prev"' + (updatesState.page === 0 ? ' disabled' : '') + '>Prev</button>' +
-                      '<div class="updates-page-indicator">Page ' + (updatesState.page + 1) + ' / ' + totalPages + '</div>' +
-                      '<button class="updates-page-button" type="button" data-updates-page="next"' + (updatesState.page >= totalPages - 1 ? ' disabled' : '') + '>Next</button>'
+                    ? '<button class="updates-page-button" type="button" data-updates-section="' + escapeHtml(sectionKey) + '" data-updates-page="prev"' + (sectionState.page === 0 ? ' disabled' : '') + '>Prev</button>' +
+                      '<div class="updates-page-indicator">Page ' + (sectionState.page + 1) + ' / ' + totalPages + '</div>' +
+                      '<button class="updates-page-button" type="button" data-updates-section="' + escapeHtml(sectionKey) + '" data-updates-page="next"' + (sectionState.page >= totalPages - 1 ? ' disabled' : '') + '>Next</button>'
                     : "";
             }
 
@@ -3469,8 +3850,32 @@
                 }
             }
 
-            async function hydrateUpdates() {
-                var endpoints = getUpdatesEndpoints();
+            async function hydrateBotStatus() {
+                var endpoints = getHealthEndpoints();
+
+                for (var i = 0; i < endpoints.length; i += 1) {
+                    try {
+                        var response = await fetch(endpoints[i], { headers: { "Accept": "application/json" } });
+                        if (!response.ok) {
+                            continue;
+                        }
+
+                        var payload = await response.json();
+                        var checks = payload && payload.checks ? payload.checks : {};
+                        var isOnline = checks.discordReady === true && checks.dbReady !== false;
+                        updateBotStatus(isOnline, isOnline ? "Online" : "Offline");
+                        return;
+                    } catch (_) {}
+                }
+
+                updateBotStatus(false, "Offline");
+            }
+
+            async function hydrateUpdateSection(sectionKey, endpoints) {
+                var sectionState = updateSections[sectionKey];
+                if (!sectionState) {
+                    return;
+                }
 
                 for (var i = 0; i < endpoints.length; i += 1) {
                     try {
@@ -3484,41 +3889,65 @@
                             continue;
                         }
 
-                        renderUpdates(payload.items);
+                        renderUpdateSection(sectionKey, payload.items);
                         return;
                     } catch (_) {}
                 }
 
-                renderUpdates([]);
+                renderUpdateSection(sectionKey, []);
+            }
+
+            async function hydrateUpdates() {
+                await Promise.all([
+                    hydrateUpdateSection("changelogs", getChangelogsEndpoints()),
+                    hydrateUpdateSection("announcements", getAnnouncementsEndpoints())
+                ]);
             }
 
             document.addEventListener("click", function (event) {
+                var toggleViewButton = event.target.closest("[data-updates-view]");
+                if (toggleViewButton) {
+                    var viewKey = toggleViewButton.getAttribute("data-updates-view");
+                    if (viewKey && updateSections[viewKey]) {
+                        setActiveUpdatesView(viewKey);
+                    }
+                    return;
+                }
+
                 var toggleButton = event.target.closest("[data-update-toggle]");
                 if (toggleButton) {
+                    var toggleSection = toggleButton.getAttribute("data-update-section");
                     var toggleId = toggleButton.getAttribute("data-update-toggle");
-                    if (toggleId) {
-                        updatesState.expanded[toggleId] = !updatesState.expanded[toggleId];
-                        renderUpdates(updatesState.items);
+                    if (toggleId && toggleSection && updateSections[toggleSection]) {
+                        updateSections[toggleSection].expanded[toggleId] = !updateSections[toggleSection].expanded[toggleId];
+                        renderUpdateSection(toggleSection, updateSections[toggleSection].items);
                     }
                     return;
                 }
 
                 var pageButton = event.target.closest("[data-updates-page]");
                 if (pageButton) {
+                    var pageSection = pageButton.getAttribute("data-updates-section");
                     var direction = pageButton.getAttribute("data-updates-page");
-                    if (direction === "prev" && updatesState.page > 0) {
-                        updatesState.page -= 1;
-                        renderUpdates(updatesState.items);
+                    if (!pageSection || !updateSections[pageSection]) {
+                        return;
+                    }
+                    if (direction === "prev" && updateSections[pageSection].page > 0) {
+                        updateSections[pageSection].page -= 1;
+                        renderUpdateSection(pageSection, updateSections[pageSection].items);
                     }
                     if (direction === "next") {
-                        updatesState.page += 1;
-                        renderUpdates(updatesState.items);
+                        updateSections[pageSection].page += 1;
+                        renderUpdateSection(pageSection, updateSections[pageSection].items);
                     }
                 }
             });
 
+            setActiveUpdatesView("announcements");
             hydrateLiveStats();
+            hydrateBotStatus();
             hydrateUpdates();
+            setInterval(hydrateBotStatus, 60000);
         }());
     </script>
 </body>

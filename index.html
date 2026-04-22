@@ -601,6 +601,8 @@
 
         .faq-list,
         .update-list,
+        .updates-featured,
+        .updates-pagination,
         .permissions-grid,
         .quickstart-grid,
         .contact-actions {
@@ -615,7 +617,19 @@
         }
 
         .update-list {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .updates-featured {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            margin-bottom: 14px;
+        }
+
+        .updates-pagination {
+            grid-template-columns: auto auto auto;
+            justify-content: center;
+            align-items: center;
+            margin-top: 18px;
         }
 
         .faq-item,
@@ -670,6 +684,112 @@
         .contact-box p,
         .contact-box li {
             color: var(--muted);
+        }
+
+        .update-item {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 100%;
+        }
+
+        .update-item.is-featured {
+            padding: 26px;
+            min-height: 260px;
+        }
+
+        .update-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .update-type-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 30px;
+            padding: 0 12px;
+            border-radius: 999px;
+            font-size: 0.76rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-weight: 800;
+            border: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+            background: color-mix(in srgb, var(--surface) 82%, transparent);
+            color: var(--text);
+        }
+
+        .update-date {
+            color: var(--muted);
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        .update-body {
+            line-height: 1.65;
+        }
+
+        .update-body.is-collapsed {
+            overflow: hidden;
+            display: block;
+        }
+
+        .update-body.is-collapsed.featured {
+            max-height: 11.55em;
+        }
+
+        .update-body.is-collapsed.regular {
+            max-height: 6.6em;
+        }
+
+        .update-item .update-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: auto;
+        }
+
+        .update-more-button,
+        .updates-page-button {
+            min-height: 42px;
+            padding: 0 16px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .update-more-button:hover,
+        .updates-page-button:hover {
+            background: color-mix(in srgb, var(--surface-soft) 75%, var(--surface));
+        }
+
+        .updates-page-button:disabled {
+            cursor: default;
+            opacity: 0.55;
+        }
+
+        .updates-page-indicator {
+            min-width: 110px;
+            text-align: center;
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .update-link {
+            color: var(--text);
+            font-weight: 700;
+            text-decoration: underline;
+            text-underline-offset: 3px;
         }
 
         .contact-actions {
@@ -1386,9 +1506,14 @@
             .screenshot-grid,
             .story-mini-grid,
             .faq-list,
+            .updates-featured,
             .permissions-grid,
             .quickstart-grid,
             .contact-actions {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .update-list {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
         }
@@ -1397,6 +1522,7 @@
             .hero-grid,
             .two-grid,
             .three-grid,
+            .updates-featured,
             .slide,
             .showcase-band,
             .showcase-collage {
@@ -1426,6 +1552,10 @@
             }
 
             .feature-preview-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .update-list {
                 grid-template-columns: 1fr;
             }
 
@@ -1982,9 +2112,9 @@
                                 </div>
                             </div>
                             <div class="cat-badges">
-                                <div class="cat-badge" data-live-badge="commands">67 slash commands</div>
-                                <div class="cat-badge" data-live-badge="servers">Server-ready</div>
-                                <div class="cat-badge" data-live-badge="players">Players tracked</div>
+                                <div class="cat-badge" data-live-badge="commands">0 slash commands</div>
+                                <div class="cat-badge" data-live-badge="servers">0 servers live</div>
+                                <div class="cat-badge" data-live-badge="players">0 players tracked</div>
                             </div>
                         </div>
                     </section>
@@ -1993,7 +2123,7 @@
                         <h2 class="section-title">Built To Live Inside A Server</h2>
                         <p class="section-copy">Meow Bot is built for repeat use. Members can chat with it, claim rewards, run game nights, hatch pets, trigger server boosts, and keep systems like counting and anonymous drops active every day.</p>
                         <div class="home-metrics-row">
-                            <div class="home-metric"><strong data-live-stat="commands">67</strong><span>Slash Commands</span></div>
+                            <div class="home-metric"><strong data-live-stat="commands">0</strong><span>Slash Commands</span></div>
                             <div class="home-metric"><strong data-live-stat="servers">0</strong><span>Servers</span></div>
                             <div class="home-metric"><strong data-live-stat="players">0</strong><span>Players</span></div>
                         </div>
@@ -2512,21 +2642,15 @@
                 <div class="panel">
                     <div class="panel-inner">
                         <h1 class="section-title">Updates</h1>
-                        <p class="section-subtitle">Release notes, improvements, and what is coming next</p>
-                        <div class="update-list">
-                            <article class="update-item soft">
-                                <h3>v2.4 Pet Refactor - Apr 12, 2026</h3>
-                                <p>Pets were rebuilt into a one-pet progression system. Eggs can now be bought or caught, hatch over time, evolve through a long ladder, and support mood, greetings, items, rebellious behavior, jobs, abilities, equipment, PvE, PvP, durability, ghost consequences, and late-stage evolution stones.</p>
-                            </article>
-                            <article class="update-item warm">
-                                <h3>v2.5 Website + Command Refresh - Apr 12, 2026</h3>
-                                <p>The site was refreshed around the new pet system, retired legacy pet commands were removed, and progression pacing was rebalanced for clearer long-term growth.</p>
-                            </article>
-                            <article class="update-item lime">
-                                <h3>Coming Next - Roadmap</h3>
-                                <p>Planned next steps include richer pet abilities, more items and cosmetics, stronger lore-journal progression, more passive pet dialogue, and fuller stage 8-10 endgame systems.</p>
+                        <p class="section-subtitle">Release notes and announcements pulled directly from the bot feed</p>
+                        <div class="updates-featured" id="updatesFeatured">
+                            <article class="update-item soft is-featured">
+                                <h3>Loading updates...</h3>
+                                <p>The site is fetching the latest changelogs and announcements from the bot.</p>
                             </article>
                         </div>
+                        <div class="update-list" id="updatesFeed"></div>
+                        <div class="updates-pagination" id="updatesPagination"></div>
                     </div>
                 </div>
             </section>
@@ -3086,7 +3210,7 @@
                 });
             }
 
-            function getStatsEndpoints() {
+            function getApiEndpoints(pathname) {
                 var currentOrigin = window.location.origin;
                 var localStatsOrigin = "http://127.0.0.1:3001";
                 var customStatsOrigin = window.MEOW_STATS_API_BASE;
@@ -3103,47 +3227,225 @@
                 }
 
                 if (customStatsOrigin) {
-                    addEndpoint(String(customStatsOrigin).replace(/\/$/, "") + "/api/stats");
+                    addEndpoint(String(customStatsOrigin).replace(/\/$/, "") + pathname);
                 }
 
                 if (window.location.protocol !== "file:") {
-                    addEndpoint(currentOrigin.replace(/\/$/, "") + "/api/stats");
-                    addEndpoint(currentOrigin.replace(/\/$/, "") + "/.netlify/functions/stats");
+                    addEndpoint(currentOrigin.replace(/\/$/, "") + pathname);
+                    addEndpoint(currentOrigin.replace(/\/$/, "") + "/.netlify/functions" + pathname.replace(/^\/api/, ""));
                 }
 
                 if (window.location.protocol === "file:" || /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname)) {
-                    addEndpoint(localStatsOrigin + "/api/stats");
+                    addEndpoint(localStatsOrigin + pathname);
                 }
 
                 return endpoints;
             }
 
+            function getStatsEndpoints() {
+                return getApiEndpoints("/api/stats");
+            }
+
+            function getUpdatesEndpoints() {
+                return getApiEndpoints("/api/updates?limit=48");
+            }
+
+            var updatesState = {
+                items: [],
+                page: 0,
+                pageSize: 8,
+                expanded: Object.create(null)
+            };
+
+            function animateLiveCount(element, targetValue, formatter) {
+                if (!element) {
+                    return;
+                }
+
+                var end = Number(targetValue);
+                if (!Number.isFinite(end)) {
+                    element.textContent = formatter(targetValue);
+                    return;
+                }
+
+                var stored = Number(element.getAttribute("data-live-current"));
+                var parsed = parseInt(String(element.textContent || "").replace(/[^\d-]/g, ""), 10);
+                var start = Number.isFinite(stored) ? stored : (Number.isFinite(parsed) ? parsed : 0);
+
+                if (element._liveCountFrame) {
+                    cancelAnimationFrame(element._liveCountFrame);
+                }
+
+                if (start === end) {
+                    element.setAttribute("data-live-current", String(end));
+                    element.textContent = formatter(end);
+                    return;
+                }
+
+                var durationMs = 700;
+                var startedAt = null;
+
+                function step(timestamp) {
+                    if (startedAt === null) {
+                        startedAt = timestamp;
+                    }
+
+                    var progress = Math.min(1, (timestamp - startedAt) / durationMs);
+                    var eased = 1 - Math.pow(1 - progress, 3);
+                    var current = Math.round(start + (end - start) * eased);
+                    element.setAttribute("data-live-current", String(current));
+                    element.textContent = formatter(current);
+
+                    if (progress < 1) {
+                        element._liveCountFrame = requestAnimationFrame(step);
+                    } else {
+                        element._liveCountFrame = null;
+                    }
+                }
+
+                element._liveCountFrame = requestAnimationFrame(step);
+            }
+
             function updateLiveStats(stats) {
                 var values = {
-                    commands: String(stats.commands),
-                    servers: String(stats.servers),
-                    players: String(stats.players)
+                    commands: Number(stats.commands) || 0,
+                    servers: Number(stats.servers) || 0,
+                    players: Number(stats.players) || 0
                 };
 
                 document.querySelectorAll("[data-live-stat]").forEach(function (element) {
                     var key = element.getAttribute("data-live-stat");
-                    if (values[key]) {
-                        element.textContent = values[key];
+                    if (Object.prototype.hasOwnProperty.call(values, key)) {
+                        animateLiveCount(element, values[key], function (value) {
+                            return String(value);
+                        });
                     }
                 });
-
-                var badgeText = {
-                    commands: values.commands + " slash commands",
-                    servers: values.servers + " servers live",
-                    players: values.players + " players tracked"
-                };
 
                 document.querySelectorAll("[data-live-badge]").forEach(function (element) {
                     var key = element.getAttribute("data-live-badge");
-                    if (badgeText[key]) {
-                        element.textContent = badgeText[key];
+                    if (Object.prototype.hasOwnProperty.call(values, key)) {
+                        animateLiveCount(element, values[key], function (value) {
+                            if (key === "commands") {
+                                return value + " slash commands";
+                            }
+                            if (key === "servers") {
+                                return value + " servers live";
+                            }
+                            return value + " players tracked";
+                        });
                     }
                 });
+            }
+
+            function escapeHtml(value) {
+                return String(value || "")
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/\"/g, "&quot;")
+                    .replace(/'/g, "&#39;");
+            }
+
+            function formatUpdateDate(value) {
+                var date = new Date(value || "");
+                if (isNaN(date.getTime())) {
+                    return "Unknown date";
+                }
+                return date.toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric"
+                });
+            }
+
+            function renderSingleUpdateCard(item, index, isFeatured) {
+                var type = String(item && item.type || "update");
+                var label = type === "announcement" ? "Announcement" : "Changelog";
+                var title = String(item && item.title || "Untitled update").trim() || "Untitled update";
+                var message = String(item && item.message || "").trim() || "No details provided.";
+                var id = String(item && item.id || "update-" + index);
+                var dateLabel = formatUpdateDate(item && item.createdAt);
+                var link = item && item.link ? String(item.link) : "";
+                var cardClass = ["soft", "warm", "lime"][index % 3];
+                var isExpanded = !!updatesState.expanded[id];
+                var bodyClass = "update-body" + (isExpanded ? "" : " is-collapsed " + (isFeatured ? "featured" : "regular"));
+                var toggleLabel = isExpanded ? "Read less" : "Read more";
+                var linkHtml = link ? '<a class="update-link" href="' + escapeHtml(link) + '" target="_blank" rel="noopener noreferrer">Open link</a>' : "";
+
+                return '<article class="update-item ' + cardClass + (isFeatured ? ' is-featured' : '') + '">' +
+                    '<div class="update-meta">' +
+                        '<span class="update-type-pill">' + escapeHtml(label) + '</span>' +
+                        '<span class="update-date">' + escapeHtml(dateLabel) + '</span>' +
+                    '</div>' +
+                    '<h3>' + escapeHtml(title) + '</h3>' +
+                    '<p class="' + bodyClass + '">' + escapeHtml(message).replace(/\n/g, '<br>') + '</p>' +
+                    '<div class="update-actions">' +
+                        '<button class="update-more-button" type="button" data-update-toggle="' + escapeHtml(id) + '">' + escapeHtml(toggleLabel) + '</button>' +
+                        linkHtml +
+                    '</div>' +
+                '</article>';
+            }
+
+            function renderUpdates(items) {
+                updatesState.items = Array.isArray(items) ? items : [];
+
+                var updatesFeatured = document.getElementById("updatesFeatured");
+                var updatesFeed = document.getElementById("updatesFeed");
+                var updatesPagination = document.getElementById("updatesPagination");
+                if (!updatesFeed || !updatesFeatured || !updatesPagination) {
+                    return;
+                }
+
+                if (!updatesState.items.length) {
+                    updatesFeatured.innerHTML = '<article class="update-item soft is-featured"><h3>No updates yet</h3><p>New changelogs and announcements will appear here automatically once they are posted from the bot.</p></article>';
+                    updatesFeed.innerHTML = "";
+                    updatesPagination.innerHTML = "";
+                    return;
+                }
+
+                var totalPages = Math.max(1, Math.ceil(updatesState.items.length / updatesState.pageSize));
+                if (updatesState.page >= totalPages) {
+                    updatesState.page = totalPages - 1;
+                }
+                if (updatesState.page < 0) {
+                    updatesState.page = 0;
+                }
+
+                var start = updatesState.page * updatesState.pageSize;
+                var pageItems = updatesState.items.slice(start, start + updatesState.pageSize);
+                var featured = pageItems.filter(function (item) {
+                    return String(item && item.type || "") === "changelog";
+                }).slice(0, 2);
+
+                if (featured.length < 2) {
+                    pageItems.forEach(function (item) {
+                        if (featured.length >= 2) {
+                            return;
+                        }
+                        if (featured.indexOf(item) === -1) {
+                            featured.push(item);
+                        }
+                    });
+                }
+
+                var gridItems = pageItems.filter(function (item) {
+                    return featured.indexOf(item) === -1;
+                });
+
+                updatesFeatured.innerHTML = featured.map(function (item, index) {
+                    return renderSingleUpdateCard(item, start + index, true);
+                }).join("");
+
+                updatesFeed.innerHTML = gridItems.map(function (item, index) {
+                    return renderSingleUpdateCard(item, start + featured.length + index, false);
+                }).join("");
+
+                updatesPagination.innerHTML = totalPages > 1
+                    ? '<button class="updates-page-button" type="button" data-updates-page="prev"' + (updatesState.page === 0 ? ' disabled' : '') + '>Prev</button>' +
+                      '<div class="updates-page-indicator">Page ' + (updatesState.page + 1) + ' / ' + totalPages + '</div>' +
+                      '<button class="updates-page-button" type="button" data-updates-page="next"' + (updatesState.page >= totalPages - 1 ? ' disabled' : '') + '>Next</button>'
+                    : "";
             }
 
             async function hydrateLiveStats() {
@@ -3167,7 +3469,56 @@
                 }
             }
 
+            async function hydrateUpdates() {
+                var endpoints = getUpdatesEndpoints();
+
+                for (var i = 0; i < endpoints.length; i += 1) {
+                    try {
+                        var response = await fetch(endpoints[i], { headers: { "Accept": "application/json" } });
+                        if (!response.ok) {
+                            continue;
+                        }
+
+                        var payload = await response.json();
+                        if (!payload || !Array.isArray(payload.items)) {
+                            continue;
+                        }
+
+                        renderUpdates(payload.items);
+                        return;
+                    } catch (_) {}
+                }
+
+                renderUpdates([]);
+            }
+
+            document.addEventListener("click", function (event) {
+                var toggleButton = event.target.closest("[data-update-toggle]");
+                if (toggleButton) {
+                    var toggleId = toggleButton.getAttribute("data-update-toggle");
+                    if (toggleId) {
+                        updatesState.expanded[toggleId] = !updatesState.expanded[toggleId];
+                        renderUpdates(updatesState.items);
+                    }
+                    return;
+                }
+
+                var pageButton = event.target.closest("[data-updates-page]");
+                if (pageButton) {
+                    var direction = pageButton.getAttribute("data-updates-page");
+                    if (direction === "prev" && updatesState.page > 0) {
+                        updatesState.page -= 1;
+                        renderUpdates(updatesState.items);
+                    }
+                    if (direction === "next") {
+                        updatesState.page += 1;
+                        renderUpdates(updatesState.items);
+                    }
+                }
+            });
+
             hydrateLiveStats();
+            hydrateUpdates();
         }());
     </script>
 </body>

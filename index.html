@@ -636,9 +636,43 @@
             background: var(--surface);
         }
 
+        .command-lookup-wrap {
+            overflow: visible;
+        }
+
         .table {
             width: 100%;
             border-collapse: collapse;
+        }
+
+        .command-lookup-table {
+            table-layout: fixed;
+        }
+
+        .command-lookup-table th:nth-child(1),
+        .command-lookup-table td:nth-child(1) {
+            width: 42%;
+        }
+
+        .command-lookup-table th:nth-child(2),
+        .command-lookup-table td:nth-child(2) {
+            width: 14%;
+        }
+
+        .command-lookup-table th:nth-child(3),
+        .command-lookup-table td:nth-child(3) {
+            width: 44%;
+        }
+
+        .command-lookup-table td:nth-child(1) {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        .command-lookup-table td:nth-child(1) code {
+            white-space: normal;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
 
         .table th,
@@ -2019,6 +2053,93 @@
                 content: 'Notes';
             }
 
+            .command-lookup-wrap {
+                border: none;
+                background: transparent;
+                overflow: visible;
+            }
+
+            .command-lookup-table {
+                table-layout: fixed;
+            }
+
+            .command-lookup-table thead {
+                display: none;
+            }
+
+            .command-lookup-table tbody {
+                display: block;
+            }
+
+            .command-lookup-table tr {
+                display: block;
+                margin-bottom: 14px;
+                border: 1px solid var(--line);
+                border-radius: 24px;
+                background: var(--surface);
+                overflow: hidden;
+            }
+
+            .command-lookup-table th,
+            .command-lookup-table td {
+                display: block;
+                width: 100%;
+                padding: 14px 16px;
+                border-bottom: 1px solid var(--line);
+                box-sizing: border-box;
+            }
+
+            .command-lookup-table td::before {
+                display: block;
+                margin-bottom: 8px;
+                font-size: 0.82rem;
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                color: #8a6948;
+                font-weight: 800;
+            }
+
+            .command-lookup-table th:nth-child(1),
+            .command-lookup-table td:nth-child(1) {
+                width: 100%;
+            }
+
+            .command-lookup-table th:nth-child(2),
+            .command-lookup-table td:nth-child(2) {
+                width: 100%;
+            }
+
+            .command-lookup-table th:nth-child(3),
+            .command-lookup-table td:nth-child(3) {
+                width: 100%;
+            }
+
+            .command-lookup-table td:nth-child(1),
+            .command-lookup-table td:nth-child(3) {
+                word-break: break-word;
+                overflow-wrap: anywhere;
+            }
+
+            .command-lookup-table td:nth-child(1) code {
+                white-space: normal;
+            }
+
+            .command-lookup-table td:last-child {
+                border-bottom: none;
+            }
+
+            .command-lookup-table td:nth-child(1)::before {
+                content: 'Command';
+            }
+
+            .command-lookup-table td:nth-child(2)::before {
+                content: 'Purpose';
+            }
+
+            .command-lookup-table td:nth-child(3)::before {
+                content: 'Notes';
+            }
+
             .slideshow-head {
                 padding: 20px 18px 0;
             }
@@ -2362,7 +2483,7 @@
                                     </div>
                                     <div class="message">
                                         <div class="avatar">🎮</div>
-                                        <div><strong>Game Pulse</strong><p>Trivia, riddles, Wordle, scramble, story chain, Guess The Nearest, Pokemon silhouettes, and blackjack are ready.</p></div>
+                                        <div><strong>Game Pulse</strong><p>Word games, quiz rounds, social prompts, nearest-number matches, Pokemon silhouettes, and blackjack are ready.</p></div>
                                     </div>
                                     <div class="message">
                                         <div class="avatar">🐾</div>
@@ -2465,9 +2586,9 @@
                                 <div class="slide-copy">
                                     <div class="slide-kicker">Feature 03</div>
                                     <h4>Games, Chaos, And Variety</h4>
-                                    <p>Party games, PvP, movie picks, wiki and dictionary lookups, counting, anonymous drops, XP events, and pets all live in one bot.</p>
+                                    <p>Word games, quiz rounds, social prompts, PvP, movie picks, counting, events, and pets all live in one bot.</p>
                                     <div class="slide-points">
-                                        <div>Trivia, Wordle, riddles, reaction speed, Guess The Nearest, and story chain</div>
+                                        <div>Trivia, Wordle, riddles, Hangman, Guess The Nearest, and WTP</div>
                                         <div>Roast battles, time travel, memes, anonymous drops, and social prompts</div>
                                         <div>Guessing games, pet battles, tournaments, events, movie picks, and quick lookups</div>
                                     </div>
@@ -2485,7 +2606,7 @@
                                         </div>
                                         <div class="feature-preview-wide">
                                             <strong style="font-size:1.15rem;">One bot should cover multiple moods.</strong>
-                                            <p>Trivia. Counting. Movie picks. XP boosts. Anonymous drops. Pet battles. Story chain.</p>
+                                            <p>Trivia. Counting. Movie picks. XP boosts. Anonymous drops. Pet battles. Word games.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -2536,7 +2657,7 @@
                             <article class="info-card warm">
                                 <div class="card-icon">🎮</div>
                                 <h3 class="card-title">Big Game Stack</h3>
-                            <p>Trivia, riddles, Wordle, Daily Wordle, scramble, hangman, Guess The Nearest, reaction speed, story chain, WTP, and more.</p>
+                            <p>Word games, quiz rounds, social prompts, nearest-number matches, WTP, blackjack, and more.</p>
                             </article>
                             <article class="info-card lime">
                                 <div class="card-icon">🪙</div>
@@ -2598,16 +2719,16 @@
                         <p><code>/balance</code>, <code>/daily</code>, <code>/gamble</code>, <code>/give</code>, <code>/shop</code>, <code>/leaderboard</code>, <code>/trade</code>, <code>/quests</code>, <code>/lottery</code>, <code>/mysterybox</code></p>
                     </article>
                     <article class="command-card lime" data-command-item>
-                        <h3 class="card-title">Games</h3>
-                        <p><code>/trivia</code>, <code>/riddle</code>, <code>/hangman</code>, <code>/wordchain</code>, <code>/guessthenearest</code>, <code>/scramble</code>, <code>/wordle</code>, <code>/dailywordle</code>, <code>/guessthenumber</code>, <code>/guesschannel</code>, <code>/wtp</code>, <code>/storychain</code>, <code>/reactionspeed</code>, <code>/blackjack</code></p>
+                        <h3 class="card-title">Game Categories</h3>
+                        <p><strong>Word:</strong> <code>/wordle</code>, <code>/dailywordle</code>, <code>/hangman</code>, <code>/scramble</code>, <code>/wordchain</code><br><strong>Quiz:</strong> <code>/trivia</code>, <code>/riddle</code>, <code>/wtp</code><br><strong>Competitive:</strong> <code>/guessthenearest</code>, <code>/guessthenumber</code>, <code>/blackjack</code></p>
                     </article>
                     <article class="command-card" data-command-item>
                         <h3 class="card-title">Social + Utility + Setup</h3>
-                        <p><code>/roast</code>, <code>/ship</code>, <code>/hug</code>, <code>/kiss</code>, <code>/catfact</code>, <code>/dadjoke</code>, <code>/meme</code>, <code>/anonymousstatement</code>, <code>/movie</code>, <code>/dictionary</code>, <code>/wikipedia</code>, <code>/timetravel</code>, <code>/talkchannel</code>, <code>/petchannel</code>, <code>/logschannel</code>, <code>/eventchannel</code>, <code>/announcechannel</code>, <code>/dailywordlechannel</code>, <code>/anonymouschannel</code>, <code>/counting</code>, <code>/event</code>, <code>/reactions</code>, <code>/setup</code>, <code>/resetuser</code></p>
+                        <p><code>/roast</code>, <code>/ship</code>, <code>/hug</code>, <code>/kiss</code>, <code>/catfact</code>, <code>/dadjoke</code>, <code>/dog</code>, <code>/getadvice</code>, <code>/meme</code>, <code>/anonymousstatement</code>, <code>/movie</code>, <code>/dictionary</code>, <code>/wikipedia</code>, <code>/timetravel</code>, <code>/talkchannel</code>, <code>/petchannel</code>, <code>/logschannel</code>, <code>/eventchannel</code>, <code>/announcechannel</code>, <code>/dailywordlechannel</code>, <code>/anonymouschannel</code>, <code>/counting</code>, <code>/event</code>, <code>/reactions</code>, <code>/setup</code>, <code>/resetuser</code></p>
                     </article>
                     <article class="command-card soft" data-command-item>
                         <h3 class="card-title">Prefixes</h3>
-                        <p><code>!cat</code>, <code>!catch</code>, <code>!hint</code>, <code>!reveal</code></p>
+                        <p><code>!cat</code>, <code>!dog</code>, <code>!meme</code>, <code>!catch</code>, <code>!hint</code>, <code>!reveal</code>, plus simple <code>meow</code>, <code>woof</code>, <code>meow meme</code>, <code>give meme</code>, <code>send meme</code>, <code>got meme</code>, and <code>meme me</code> triggers</p>
                     </article>
                 </div>
 
@@ -2618,8 +2739,8 @@
                             <input class="search-input" id="commandSearch" type="search" placeholder="Search commands, categories, or features" />
                             <div class="search-note">Search the cards and table instantly.</div>
                         </div>
-                        <div class="table-wrap">
-                            <table class="table">
+                        <div class="table-wrap command-lookup-wrap">
+                            <table class="table command-lookup-table">
                                 <thead>
                                     <tr>
                                         <th>Command</th>
@@ -2649,9 +2770,19 @@
                                         <td>Includes admin weekly lotteries and host-funded event lotteries with public ticket buying, visual dashboards, and automatic winner announcements.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>/trivia</code>, <code>/riddle</code>, <code>/hangman</code>, <code>/wordchain</code>, <code>/guessthenearest</code>, <code>/scramble</code>, <code>/wordle</code>, <code>/dailywordle</code>, <code>/guessthenumber</code>, <code>/reactionspeed</code>, <code>/storychain</code>, <code>/blackjack</code></td>
-                                        <td>Games</td>
-                                        <td>Includes quick party games, word games, nearest-number matches, collaborative sessions, and coin-based risk with blackjack.</td>
+                                        <td><code>/wordle</code>, <code>/dailywordle</code>, <code>/hangman</code>, <code>/scramble</code>, <code>/wordchain</code></td>
+                                        <td>Word games</td>
+                                        <td>Letter, word, and chaining games that work well for solo play or smaller groups.</td>
+                                    </tr>
+                                    <tr data-command-row>
+                                        <td><code>/trivia</code>, <code>/riddle</code>, <code>/wtp</code></td>
+                                        <td>Quiz and puzzle</td>
+                                        <td>Knowledge and puzzle rounds for players who want answers, clues, and quick solves.</td>
+                                    </tr>
+                                    <tr data-command-row>
+                                        <td><code>/guessthenearest</code>, <code>/guessthenumber</code>, <code>/blackjack</code></td>
+                                        <td>Competitive</td>
+                                        <td>Nearest-number matches, quick guessing rounds, and casino-style risk against the dealer.</td>
                                     </tr>
                                     <tr data-command-row>
                                         <td><code>/guesschannel</code>, <code>/guessthenumber</code>, <code>/stopguess</code>, <code>/wtp</code>, <code>/stopgame</code>, <code>/howtoplay</code></td>
@@ -2669,9 +2800,9 @@
                                         <td>Provides movie discovery, comparisons, watchlists, watch history, ratings, overlap analysis, polls, and personalized recommendations.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>/roast</code>, <code>/ship</code>, <code>/hug</code>, <code>/kiss</code>, <code>/catfact</code>, <code>/dadjoke</code>, <code>/meme</code>, <code>/anonymousstatement</code>, <code>/timetravel</code></td>
+                                        <td><code>/roast</code>, <code>/ship</code>, <code>/hug</code>, <code>/kiss</code>, <code>/catfact</code>, <code>/dadjoke</code>, <code>/dog</code>, <code>/getadvice</code>, <code>/meme</code>, <code>/anonymousstatement</code>, <code>/timetravel</code></td>
                                         <td>Social</td>
-                                        <td>Lightweight fun commands reinforce the bot's personality with jokes, anonymous messages, and time-travel chaos.</td>
+                                        <td>Lightweight fun commands reinforce the bot's personality with jokes, advice, memes, anonymous messages, and time-travel chaos.</td>
                                     </tr>
                                     <tr data-command-row>
                                         <td><code>/roastbattle</code>, <code>/pvp dice|coinflip|rps</code>, <code>/petfight</code>, <code>/tournament create|join|status</code>, <code>/event</code>, <code>/counting setup|move|resume</code></td>
@@ -2684,14 +2815,14 @@
                                         <td>Configures active channels, update posts, Daily Wordle alerts, reaction controls, server settings like XP rate, and admin recovery tools.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>/movie</code>, <code>/dictionary</code>, <code>/wikipedia</code>, <code>/changelog</code>, <code>/announcements</code>, <code>/featureandbug</code>, <code>/myrequests</code></td>
+                                        <td><code>/movie</code>, <code>/dictionary</code>, <code>/wikipedia</code>, <code>/getadvice</code>, <code>/changelog</code>, <code>/announcements</code>, <code>/featureandbug</code>, <code>/myrequests</code></td>
                                         <td>Utility and updates</td>
-                                        <td>Covers movie discovery, dictionary and Wikipedia lookups, public update feeds, and the built-in feature request and bug-report workflow.</td>
+                                        <td>Covers movie discovery, dictionary and Wikipedia lookups, quick advice, public update feeds, and the built-in feature request and bug-report workflow.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>!cat</code>, <code>!catch</code>, <code>!hint</code>, <code>!reveal</code></td>
+                                        <td><code>!cat</code>, <code>!dog</code>, <code>!meme</code>, <code>!catch</code>, <code>!hint</code>, <code>!reveal</code>, <code>meow</code>, <code>woof</code>, <code>meow meme</code>, <code>give meme</code>, <code>send meme</code>, <code>got meme</code>, <code>meme me</code></td>
                                         <td>Prefixes</td>
-                                        <td><code>!cat</code> triggers the cat-spam reward behavior for top coin holders, <code>!catch</code> claims limited egg spawns in the pet channel, and <code>!hint</code> / <code>!reveal</code> are message-based helpers used in active silhouette guessing flows.</td>
+                                        <td><code>!cat</code> and <code>!dog</code> summon non-repeating animal images, simple <code>meow</code> / <code>woof</code> messages can do the same, <code>!meme</code> and <code>meow meme</code> pull dark memes, <code>give meme</code> / <code>send meme</code> / <code>got meme</code> / <code>meme me</code> pull wholesome memes, <code>!catch</code> claims limited egg spawns in the pet channel, and <code>!hint</code> / <code>!reveal</code> are message-based helpers used in active silhouette guessing flows.</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -2755,11 +2886,11 @@
                             </article>
                             <article class="quickstart-item warm">
                                 <h3>Best for active chat</h3>
-                                <p>Run <code>/trivia</code>, <code>/truthordare</code>, and <code>/wouldyourather</code> when the server already has momentum.</p>
+                                <p>Run <code>/trivia</code>, <code>/truthordare</code>, <code>/wouldyourather</code>, <code>/nhie</code>, and <code>/paranoia</code> when the server already has momentum.</p>
                             </article>
                             <article class="quickstart-item lime">
                                 <h3>Best chaos combo</h3>
-                                <p>Mix <code>/roastbattle</code>, <code>/timetravel</code>, <code>/anonymousstatement</code>, and <code>/storychain</code> for identity-heavy server moments.</p>
+                                <p>Mix <code>/roastbattle</code>, <code>/timetravel</code>, <code>/anonymousstatement</code>, and social prompts for identity-heavy server moments.</p>
                             </article>
                             <article class="quickstart-item">
                                 <h3>Best long-term loop</h3>
@@ -2771,10 +2902,10 @@
 
                 <div class="grid three-grid" style="margin-top:14px;">
                     <article class="game-card soft">
-                        <h3 class="card-title">Trivia and silly trivia</h3>
+                        <h3 class="card-title">Trivia</h3>
                         <ul>
                             <li><code>/trivia</code> opens a setup flow for mode, rounds, timing, category, and auto-start.</li>
-                            <li>Hosts choose serious or silly mode, then set rounds, timer, category, and auto-start.</li>
+                            <li>Hosts choose multiple choice or single answer mode, then set difficulty, rounds, timer, category, and auto-start.</li>
                             <li>Players answer in chat, and fast correct answers earn coins and placement bonuses.</li>
                         </ul>
                     </article>
@@ -2814,7 +2945,7 @@
                         </ul>
                     </article>
                     <article class="game-card lime">
-                        <h3 class="card-title">Who's That Pokemon and number games</h3>
+                        <h3 class="card-title">Quiz and number games</h3>
                         <ul>
                             <li><code>/wtp</code> uses Pokemon silhouettes with setup and start flows.</li>
                             <li><code>/guessthenumber</code> starts a one-off number round in the current channel.</li>
@@ -2833,18 +2964,10 @@
                         </ul>
                     </article>
                     <article class="game-card warm">
-                        <h3 class="card-title">Story chain and social prompts</h3>
+                        <h3 class="card-title">Social prompts</h3>
                         <ul>
-                            <li>Story Chain rewards collaborative storytelling over multiple rounds.</li>
                             <li>Would You Rather and Truth or Dare keep conversation moving when the server already has momentum.</li>
                             <li>Dad Joke and anonymous statement flows work well as lighter social breaks between larger games.</li>
-                        </ul>
-                    </article>
-                    <article class="game-card lime">
-                        <h3 class="card-title">Reaction speed</h3>
-                        <ul>
-                            <li>Reaction Speed focuses on quick response under time pressure.</li>
-                            <li>It works best as a short burst game when chat is already active.</li>
                         </ul>
                     </article>
                 </div>

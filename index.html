@@ -1506,9 +1506,9 @@
             margin-top: clamp(26px, 5vh, 56px);
             min-height: 132px;
             display: flex;
-            align-items: flex-end;
+            align-items: flex-start;
             gap: 18px;
-            opacity: 0.72;
+            opacity: 1;
         }
 
         .home-whiskers {
@@ -1518,6 +1518,103 @@
             background-repeat: no-repeat;
             background-size: contain;
             background-position: left center;
+        }
+
+        .home-server-widget {
+            width: 100%;
+            border-radius: 26px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+            background: color-mix(in srgb, var(--surface) 92%, transparent);
+            position: relative;
+        }
+
+        .home-server-widget::before {
+            content: "";
+            position: absolute;
+            inset: -18px;
+            border-radius: 34px;
+            background: radial-gradient(circle at 30% 20%, rgba(154, 124, 255, 0.24), transparent 55%), radial-gradient(circle at 75% 75%, rgba(255, 143, 207, 0.14), transparent 52%);
+            filter: blur(22px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .home-server-widget > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .home-server-card-body {
+            padding: 16px 16px 10px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .home-server-card-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 1rem;
+        }
+
+        .home-server-card-kicker::before {
+            content: "";
+            width: 14px;
+            height: 14px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent) 14%, transparent);
+            flex: 0 0 14px;
+        }
+
+        .home-server-card-copy {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.55;
+            font-size: 0.95rem;
+        }
+
+        .home-server-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 2px;
+        }
+
+        .home-server-card-tag {
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: color-mix(in srgb, var(--surface-soft) 38%, var(--surface));
+            color: var(--muted);
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .home-server-link-row {
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px 14px 12px;
+            background: color-mix(in srgb, var(--surface) 92%, transparent);
+            border-top: 1px solid var(--line);
+        }
+
+        .home-server-link {
+            min-height: 42px;
+            padding: 0 18px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: color-mix(in srgb, var(--surface-soft) 55%, var(--surface));
+            color: var(--text);
+            font-size: 0.95rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .home-landing > *,
@@ -2232,6 +2329,10 @@
                 height: 66px;
             }
 
+            .home-server-widget {
+                width: 100%;
+            }
+
             .hero-side-icon {
                 justify-content: center;
                 width: 100%;
@@ -2375,6 +2476,10 @@
                 display: none;
             }
 
+            .home-server-widget {
+                width: 100%;
+            }
+
             .home-landing::before,
             .home-section-panel.soft::before,
             .slideshow-panel::after,
@@ -2463,8 +2568,21 @@
                                 <button class="cta-secondary tab-link" data-target="commands" type="button">Explore Commands</button>
                                 <button class="cta-secondary tab-link" data-target="howtoplay" type="button">Read Game Guide</button>
                             </div>
-                            <div class="home-left-decor" aria-hidden="true">
-                                <div class="home-whiskers"></div>
+                            <div class="home-left-decor">
+                                <div class="home-server-widget">
+                                    <div class="home-server-card-body">
+                                        <div class="home-server-card-kicker">Discord Server</div>
+                                        <p class="home-server-card-copy">Chat, games, bot chaos, updates, and a safe place for people who get the vibe.<br><br>Need help or setup support? Join the server and ask there.</p>
+                                        <div class="home-server-card-tags">
+                                            <span class="home-server-card-tag">Chat</span>
+                                            <span class="home-server-card-tag">Games</span>
+                                            <span class="home-server-card-tag">Updates</span>
+                                        </div>
+                                    </div>
+                                    <div class="home-server-link-row">
+                                        <a class="home-server-link" data-app-link="discord" href="https://discord.gg/8aeWmjAd" target="_blank" rel="noopener noreferrer">Join Discord</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="home-hero-visual">
@@ -2724,11 +2842,11 @@
                     </article>
                     <article class="command-card" data-command-item>
                         <h3 class="card-title">Social + Utility + Setup</h3>
-                        <p><code>/roast</code>, <code>/ship</code>, <code>/hug</code>, <code>/kiss</code>, <code>/catfact</code>, <code>/dadjoke</code>, <code>/dog</code>, <code>/getadvice</code>, <code>/meme</code>, <code>/anonymousstatement</code>, <code>/movie</code>, <code>/dictionary</code>, <code>/wikipedia</code>, <code>/timetravel</code>, <code>/talkchannel</code>, <code>/petchannel</code>, <code>/logschannel</code>, <code>/eventchannel</code>, <code>/announcechannel</code>, <code>/dailywordlechannel</code>, <code>/anonymouschannel</code>, <code>/counting</code>, <code>/event</code>, <code>/reactions</code>, <code>/setup</code>, <code>/resetuser</code></p>
+                        <p><code>/roast</code>, <code>/ship</code>, <code>/hug</code>, <code>/kiss</code>, <code>/catfact</code>, <code>/funnycat</code>, <code>/dadjoke</code>, <code>/dog</code>, <code>/getadvice</code>, <code>/meme</code>, <code>/anonymousstatement</code>, <code>/movie</code>, <code>/dictionary</code>, <code>/wikipedia</code>, <code>/timetravel</code>, <code>/talkchannel</code>, <code>/petchannel</code>, <code>/logschannel</code>, <code>/eventchannel</code>, <code>/announcechannel</code>, <code>/dailywordlechannel</code>, <code>/anonymouschannel</code>, <code>/counting</code>, <code>/event</code>, <code>/reactions</code>, <code>/setup</code>, <code>/resetuser</code></p>
                     </article>
                     <article class="command-card soft" data-command-item>
                         <h3 class="card-title">Prefixes</h3>
-                        <p><code>!cat</code>, <code>!dog</code>, <code>!meme</code>, <code>!catch</code>, <code>!hint</code>, <code>!reveal</code>, plus simple <code>meow</code>, <code>woof</code>, <code>meow meme</code>, <code>give meme</code>, <code>send meme</code>, <code>got meme</code>, and <code>meme me</code> triggers</p>
+                        <p><code>!cat</code>, <code>!dog</code>, <code>!animal</code>, <code>!animals</code>, <code>!nature</code>, <code>!fact</code>, <code>!cute</code>, <code>!funnycat</code>, <code>!meme</code>, <code>!catch</code>, <code>!hint</code>, <code>!reveal</code>, plus simple <code>meow</code>, <code>woof</code>, <code>animal</code>, <code>animals</code>, <code>nature</code>, <code>fact</code>, <code>cute</code>, <code>funny cat</code>, <code>funny meow</code>, <code>meow meme</code>, <code>give meme</code>, <code>send meme</code>, <code>got meme</code>, and <code>meme me</code> triggers</p>
                     </article>
                 </div>
 
@@ -2800,7 +2918,7 @@
                                         <td>Provides movie discovery, comparisons, watchlists, watch history, ratings, overlap analysis, polls, and personalized recommendations.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>/roast</code>, <code>/ship</code>, <code>/hug</code>, <code>/kiss</code>, <code>/catfact</code>, <code>/dadjoke</code>, <code>/dog</code>, <code>/getadvice</code>, <code>/meme</code>, <code>/anonymousstatement</code>, <code>/timetravel</code></td>
+                                        <td><code>/roast</code>, <code>/ship</code>, <code>/hug</code>, <code>/kiss</code>, <code>/catfact</code>, <code>/funnycat</code>, <code>/dadjoke</code>, <code>/dog</code>, <code>/getadvice</code>, <code>/meme</code>, <code>/anonymousstatement</code>, <code>/timetravel</code></td>
                                         <td>Social</td>
                                         <td>Lightweight fun commands reinforce the bot's personality with jokes, advice, memes, anonymous messages, and time-travel chaos.</td>
                                     </tr>
@@ -2820,9 +2938,9 @@
                                         <td>Covers movie discovery, dictionary and Wikipedia lookups, quick advice, public update feeds, and the built-in feature request and bug-report workflow.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>!cat</code>, <code>!dog</code>, <code>!meme</code>, <code>!catch</code>, <code>!hint</code>, <code>!reveal</code>, <code>meow</code>, <code>woof</code>, <code>meow meme</code>, <code>give meme</code>, <code>send meme</code>, <code>got meme</code>, <code>meme me</code></td>
+                                        <td><code>!cat</code>, <code>!dog</code>, <code>!animal</code>, <code>!animals</code>, <code>!nature</code>, <code>!fact</code>, <code>!cute</code>, <code>!funnycat</code>, <code>!meme</code>, <code>!catch</code>, <code>!hint</code>, <code>!reveal</code>, <code>meow</code>, <code>woof</code>, <code>animal</code>, <code>animals</code>, <code>nature</code>, <code>fact</code>, <code>cute</code>, <code>funny cat</code>, <code>funny meow</code>, <code>meow meme</code>, <code>give meme</code>, <code>send meme</code>, <code>got meme</code>, <code>meme me</code></td>
                                         <td>Prefixes</td>
-                                        <td><code>!cat</code> and <code>!dog</code> summon non-repeating animal images, simple <code>meow</code> / <code>woof</code> messages can do the same, <code>!meme</code> and <code>meow meme</code> pull dark memes, <code>give meme</code> / <code>send meme</code> / <code>got meme</code> / <code>meme me</code> pull wholesome memes, <code>!catch</code> claims limited egg spawns in the pet channel, and <code>!hint</code> / <code>!reveal</code> are message-based helpers used in active silhouette guessing flows.</td>
+                                        <td><code>!cat</code> and <code>!dog</code> summon non-repeating direct animal images, <code>!animal</code> / <code>!animals</code> / <code>animal</code> / <code>animals</code> pull from the mixed random animal pool, <code>!nature</code> / <code>nature</code> pull premium nature and landscape wallpapers, <code>!fact</code> / <code>fact</code> pull random useless facts, <code>!cute</code> / <code>cute</code> pull cute anime-style images, <code>!funnycat</code> / <code>funny cat</code> / <code>funny meow</code> pull subreddit-based funny cat posts, simple <code>meow</code> / <code>woof</code> messages can summon cat or dog images, <code>!meme</code> and <code>meow meme</code> pull dark memes, <code>give meme</code> / <code>send meme</code> / <code>got meme</code> / <code>meme me</code> pull wholesome memes, <code>!catch</code> claims limited egg spawns in the pet channel, and <code>!hint</code> / <code>!reveal</code> are message-based helpers used in active silhouette guessing flows.</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -3845,6 +3963,21 @@
                 });
             }
 
+            function applyAppLinks(appLinks) {
+                if (!appLinks || typeof appLinks !== "object") {
+                    return;
+                }
+
+                document.querySelectorAll("[data-app-link]").forEach(function (element) {
+                    var key = element.getAttribute("data-app-link");
+                    var href = key && appLinks[key] ? String(appLinks[key]) : "";
+                    if (!href) {
+                        return;
+                    }
+                    element.setAttribute("href", href);
+                });
+            }
+
             function escapeHtml(value) {
                 return String(value || "")
                     .replace(/&/g, "&amp;")
@@ -3968,6 +4101,7 @@
                         }
 
                         updateLiveStats(stats);
+                        applyAppLinks(stats.appLinks);
                         return;
                     } catch (_) {}
                 }

@@ -290,6 +290,16 @@
             box-shadow: 0 0 0 4px color-mix(in srgb, #22c55e 18%, transparent);
         }
 
+        .status-pill.is-reconnecting .status-pill-dot {
+            background: #f59e0b;
+            box-shadow: 0 0 0 4px color-mix(in srgb, #f59e0b 18%, transparent);
+        }
+
+        .status-pill.is-degraded .status-pill-dot {
+            background: #a855f7;
+            box-shadow: 0 0 0 4px color-mix(in srgb, #a855f7 18%, transparent);
+        }
+
         .status-pill.is-offline .status-pill-dot {
             background: #ef4444;
             box-shadow: 0 0 0 4px color-mix(in srgb, #ef4444 18%, transparent);
@@ -3919,16 +3929,40 @@
                 element._liveCountFrame = requestAnimationFrame(step);
             }
 
-            function updateBotStatus(isOnline, label) {
+            function updateBotStatus(statusClass, label) {
                 var badge = document.getElementById("botStatusBadge");
                 var text = document.getElementById("botStatusText");
                 if (!badge || !text) {
                     return;
                 }
 
-                badge.classList.remove("is-online", "is-offline");
-                badge.classList.add(isOnline ? "is-online" : "is-offline");
+                badge.classList.remove("is-online", "is-reconnecting", "is-degraded", "is-offline");
+                badge.classList.add(statusClass || "is-offline");
                 text.textContent = label;
+            }
+
+            function getBotStatusState(payload) {
+                var checks = payload && payload.checks ? payload.checks : {};
+                var startup = payload && payload.startup ? payload.startup : {};
+                var issues = payload && Array.isArray(payload.issues) ? payload.issues : [];
+
+                if (checks.dbReady === false) {
+                    return { className: "is-degraded", label: "Database issue" };
+                }
+
+                if (checks.discordReady === true && checks.dbReady !== false) {
+                    return { className: "is-online", label: "Online" };
+                }
+
+                if (startup.lastGatewayIssue || startup.lastRecoveryAt || issues.indexOf("discord_not_ready") !== -1) {
+                    return { className: "is-reconnecting", label: "Reconnecting" };
+                }
+
+                if (payload && payload.status === "degraded") {
+                    return { className: "is-degraded", label: "Degraded" };
+                }
+
+                return { className: "is-offline", label: "Offline" };
             }
 
             function updateLiveStats(stats) {
@@ -4118,14 +4152,13 @@
                         }
 
                         var payload = await response.json();
-                        var checks = payload && payload.checks ? payload.checks : {};
-                        var isOnline = checks.discordReady === true && checks.dbReady !== false;
-                        updateBotStatus(isOnline, isOnline ? "Online" : "Offline");
+                        var statusState = getBotStatusState(payload);
+                        updateBotStatus(statusState.className, statusState.label);
                         return;
                     } catch (_) {}
                 }
 
-                updateBotStatus(false, "Offline");
+                updateBotStatus("is-offline", "Offline");
             }
 
             async function hydrateUpdateSection(sectionKey, endpoints) {

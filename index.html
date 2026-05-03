@@ -8,6 +8,10 @@
         (function () {
             var storageKey = "meow-bot-theme";
             var savedTheme = localStorage.getItem(storageKey);
+            var allowedThemes = ["light", "dark", "pure-dark"];
+            if (allowedThemes.indexOf(savedTheme) === -1) {
+                savedTheme = "light";
+            }
             document.documentElement.setAttribute("data-theme", savedTheme || "light");
         }());
     </script>
@@ -35,19 +39,36 @@
 
         html[data-theme="dark"] {
             color-scheme: dark;
-            --bg: #0b1020;
-            --shell: #121a30;
-            --surface: #18233b;
-            --surface-soft: #2a2250;
-            --surface-warm: #3a2747;
-            --surface-lime: #1e3550;
-            --surface-dark: #060914;
-            --text: #fff6fb;
-            --muted: #d8cbe3;
-            --line: rgba(184, 191, 255, 0.14);
-            --accent: #9a7cff;
-            --accent-2: #ff8fcf;
-            --shadow: 0 28px 70px rgba(0, 0, 0, 0.42);
+            --bg: #070816;
+            --shell: #10152d;
+            --surface: #171d3b;
+            --surface-soft: #271d52;
+            --surface-warm: #3a2148;
+            --surface-lime: #12384c;
+            --surface-dark: #060817;
+            --text: #fbf8ff;
+            --muted: #c8c5ec;
+            --line: rgba(205, 214, 255, 0.18);
+            --accent: #b088ff;
+            --accent-2: #ff78c7;
+            --shadow: 0 30px 80px rgba(0, 0, 0, 0.56);
+        }
+
+        html[data-theme="pure-dark"] {
+            color-scheme: dark;
+            --bg: #000000;
+            --shell: #030303;
+            --surface: #080808;
+            --surface-soft: #101010;
+            --surface-warm: #12100f;
+            --surface-lime: #0c1211;
+            --surface-dark: #000000;
+            --text: #f7f7f7;
+            --muted: #b7b7b7;
+            --line: rgba(255, 255, 255, 0.14);
+            --accent: #f5f5f5;
+            --accent-2: #9ca3af;
+            --shadow: 0 30px 80px rgba(0, 0, 0, 0.78);
         }
 
         * {
@@ -69,6 +90,18 @@
             color: var(--text);
             position: relative;
             overflow-x: hidden;
+        }
+
+        html[data-theme="dark"] body {
+            background:
+                radial-gradient(circle at 12% 8%, rgba(176, 136, 255, 0.3), transparent 24%),
+                radial-gradient(circle at 88% 12%, rgba(56, 223, 243, 0.22), transparent 26%),
+                radial-gradient(circle at 48% 92%, rgba(255, 120, 199, 0.16), transparent 30%),
+                linear-gradient(180deg, #070816 0%, #10183a 54%, #060713 100%);
+        }
+
+        html[data-theme="pure-dark"] body {
+            background: #000000;
         }
 
         body::before,
@@ -96,6 +129,18 @@
             transform: scaleX(-1);
         }
 
+        html[data-theme="dark"] body::before,
+        html[data-theme="dark"] body::after {
+            opacity: 0.18;
+            filter: saturate(1.35) brightness(1.15);
+        }
+
+        html[data-theme="pure-dark"] body::before,
+        html[data-theme="pure-dark"] body::after {
+            opacity: 0.05;
+            filter: grayscale(1) brightness(0.8);
+        }
+
         a {
             color: inherit;
             text-decoration: none;
@@ -117,6 +162,18 @@
             z-index: 1;
         }
 
+        html[data-theme="dark"] .app-shell {
+            background: linear-gradient(180deg, rgba(18, 24, 52, 0.98) 0%, rgba(10, 14, 32, 0.98) 100%);
+            border-color: rgba(210, 218, 255, 0.16);
+            box-shadow: 0 34px 90px rgba(0, 0, 0, 0.62), 0 0 80px rgba(176, 136, 255, 0.12);
+        }
+
+        html[data-theme="pure-dark"] .app-shell {
+            background: #030303;
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 34px 90px rgba(0, 0, 0, 0.86);
+        }
+
         .topbar {
             display: flex;
             align-items: center;
@@ -124,6 +181,17 @@
             gap: 18px;
             padding: 18px 28px;
             flex-wrap: wrap;
+            background: var(--shell);
+        }
+
+        html[data-theme="dark"] .topbar {
+            background: linear-gradient(90deg, rgba(20, 26, 58, 0.98), rgba(15, 25, 55, 0.98));
+            border-bottom: 1px solid rgba(205, 214, 255, 0.08);
+        }
+
+        html[data-theme="pure-dark"] .topbar {
+            background: #050505;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .brand {
@@ -163,6 +231,13 @@
             font-size: 0.84rem;
             letter-spacing: 0.04em;
             font-weight: 700;
+            position: relative;
+            overflow: hidden;
+            transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .tab-link:hover {
+            transform: translateY(-1px);
         }
 
         .tab-link.active {
@@ -170,6 +245,31 @@
             border-color: var(--line);
             background: color-mix(in srgb, var(--surface-soft) 62%, transparent);
             box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent);
+        }
+
+        html[data-theme="dark"] .tab-link.active {
+            color: #ffffff;
+            border-color: rgba(205, 214, 255, 0.24);
+            background: linear-gradient(135deg, rgba(176, 136, 255, 0.22), rgba(56, 223, 243, 0.1));
+            box-shadow: inset 0 0 0 1px rgba(176, 136, 255, 0.18), 0 10px 28px rgba(0, 0, 0, 0.22);
+        }
+
+        html[data-theme="pure-dark"] .tab-link.active {
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.2);
+            background: #151515;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+        }
+
+        .tab-link.nav-pulse::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(110deg, transparent 0%, color-mix(in srgb, var(--accent) 28%, transparent) 45%, transparent 78%);
+            transform: translateX(-130%);
+            animation: navPillSweep 0.55s ease both;
+            pointer-events: none;
         }
 
         .top-actions {
@@ -305,14 +405,72 @@
             box-shadow: 0 0 0 4px color-mix(in srgb, #ef4444 18%, transparent);
         }
 
+        main {
+            position: relative;
+            background: var(--shell);
+        }
+
+        html[data-theme="dark"] main {
+            background: linear-gradient(180deg, rgba(15, 25, 55, 0.98), rgba(10, 14, 32, 0.98));
+        }
+
+        html[data-theme="pure-dark"] main {
+            background: #030303;
+        }
+
+        main.blackhole-suck,
+        main.blackhole-throw {
+            overflow: hidden;
+        }
+
         .page {
             display: none;
-            padding: 0 14px 14px;
+            padding: 18px 14px 18px;
+            position: relative;
+            transform-origin: 50% clamp(126px, 24vh, 240px);
         }
 
         .page.active {
             display: block;
-            animation: pageFade 0.24s ease;
+        }
+
+        .page.page-suck {
+            display: block;
+            animation: blackHoleSuck 0.2s cubic-bezier(0.4, 0, 1, 1) both;
+            will-change: transform, opacity;
+        }
+
+        .page.page-throw {
+            display: block;
+            animation: blackHoleThrow 0.36s cubic-bezier(0.16, 1, 0.3, 1) both;
+            will-change: transform, opacity;
+        }
+
+        .page.pagefx-slide.page-suck { animation-name: pageSlideOut; }
+        .page.pagefx-slide.page-throw { animation-name: pageSlideIn; }
+        .page.pagefx-rise.page-suck { animation-name: pageRiseOut; }
+        .page.pagefx-rise.page-throw { animation-name: pageRiseIn; }
+        .page.pagefx-zoom.page-suck { animation-name: pageZoomOut; }
+        .page.pagefx-zoom.page-throw { animation-name: pageZoomIn; }
+        .page.pagefx-wipe.page-suck { animation-name: pageWipeOut; }
+        .page.pagefx-wipe.page-throw { animation-name: pageWipeIn; }
+        .page.pagefx-split.page-suck { animation-name: pageSplitOut; }
+        .page.pagefx-split.page-throw { animation-name: pageSplitIn; }
+        .page.pagefx-stack.page-suck { animation-name: pageStackOut; }
+        .page.pagefx-stack.page-throw { animation-name: pageStackIn; }
+        .page.pagefx-focus.page-suck { animation-name: pageFocusOut; }
+        .page.pagefx-focus.page-throw { animation-name: pageFocusIn; }
+
+        .page.pagefx-wipe.page-suck,
+        .page.pagefx-wipe.page-throw,
+        .page.pagefx-split.page-suck,
+        .page.pagefx-split.page-throw {
+            will-change: transform, opacity, clip-path;
+        }
+
+        .page.pagefx-focus.page-suck,
+        .page.pagefx-focus.page-throw {
+            will-change: transform, opacity, filter;
         }
 
         .is-hidden {
@@ -346,6 +504,18 @@
             border: 1px solid var(--line);
             overflow: hidden;
             min-height: 100%;
+        }
+
+        html[data-theme="dark"] .panel {
+            background: linear-gradient(180deg, rgba(28, 34, 69, 0.96), rgba(17, 22, 48, 0.98));
+            border-color: rgba(205, 214, 255, 0.15);
+            box-shadow: 0 24px 54px rgba(0, 0, 0, 0.28);
+        }
+
+        html[data-theme="pure-dark"] .panel {
+            background: #080808;
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: none;
         }
 
         .panel-inner {
@@ -415,7 +585,7 @@
         .cta-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
             margin-top: 22px;
             position: relative;
             z-index: 1;
@@ -423,13 +593,15 @@
 
         .cta-primary,
         .cta-secondary {
-            min-height: 46px;
-            padding: 0 20px;
+            min-height: 42px;
+            padding: 0 16px;
             border-radius: 999px;
             border: 1px solid var(--line);
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            font-size: 0.94rem;
+            white-space: nowrap;
         }
 
         .cta-primary {
@@ -438,9 +610,72 @@
             border-color: transparent;
         }
 
+        .cta-support {
+            position: relative;
+            overflow: hidden;
+            padding: 0 18px;
+            border-color: transparent;
+            background: linear-gradient(120deg, #ffe38f 0%, #ff95b8 28%, #8bdcff 56%, #ffe38f 100%);
+            background-size: 220% 220%;
+            color: #18130c;
+            font-weight: 900;
+            box-shadow: 0 16px 34px rgba(255, 149, 184, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+            transform: translateY(-1px);
+            animation: supportGradientFlow 3.6s ease-in-out infinite;
+        }
+
+        .cta-support::after {
+            content: "";
+            position: absolute;
+            inset: 2px;
+            border-radius: inherit;
+            border: 1px solid rgba(255, 255, 255, 0.38);
+            pointer-events: none;
+        }
+
         html[data-theme="dark"] .cta-primary {
-            color: #101216;
-            background: #f4ecec;
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 58%, #38dff3 100%);
+            box-shadow: 0 14px 34px rgba(176, 136, 255, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+        }
+
+        html[data-theme="dark"] .cta-secondary.cta-support {
+            color: #0b1020;
+            background: linear-gradient(120deg, #ffe66f 0%, #ff73b7 30%, #74f2ff 58%, #ffe66f 100%);
+            background-size: 220% 220%;
+            box-shadow: 0 16px 42px rgba(255, 115, 183, 0.26), 0 0 28px rgba(116, 242, 255, 0.12);
+        }
+
+        html[data-theme="dark"] .cta-secondary,
+        html[data-theme="dark"] .theme-toggle,
+        html[data-theme="dark"] .pill-button,
+        html[data-theme="dark"] .status-pill {
+            background: rgba(255, 255, 255, 0.035);
+            border-color: rgba(205, 214, 255, 0.2);
+            box-shadow: 0 0 0 1px rgba(176, 136, 255, 0.06) inset;
+        }
+
+        html[data-theme="pure-dark"] .cta-primary {
+            color: #000000;
+            background: #f7f7f7;
+            box-shadow: none;
+        }
+
+        html[data-theme="pure-dark"] .cta-secondary.cta-support {
+            color: #000000;
+            background: linear-gradient(120deg, #ffffff 0%, #cfcfcf 28%, #ffffff 56%, #9f9f9f 100%);
+            background-size: 220% 220%;
+            border-color: #ffffff;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.16);
+        }
+
+        html[data-theme="pure-dark"] .cta-secondary,
+        html[data-theme="pure-dark"] .theme-toggle,
+        html[data-theme="pure-dark"] .pill-button,
+        html[data-theme="pure-dark"] .status-pill {
+            background: #0b0b0b;
+            border-color: rgba(255, 255, 255, 0.14);
+            box-shadow: none;
         }
 
         .hero-art {
@@ -463,10 +698,32 @@
             box-shadow: var(--shadow);
         }
 
+        html[data-theme="dark"] .discord-card {
+            background: rgba(14, 19, 43, 0.82);
+            border-color: rgba(205, 214, 255, 0.17);
+            box-shadow: 0 26px 60px rgba(0, 0, 0, 0.38), 0 0 48px rgba(176, 136, 255, 0.1);
+        }
+
+        html[data-theme="pure-dark"] .discord-card {
+            background: #090909;
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: none;
+        }
+
         .discord-head {
             padding: 16px 18px;
             border-bottom: 1px solid var(--line);
             background: color-mix(in srgb, var(--surface-soft) 50%, var(--surface));
+        }
+
+        html[data-theme="dark"] .discord-head {
+            background: linear-gradient(90deg, rgba(176, 136, 255, 0.18), rgba(56, 223, 243, 0.08));
+            border-bottom-color: rgba(205, 214, 255, 0.14);
+        }
+
+        html[data-theme="pure-dark"] .discord-head {
+            background: #111111;
+            border-bottom-color: rgba(255, 255, 255, 0.1);
         }
 
         .discord-head strong {
@@ -522,6 +779,16 @@
             font-weight: 600;
         }
 
+        html[data-theme="dark"] .cat-badge {
+            background: rgba(255, 255, 255, 0.055);
+            border-color: rgba(205, 214, 255, 0.16);
+        }
+
+        html[data-theme="pure-dark"] .cat-badge {
+            background: #0d0d0d;
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
         .metric-card {
             text-align: center;
             padding: 24px 18px;
@@ -567,6 +834,35 @@
             border-radius: 24px;
             border: 1px solid var(--line);
             background: var(--surface);
+        }
+
+        html[data-theme="dark"] .info-card,
+        html[data-theme="dark"] .doc-card,
+        html[data-theme="dark"] .legal-card,
+        html[data-theme="dark"] .command-card,
+        html[data-theme="dark"] .game-card,
+        html[data-theme="dark"] .faq-item,
+        html[data-theme="dark"] .permission-item,
+        html[data-theme="dark"] .quickstart-item,
+        html[data-theme="dark"] .contact-box,
+        html[data-theme="dark"] .update-item {
+            border-color: rgba(205, 214, 255, 0.16);
+            box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+
+        html[data-theme="pure-dark"] .info-card,
+        html[data-theme="pure-dark"] .doc-card,
+        html[data-theme="pure-dark"] .legal-card,
+        html[data-theme="pure-dark"] .command-card,
+        html[data-theme="pure-dark"] .game-card,
+        html[data-theme="pure-dark"] .faq-item,
+        html[data-theme="pure-dark"] .permission-item,
+        html[data-theme="pure-dark"] .quickstart-item,
+        html[data-theme="pure-dark"] .contact-box,
+        html[data-theme="pure-dark"] .update-item {
+            background: #0a0a0a;
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: none;
         }
 
         .info-card.soft,
@@ -646,6 +942,16 @@
             background: var(--surface);
         }
 
+        html[data-theme="dark"] .table-wrap {
+            background: rgba(12, 17, 40, 0.72);
+            border-color: rgba(205, 214, 255, 0.15);
+        }
+
+        html[data-theme="pure-dark"] .table-wrap {
+            background: #080808;
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
         .command-lookup-wrap {
             overflow: visible;
         }
@@ -721,6 +1027,26 @@
             background: var(--surface);
             color: var(--text);
             font: inherit;
+        }
+
+        html[data-theme="dark"] .search-input {
+            background: rgba(255, 255, 255, 0.045);
+            border-color: rgba(205, 214, 255, 0.2);
+            box-shadow: 0 0 0 1px rgba(56, 223, 243, 0.05) inset;
+        }
+
+        html[data-theme="dark"] .search-input::placeholder {
+            color: rgba(200, 197, 236, 0.68);
+        }
+
+        html[data-theme="pure-dark"] .search-input {
+            background: #050505;
+            border-color: rgba(255, 255, 255, 0.14);
+            box-shadow: none;
+        }
+
+        html[data-theme="pure-dark"] .search-input::placeholder {
+            color: rgba(183, 183, 183, 0.72);
         }
 
         .search-note {
@@ -1047,9 +1373,153 @@
             min-height: 1.2em;
         }
 
-        @keyframes pageFade {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes blackHoleSuck {
+            0% { opacity: 1; transform: scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: scale(0.86) rotate(-2deg); }
+        }
+
+        @keyframes blackHoleThrow {
+            0% { opacity: 0; transform: translateY(10px) scale(0.94) rotate(1.5deg); }
+            68% { opacity: 1; transform: translateY(-1px) scale(1.01) rotate(-0.3deg); }
+            100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+        }
+
+        @keyframes pageSlideOut {
+            0% { opacity: 1; transform: translateX(0) scale(1); }
+            100% { opacity: 0; transform: translateX(-42px) scale(0.98); }
+        }
+
+        @keyframes pageSlideIn {
+            0% { opacity: 0; transform: translateX(46px) scale(0.98); }
+            68% { opacity: 1; transform: translateX(-2px) scale(1.005); }
+            100% { opacity: 1; transform: translateX(0) scale(1); }
+        }
+
+        @keyframes pageRiseOut {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-28px) scale(0.97); }
+        }
+
+        @keyframes pageRiseIn {
+            0% { opacity: 0; transform: translateY(34px) scale(0.97); }
+            70% { opacity: 1; transform: translateY(-2px) scale(1.008); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes pageZoomOut {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.035); }
+        }
+
+        @keyframes pageZoomIn {
+            0% { opacity: 0; transform: scale(0.955); }
+            70% { opacity: 1; transform: scale(1.006); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes pageWipeOut {
+            0% {
+                opacity: 1;
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+                transform: translateX(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                clip-path: polygon(0 0, 12% 0, 0 100%, 0 100%);
+                transform: translateX(-18px) scale(0.985);
+            }
+        }
+
+        @keyframes pageWipeIn {
+            0% {
+                opacity: 0;
+                clip-path: polygon(100% 0, 100% 0, 88% 100%, 100% 100%);
+                transform: translateX(18px) scale(0.985);
+            }
+            100% {
+                opacity: 1;
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        @keyframes pageSplitOut {
+            0% {
+                opacity: 1;
+                clip-path: inset(0 0 0 0 round 0);
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                clip-path: inset(0 48% 0 48% round 22px);
+                transform: scale(0.985);
+            }
+        }
+
+        @keyframes pageSplitIn {
+            0% {
+                opacity: 0;
+                clip-path: inset(0 50% 0 50% round 24px);
+                transform: scale(0.985);
+            }
+            72% {
+                opacity: 1;
+                clip-path: inset(0 -1% 0 -1% round 0);
+                transform: scale(1.006);
+            }
+            100% {
+                opacity: 1;
+                clip-path: inset(0 0 0 0 round 0);
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pageStackOut {
+            0% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(18px) scale(0.94) rotate(-1.2deg); }
+        }
+
+        @keyframes pageStackIn {
+            0% { opacity: 0; transform: translateY(-22px) scale(1.035) rotate(1.2deg); }
+            66% { opacity: 1; transform: translateY(2px) scale(0.996) rotate(-0.2deg); }
+            100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+        }
+
+        @keyframes pageFocusOut {
+            0% { opacity: 1; filter: blur(0); transform: scale(1); }
+            100% { opacity: 0; filter: blur(10px); transform: scale(0.985); }
+        }
+
+        @keyframes pageFocusIn {
+            0% { opacity: 0; filter: blur(12px); transform: scale(1.035); }
+            72% { opacity: 1; filter: blur(0); transform: scale(0.998); }
+            100% { opacity: 1; filter: blur(0); transform: scale(1); }
+        }
+
+        @keyframes supportGradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes navPillSweep {
+            from { transform: translateX(-130%); }
+            to { transform: translateX(130%); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .page.page-suck,
+            .page.page-throw,
+            .cta-support,
+            .tab-link.nav-pulse::after {
+                animation: none;
+            }
+
+            .tab-link,
+            .tab-link:hover {
+                transition: none;
+                transform: none;
+            }
         }
 
         .legal-card ul,
@@ -1242,16 +1712,23 @@
         }
 
         html[data-theme="dark"] .feature-preview-card {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.065);
         }
 
         .feature-preview-card.soft { background: #e6defd; }
         .feature-preview-card.warm { background: #f9ead7; }
         .feature-preview-card.lime { background: #e5f2ce; }
 
-        html[data-theme="dark"] .feature-preview-card.soft { background: #382d64; }
-        html[data-theme="dark"] .feature-preview-card.warm { background: #4b3158; }
-        html[data-theme="dark"] .feature-preview-card.lime { background: #274666; }
+        html[data-theme="dark"] .feature-preview-card.soft { background: linear-gradient(145deg, #342469, #211945); }
+        html[data-theme="dark"] .feature-preview-card.warm { background: linear-gradient(145deg, #55284f, #2a193f); }
+        html[data-theme="dark"] .feature-preview-card.lime { background: linear-gradient(145deg, #104c66, #142a4d); }
+
+        html[data-theme="pure-dark"] .feature-preview-card,
+        html[data-theme="pure-dark"] .feature-preview-card.soft,
+        html[data-theme="pure-dark"] .feature-preview-card.warm,
+        html[data-theme="pure-dark"] .feature-preview-card.lime {
+            background: #101010;
+        }
 
         .feature-preview-card strong {
             font-size: 1rem;
@@ -1277,7 +1754,15 @@
         }
 
         html[data-theme="dark"] .feature-preview-wide {
-            background: #151d33;
+            background: linear-gradient(135deg, #0b1025 0%, #221b53 52%, #122f4a 100%);
+            border-color: rgba(205, 214, 255, 0.18);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 18px 42px rgba(0, 0, 0, 0.25);
+        }
+
+        html[data-theme="pure-dark"] .feature-preview-wide {
+            background: #050505;
+            border-color: rgba(255, 255, 255, 0.14);
+            box-shadow: none;
         }
 
         .feature-preview-wide p {
@@ -1636,8 +2121,63 @@
 
         html[data-theme="dark"] .home-landing {
             background:
-                radial-gradient(circle at top right, rgba(159, 132, 255, 0.18), transparent 24%),
-                linear-gradient(180deg, color-mix(in srgb, var(--surface-soft) 28%, var(--surface)) 0%, var(--surface) 100%);
+                radial-gradient(circle at top right, rgba(176, 136, 255, 0.28), transparent 28%),
+                radial-gradient(circle at 18% 82%, rgba(56, 223, 243, 0.14), transparent 26%),
+                linear-gradient(180deg, color-mix(in srgb, var(--surface-soft) 38%, var(--surface)) 0%, var(--surface) 100%);
+        }
+
+        html[data-theme="pure-dark"] .home-landing {
+            background: #080808;
+        }
+
+        html[data-theme="dark"] .home-section-panel.soft,
+        html[data-theme="dark"] .info-card.soft,
+        html[data-theme="dark"] .command-card.soft,
+        html[data-theme="dark"] .game-card.soft,
+        html[data-theme="dark"] .faq-item.soft {
+            background: linear-gradient(145deg, #2b205b, #1a1f43);
+        }
+
+        html[data-theme="pure-dark"] .home-section-panel.soft,
+        html[data-theme="pure-dark"] .info-card.soft,
+        html[data-theme="pure-dark"] .command-card.soft,
+        html[data-theme="pure-dark"] .game-card.soft,
+        html[data-theme="pure-dark"] .faq-item.soft {
+            background: #101010;
+        }
+
+        html[data-theme="dark"] .home-section-panel.warm,
+        html[data-theme="dark"] .info-card.warm,
+        html[data-theme="dark"] .command-card.warm,
+        html[data-theme="dark"] .game-card.warm,
+        html[data-theme="dark"] .legal-card.warm,
+        html[data-theme="dark"] .faq-item.warm {
+            background: linear-gradient(145deg, #44244f, #211c42);
+        }
+
+        html[data-theme="pure-dark"] .home-section-panel.warm,
+        html[data-theme="pure-dark"] .info-card.warm,
+        html[data-theme="pure-dark"] .command-card.warm,
+        html[data-theme="pure-dark"] .game-card.warm,
+        html[data-theme="pure-dark"] .legal-card.warm,
+        html[data-theme="pure-dark"] .faq-item.warm {
+            background: #121212;
+        }
+
+        html[data-theme="dark"] .home-section-panel.lime,
+        html[data-theme="dark"] .info-card.lime,
+        html[data-theme="dark"] .command-card.lime,
+        html[data-theme="dark"] .game-card.lime,
+        html[data-theme="dark"] .faq-item.lime {
+            background: linear-gradient(145deg, #123f58, #18284d);
+        }
+
+        html[data-theme="pure-dark"] .home-section-panel.lime,
+        html[data-theme="pure-dark"] .info-card.lime,
+        html[data-theme="pure-dark"] .command-card.lime,
+        html[data-theme="pure-dark"] .game-card.lime,
+        html[data-theme="pure-dark"] .faq-item.lime {
+            background: #0c0c0c;
         }
 
         .home-eyebrow-row {
@@ -1721,6 +2261,12 @@
 
         html[data-theme="dark"] .home-section-panel.dark {
             color: #f8eff0;
+            background: linear-gradient(135deg, #070816 0%, #171344 52%, #0d3141 100%);
+        }
+
+        html[data-theme="pure-dark"] .home-section-panel.dark {
+            color: #f7f7f7;
+            background: #000000;
         }
 
         .home-section-panel.dark .section-copy,
@@ -2047,6 +2593,7 @@
             }
 
             .page {
+                padding-top: 12px;
                 padding-left: 10px;
                 padding-right: 10px;
             }
@@ -2395,6 +2942,7 @@
             }
 
             .page {
+                padding-top: 10px;
                 padding-left: 6px;
                 padding-right: 6px;
                 padding-bottom: 24px;
@@ -2575,14 +3123,14 @@
                             <p class="home-lead">Meow Bot brings cat-personality chat, party games, daily progression, movie picks, quick lookups, server tools, public events, and a deep pet system into one Discord bot built for active communities.</p>
                             <div class="cta-row">
                                 <a class="cta-primary" href="https://discord.com/oauth2/authorize?client_id=1488940777190199386" target="_blank" rel="noopener noreferrer">Invite Meow Bot</a>
+                                <a class="cta-secondary cta-support" data-app-link="support" href="https://www.patreon.com/cw/FluffyThePenguin/membership" target="_blank" rel="noopener noreferrer">Support Meow Bot</a>
                                 <button class="cta-secondary tab-link" data-target="commands" type="button">Explore Commands</button>
-                                <button class="cta-secondary tab-link" data-target="howtoplay" type="button">Read Game Guide</button>
                             </div>
                             <div class="home-left-decor">
                                 <div class="home-server-widget">
                                     <div class="home-server-card-body">
                                         <div class="home-server-card-kicker">Discord Server</div>
-                                        <p class="home-server-card-copy">Chat, games, bot chaos, updates, and a safe place for people who get the vibe.<br><br>Need help or setup support? Join the server and ask there.</p>
+                                        <p class="home-server-card-copy">Chat, games, bot chaos, updates, and a safe place for people who get the vibe.<br><br>Need help with setup, dashboards, or commands? Join the server and ask there.</p>
                                         <div class="home-server-card-tags">
                                             <span class="home-server-card-tag">Chat</span>
                                             <span class="home-server-card-tag">Games</span>
@@ -2611,7 +3159,7 @@
                                     </div>
                                     <div class="message">
                                         <div class="avatar">🎮</div>
-                                        <div><strong>Game Pulse</strong><p>Word games, quiz rounds, social prompts, nearest-number matches, Pokemon silhouettes, and blackjack are ready.</p></div>
+                                        <div><strong>Game Pulse</strong><p>Word games, quiz rounds, social prompts, country clues, WTP silhouette rounds, and blackjack are ready.</p></div>
                                     </div>
                                     <div class="message">
                                         <div class="avatar">🐾</div>
@@ -2714,10 +3262,10 @@
                                 <div class="slide-copy">
                                     <div class="slide-kicker">Feature 03</div>
                                     <h4>Games, Chaos, And Variety</h4>
-                                    <p>Word games, quiz rounds, social prompts, PvP, movie picks, counting, events, and pets all live in one bot.</p>
+                                    <p>Word games, quiz rounds, country clues, social prompts, PvP, movie picks, anime and manga lookups, counting, events, and pets all live in one bot.</p>
                                     <div class="slide-points">
-                                        <div>Trivia, Wordle, riddles, Hangman, Guess The Nearest, and WTP</div>
-                                        <div>Roast battles, time travel, memes, anonymous drops, and social prompts</div>
+                                        <div>Trivia, Wordle, riddles, Hangman, Country Games, Guess The Nearest, and WTP</div>
+                                        <div>Roasts, time travel, memes, anonymous drops, and social prompts</div>
                                         <div>Guessing games, pet battles, tournaments, events, movie picks, and quick lookups</div>
                                     </div>
                                 </div>
@@ -2785,7 +3333,7 @@
                             <article class="info-card warm">
                                 <div class="card-icon">🎮</div>
                                 <h3 class="card-title">Big Game Stack</h3>
-                            <p>Word games, quiz rounds, social prompts, nearest-number matches, WTP, blackjack, and more.</p>
+                            <p>Word games, quiz rounds, country games, social prompts, nearest-number matches, WTP, blackjack, and more.</p>
                             </article>
                             <article class="info-card lime">
                                 <div class="card-icon">🪙</div>
@@ -2795,7 +3343,7 @@
                             <article class="info-card">
                                 <div class="card-icon">⚙️</div>
                                 <h3 class="card-title">Server Setup</h3>
-                                <p>Configure talk channels, pet channels, logs, update posts, event announcements, anonymous statement drops, Daily Wordle alerts, counting, reaction settings, XP rate, and other guild-specific features.</p>
+                                <p>Configure talk channels, pet channels, logs, update posts, event announcements, anonymous statement drops, Daily Wordle alerts, counting, reaction settings, XP rate, and other guild-specific features through slash commands or the admin dashboard.</p>
                             </article>
                         </div>
                     </section>
@@ -2832,7 +3380,7 @@
                             <li>Economy and progression</li>
                             <li>Games, competition, and social prompts</li>
                             <li>Pets, lotteries, tournaments, and events</li>
-                            <li>Movies, lookups, feedback, updates, and setup</li>
+                            <li>Movies, anime, manga, lookups, feedback, updates, and dashboards</li>
                         </ul>
                     </article>
                 </div>
@@ -2840,7 +3388,7 @@
                 <div class="grid four-grid" style="margin-top:14px;">
                     <article class="command-card soft" data-command-item>
                         <h3 class="card-title">Core</h3>
-                        <p><code>/help</code>, <code>/start</code>, <code>/ping</code>, <code>/mood</code>, <code>/profile</code>, <code>/achievements</code>, <code>/inventory</code>, <code>/activitylog</code>, <code>/wordlestats</code>, <code>/reminder</code>, <code>/clearmemory</code>, <code>/mydata</code>, <code>/serverinfo</code></p>
+                        <p><code>/help</code>, <code>/start</code>, <code>/ping</code>, <code>/mood</code>, <code>/profile</code>, <code>/identity</code>, <code>/achievements</code>, <code>/inventory</code>, <code>/activitylog</code>, <code>/wordlestats</code>, <code>/reminder</code>, <code>/clearmemory</code>, <code>/mydata</code>, <code>/serverinfo</code>, <code>/textcommands</code></p>
                     </article>
                     <article class="command-card warm" data-command-item>
                         <h3 class="card-title">Economy</h3>
@@ -2848,15 +3396,11 @@
                     </article>
                     <article class="command-card lime" data-command-item>
                         <h3 class="card-title">Game Categories</h3>
-                        <p><strong>Word:</strong> <code>/wordle</code>, <code>/dailywordle</code>, <code>/hangman</code>, <code>/scramble</code>, <code>/wordchain</code><br><strong>Quiz:</strong> <code>/trivia</code>, <code>/riddle</code>, <code>/wtp</code><br><strong>Competitive:</strong> <code>/guessthenearest</code>, <code>/guessthenumber</code>, <code>/blackjack</code></p>
+                        <p><strong>Word:</strong> <code>/wordle</code>, <code>/dailywordle</code>, <code>/hangman</code>, <code>/scramble</code>, <code>/wordchain</code><br><strong>Quiz and clues:</strong> <code>/trivia</code>, <code>/riddle</code>, <code>/countrygame</code>, <code>/wtp</code><br><strong>Competitive:</strong> <code>/guessthenearest</code>, <code>/guessthenumber</code>, <code>/blackjack</code></p>
                     </article>
                     <article class="command-card" data-command-item>
                         <h3 class="card-title">Social + Utility + Setup</h3>
-                        <p><code>/roast</code>, <code>/ship</code>, <code>/hug</code>, <code>/kiss</code>, <code>/catfact</code>, <code>/funnycat</code>, <code>/dadjoke</code>, <code>/dog</code>, <code>/getadvice</code>, <code>/meme</code>, <code>/anonymousstatement</code>, <code>/movie</code>, <code>/dictionary</code>, <code>/wikipedia</code>, <code>/timetravel</code>, <code>/talkchannel</code>, <code>/petchannel</code>, <code>/logschannel</code>, <code>/eventchannel</code>, <code>/announcechannel</code>, <code>/dailywordlechannel</code>, <code>/anonymouschannel</code>, <code>/counting</code>, <code>/event</code>, <code>/reactions</code>, <code>/setup</code>, <code>/resetuser</code></p>
-                    </article>
-                    <article class="command-card soft" data-command-item>
-                        <h3 class="card-title">Prefixes</h3>
-                        <p><code>!cat</code>, <code>!dog</code>, <code>!animal</code>, <code>!animals</code>, <code>!nature</code>, <code>!fact</code>, <code>!cute</code>, <code>!funnycat</code>, <code>!meme</code>, <code>!catch</code>, <code>!hint</code>, <code>!reveal</code>, plus simple <code>meow</code>, <code>woof</code>, <code>animal</code>, <code>animals</code>, <code>nature</code>, <code>fact</code>, <code>cute</code>, <code>funny cat</code>, <code>funny meow</code>, <code>meow meme</code>, <code>give meme</code>, <code>send meme</code>, <code>got meme</code>, and <code>meme me</code> triggers</p>
+                        <p><code>/cat</code>, <code>/animals</code>, <code>/cute</code>, <code>/fact</code>, <code>/nature</code>, <code>/roast</code>, <code>/ship</code>, <code>/hug</code>, <code>/kiss</code>, <code>/catfact</code>, <code>/funnycat</code>, <code>/dadjoke</code>, <code>/joke</code>, <code>/dog</code>, <code>/getadvice</code>, <code>/meme</code>, <code>/anonymousstatement</code>, <code>/movie</code>, <code>/anime</code>, <code>/manga</code>, <code>/dictionary</code>, <code>/wikipedia</code>, <code>/timetravel</code>, <code>/talkchannel</code>, <code>/petchannel</code>, <code>/logschannel</code>, <code>/eventchannel</code>, <code>/announcechannel</code>, <code>/dailywordlechannel</code>, <code>/anonymouschannel</code>, <code>/counting</code>, <code>/event</code>, <code>/reactions</code>, <code>/admindashboard</code>, <code>/resetuser</code></p>
                     </article>
                 </div>
 
@@ -2878,14 +3422,14 @@
                                 </thead>
                                 <tbody>
                                     <tr data-command-row>
-                                        <td><code>/help</code>, <code>/start</code>, <code>/ping</code>, <code>/mood</code>, <code>/reminder</code></td>
+                                        <td><code>/help</code>, <code>/start</code>, <code>/ping</code>, <code>/mood</code>, <code>/reminder</code>, <code>/textcommands</code></td>
                                         <td>Core</td>
-                                        <td>Start here for the bot overview, main command groups, mood status, and lightweight utility settings like reminders.</td>
+                                        <td>Start here for the bot overview, main command groups, mood status, reminder settings, and retired text-command replacements.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>/profile</code>, <code>/inventory</code>, <code>/achievements</code>, <code>/wordlestats</code>, <code>/mydata</code>, <code>/clearmemory</code></td>
+                                        <td><code>/profile</code>, <code>/identity view|set|clear</code>, <code>/inventory</code>, <code>/achievements</code>, <code>/wordlestats</code>, <code>/mydata</code>, <code>/clearmemory</code></td>
                                         <td>Profile</td>
-                                        <td>Use these to check your stats, inventory, achievements, Wordle records, personal data, and saved memory settings.</td>
+                                        <td>Use these to check profile stats, server-only identity cards, inventory, achievements, Wordle records, personal data, and saved memory settings.</td>
                                     </tr>
                                     <tr data-command-row>
                                         <td><code>/balance</code>, <code>/daily</code>, <code>/gamble</code>, <code>/give</code>, <code>/shop</code>, <code>/leaderboard</code>, <code>/trade</code>, <code>/quests</code>, <code>/mysterybox</code></td>
@@ -2903,9 +3447,9 @@
                                         <td>Letter, word, and chaining games that work well for solo play or smaller groups.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>/trivia</code>, <code>/riddle</code>, <code>/wtp</code></td>
-                                        <td>Quiz and puzzle</td>
-                                        <td>Knowledge and puzzle rounds for players who want answers, clues, and quick solves.</td>
+                                        <td><code>/trivia</code>, <code>/riddle</code>, <code>/countrygame guess|flag|capital|clues|population</code>, <code>/wtp setup|start|stop</code></td>
+                                        <td>Quiz, clue, and puzzle</td>
+                                        <td>Knowledge rounds, riddles, country clues, flag and capital games, population guesses, and WTP silhouette rounds.</td>
                                     </tr>
                                     <tr data-command-row>
                                         <td><code>/guessthenearest</code>, <code>/guessthenumber</code>, <code>/blackjack</code></td>
@@ -2913,14 +3457,14 @@
                                         <td>Nearest-number matches, quick guessing rounds, and casino-style risk against the dealer.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>/guesschannel</code>, <code>/guessthenumber</code>, <code>/stopguess</code>, <code>/wtp</code>, <code>/stopgame</code>, <code>/howtoplay</code></td>
+                                        <td><code>/guesschannel</code>, <code>/guessthenumber</code>, <code>/stopguess</code>, <code>/wtp setup|start|stop</code>, <code>/stopgame</code>, <code>/howtoplay</code></td>
                                         <td>Game setup</td>
-                                        <td>Use these to run one-off or persistent guess games, stop active sessions, start Pokemon silhouette games, and read rules without leaving Discord.</td>
+                                        <td>Use these to run one-off or persistent guess games, stop active sessions, start WTP silhouette games, and read rules without leaving Discord.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>/pet</code>, <code>/petimage</code>, <code>/petfuneral</code>, <code>!catch</code>, <code>/petfight</code>, <code>/tournament create|join|status</code></td>
+                                        <td><code>/pet</code>, <code>/petimage</code>, <code>/petfuneral</code>, <code>/petfight</code>, <code>/tournament create|join|status</code></td>
                                         <td>Pets</td>
-                                        <td>Covers pet care, images, evolutions, jobs, abilities, battles, tournament play, and ghost-pet cleanup.</td>
+                                        <td>Covers pet care, images, evolutions, jobs, abilities, battles, tournament play, ghost-pet cleanup, and pet-channel egg claim buttons.</td>
                                     </tr>
                                     <tr data-command-row>
                                         <td><code>/movie like|genre|random|info|compare|top10|watchlist|history|foryou|rate|unrate|profile|poll|feedback|overlap</code></td>
@@ -2928,29 +3472,29 @@
                                         <td>Provides movie discovery, comparisons, watchlists, watch history, ratings, overlap analysis, polls, and personalized recommendations.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>/roast</code>, <code>/ship</code>, <code>/hug</code>, <code>/kiss</code>, <code>/catfact</code>, <code>/funnycat</code>, <code>/dadjoke</code>, <code>/dog</code>, <code>/getadvice</code>, <code>/meme</code>, <code>/anonymousstatement</code>, <code>/timetravel</code></td>
-                                        <td>Social</td>
-                                        <td>Lightweight fun commands reinforce the bot's personality with jokes, advice, memes, anonymous messages, and time-travel chaos.</td>
+                                        <td><code>/cat</code>, <code>/animals</code>, <code>/cute</code>, <code>/fact</code>, <code>/nature</code>, <code>/roast</code>, <code>/ship</code>, <code>/hug</code>, <code>/kiss</code>, <code>/catfact</code>, <code>/funnycat</code>, <code>/dadjoke</code>, <code>/joke</code>, <code>/dog</code>, <code>/getadvice</code>, <code>/meme</code>, <code>/anonymousstatement</code>, <code>/timetravel</code></td>
+                                        <td>Social and media</td>
+                                        <td>Lightweight fun commands reinforce the bot's personality with animal images, facts, jokes, advice, memes, anonymous messages, and time-travel chaos.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>/roastbattle</code>, <code>/pvp dice|coinflip|rps</code>, <code>/petfight</code>, <code>/tournament create|join|status</code>, <code>/event</code>, <code>/counting setup|move|resume</code></td>
+                                        <td><code>/pvp dice|coinflip|rps</code>, <code>/petfight</code>, <code>/tournament create|join|status</code>, <code>/event</code>, <code>/counting setup|move|resume</code></td>
                                         <td>Activity</td>
-                                        <td>Combines PvP bets, roast battles, pet battles, tournaments, event boosts, and managed counting into repeatable community activities.</td>
+                                        <td>Combines PvP bets, pet battles, tournaments, event boosts, and managed counting into repeatable community activities.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>/talkchannel</code>, <code>/petchannel</code>, <code>/logschannel</code>, <code>/eventchannel</code>, <code>/announcechannel</code>, <code>/dailywordlechannel</code>, <code>/anonymouschannel</code>, <code>/reactions</code>, <code>/setup</code>, <code>/resetuser</code>, <code>/serverinfo</code></td>
-                                        <td>Setup</td>
-                                        <td>Configures active channels, update posts, Daily Wordle alerts, reaction controls, server settings like XP rate, and admin recovery tools.</td>
+                                        <td><code>/talkchannel</code>, <code>/petchannel</code>, <code>/logschannel</code>, <code>/eventchannel</code>, <code>/announcechannel</code>, <code>/dailywordlechannel</code>, <code>/anonymouschannel</code>, <code>/reactions</code>, <code>/admindashboard</code>, <code>/resetuser</code>, <code>/serverinfo</code></td>
+                                        <td>Setup and admin</td>
+                                        <td>Configures active channels, update posts, Daily Wordle alerts, reaction controls, server settings, the admin dashboard, and admin recovery tools.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>/movie</code>, <code>/dictionary</code>, <code>/wikipedia</code>, <code>/getadvice</code>, <code>/changelog</code>, <code>/announcements</code>, <code>/featureandbug</code>, <code>/myrequests</code></td>
+                                        <td><code>/movie</code>, <code>/anime info|recommend|library|import|character</code>, <code>/manga info|recommend|library|import</code>, <code>/dictionary</code>, <code>/wikipedia</code>, <code>/getadvice</code>, <code>/changelog</code>, <code>/announcements</code>, <code>/featureandbug</code>, <code>/myrequests</code></td>
                                         <td>Utility and updates</td>
-                                        <td>Covers movie discovery, dictionary and Wikipedia lookups, quick advice, public update feeds, and the built-in feature request and bug-report workflow.</td>
+                                        <td>Covers movie discovery, anime and manga discovery, dictionary and Wikipedia lookups, quick advice, public update feeds, and the built-in feature request and bug-report workflow.</td>
                                     </tr>
                                     <tr data-command-row>
-                                        <td><code>!cat</code>, <code>!dog</code>, <code>!animal</code>, <code>!animals</code>, <code>!nature</code>, <code>!fact</code>, <code>!cute</code>, <code>!funnycat</code>, <code>!meme</code>, <code>!catch</code>, <code>!hint</code>, <code>!reveal</code>, <code>meow</code>, <code>woof</code>, <code>animal</code>, <code>animals</code>, <code>nature</code>, <code>fact</code>, <code>cute</code>, <code>funny cat</code>, <code>funny meow</code>, <code>meow meme</code>, <code>give meme</code>, <code>send meme</code>, <code>got meme</code>, <code>meme me</code></td>
-                                        <td>Prefixes</td>
-                                        <td><code>!cat</code> and <code>!dog</code> summon non-repeating direct animal images, <code>!animal</code> / <code>!animals</code> / <code>animal</code> / <code>animals</code> pull from the mixed random animal pool, <code>!nature</code> / <code>nature</code> pull premium nature and landscape wallpapers, <code>!fact</code> / <code>fact</code> pull random useless facts, <code>!cute</code> / <code>cute</code> pull cute anime-style images, <code>!funnycat</code> / <code>funny cat</code> / <code>funny meow</code> pull subreddit-based funny cat posts, simple <code>meow</code> / <code>woof</code> messages can summon cat or dog images, <code>!meme</code> and <code>meow meme</code> pull dark memes, <code>give meme</code> / <code>send meme</code> / <code>got meme</code> / <code>meme me</code> pull wholesome memes, <code>!catch</code> claims limited egg spawns in the pet channel, and <code>!hint</code> / <code>!reveal</code> are message-based helpers used in active silhouette guessing flows.</td>
+                                        <td><code>/textcommands</code></td>
+                                        <td>Retired text commands</td>
+                                        <td>Public <code>!</code> shortcuts are permanently off in this build. Slash commands are the supported replacements for cats, animals, nature images, facts, cute posts, memes, and pet-channel egg claims.</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -2996,9 +3540,9 @@
                         <h3 class="card-title">Main game families</h3>
                         <ul>
                             <li>Quiz and word games</li>
-                            <li>Visual, guessing, and channel-run games</li>
+                            <li>Country clues, visual guessing, and channel-run games</li>
                             <li>Social and party prompts</li>
-                            <li>PvP, roast battles, events, and battle systems</li>
+                            <li>PvP, events, and battle systems</li>
                             <li>Pets, counting, lotteries, tournaments, and long-term progression loops</li>
                         </ul>
                     </article>
@@ -3014,11 +3558,11 @@
                             </article>
                             <article class="quickstart-item warm">
                                 <h3>Best for active chat</h3>
-                                <p>Run <code>/trivia</code>, <code>/truthordare</code>, <code>/wouldyourather</code>, <code>/nhie</code>, and <code>/paranoia</code> when the server already has momentum.</p>
+                                <p>Run <code>/trivia</code>, <code>/truthordare</code>, <code>/wouldyourather</code>, <code>/nhie</code>, and <code>/paranoia</code> when the server already has momentum. Never Have I Ever and Paranoia support public next-prompt buttons.</p>
                             </article>
                             <article class="quickstart-item lime">
                                 <h3>Best chaos combo</h3>
-                                <p>Mix <code>/roastbattle</code>, <code>/timetravel</code>, <code>/anonymousstatement</code>, and social prompts for identity-heavy server moments.</p>
+                                <p>Mix <code>/roast</code>, <code>/timetravel</code>, <code>/anonymousstatement</code>, and social prompts for identity-heavy server moments.</p>
                             </article>
                             <article class="quickstart-item">
                                 <h3>Best long-term loop</h3>
@@ -3075,7 +3619,8 @@
                     <article class="game-card lime">
                         <h3 class="card-title">Quiz and number games</h3>
                         <ul>
-                            <li><code>/wtp</code> uses Pokemon silhouettes with setup and start flows.</li>
+                            <li><code>/countrygame</code> supports country clues, flags, capitals, progressive hints, and population comparisons.</li>
+                            <li><code>/wtp</code> uses Pokemon silhouette rounds with setup, start, and stop flows.</li>
                             <li><code>/guessthenumber</code> starts a one-off number round in the current channel.</li>
                             <li><code>/guesschannel</code> keeps a dedicated persistent channel-based guess flow.</li>
                             <li><code>/guessthenearest</code> runs a multiplayer nearest-number match with host controls and round scoring.</li>
@@ -3095,6 +3640,7 @@
                         <h3 class="card-title">Social prompts</h3>
                         <ul>
                             <li>Would You Rather and Truth or Dare keep conversation moving when the server already has momentum.</li>
+                            <li>Never Have I Ever and Paranoia include public Next buttons that keep the selected intensity level.</li>
                             <li>Dad Joke and anonymous statement flows work well as lighter social breaks between larger games.</li>
                         </ul>
                     </article>
@@ -3102,18 +3648,18 @@
 
                 <div class="grid two-grid" style="margin-top:14px;">
                     <article class="game-card warm">
-                        <h3 class="card-title">Blackjack, PvP, and roast battle</h3>
+                        <h3 class="card-title">Blackjack, PvP, and social challenges</h3>
                         <ul>
                             <li><code>/blackjack</code> provides a coin-based casino-style game against the dealer.</li>
                             <li><code>/pvp</code> covers direct user-vs-user coinflip, dice, and RPS challenges.</li>
-                            <li><code>/roastbattle</code> turns direct social competition into a structured judged format.</li>
+                            <li><code>/roast</code> gives a quick fun-mode roast when the server wants lighter social chaos.</li>
                         </ul>
                     </article>
                     <article class="game-card soft">
                         <h3 class="card-title">Pets, lotteries, events, and counting</h3>
                         <ul>
                             <li>Pets form a long-term progression system with care, mood, jobs, battles, and evolution gates.</li>
-                            <li>Lotteries support both admin weekly jackpots and host-funded event lotteries with public buttons and canvas dashboards.</li>
+                            <li>Lotteries support both admin weekly jackpots and host-funded event lotteries with public buttons and visual dashboards.</li>
                             <li>Server-wide XP and coin events, plus a managed counting channel, create passive activity outside direct game sessions.</li>
                         </ul>
                     </article>
@@ -3125,32 +3671,389 @@
                     <div class="panel-inner">
                         <h1 class="section-title">FAQ</h1>
                         <p class="section-subtitle">Common setup and usage questions</p>
+                        <div class="search-row">
+                            <input class="search-input" id="faqSearch" type="search" placeholder="Search FAQ questions, commands, or features" />
+                            <div class="search-note" id="faqSearchStatus">Showing all FAQ answers.</div>
+                        </div>
                         <div class="faq-list">
-                            <article class="faq-item soft">
+                            <article class="faq-item soft" data-faq-item>
                                 <h3>Why are slash commands not appearing?</h3>
                                 <p>Discord command registration can take a little time after invite. Re-inviting with the proper application command scope or waiting for propagation usually fixes it.</p>
                             </article>
-                            <article class="faq-item warm">
+                            <article class="faq-item warm" data-faq-item>
                                 <h3>Why is the bot not replying in chat?</h3>
                                 <p>Check whether a talk channel is configured, whether the bot can send messages there, and whether you are using the chat features the way they are set up to work.</p>
                             </article>
-                            <article class="faq-item lime">
+                            <article class="faq-item lime" data-faq-item>
                                 <h3>Why are some games not working?</h3>
                                 <p>Some game modes need active channels, enough participants, or no other active game already running in that channel. Others depend on setup commands such as dedicated game channels.</p>
                             </article>
-                            <article class="faq-item">
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>Where did the old text commands go?</h3>
+                                <p>Public <code>!</code> shortcuts are retired. Use slash commands instead, or run <code>/textcommands</code> to see current replacements for common media and quick-fun commands.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
                                 <h3>How do pets and progression connect?</h3>
                                 <p>Coins, quests, achievements, pets, and shop systems reinforce each other. Members earn through activity, then reinvest in collection and progression loops.</p>
                             </article>
-                            <article class="faq-item warm">
+                            <article class="faq-item warm" data-faq-item>
                                 <h3>How do I reset a broken user state?</h3>
                                 <p>Use the administrative reset command if you have access, and be careful to target only the fields you intend to clear.</p>
                             </article>
-                            <article class="faq-item soft">
+                            <article class="faq-item soft" data-faq-item>
                                 <h3>Where should I start as a new server?</h3>
-                                <p>Set the talk channel, pet channel, and event or counting channels you want first, confirm slash commands are available, then expand into pets, PvP, and larger progression systems.</p>
+                                <p>Open <code>/admindashboard</code> if you have Manage Server, or set talk, pet, logs, event, Daily Wordle, anonymous, and counting channels with slash commands. Confirm slash commands are available, then expand into pets, PvP, and larger progression systems.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>Who can open the admin dashboard?</h3>
+                                <p>Users with Manage Server, administrator, or owner-level authority can use <code>/admindashboard</code> and the web dashboard for servers they can manage.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>Why is my server missing from the dashboard?</h3>
+                                <p>Sign in with the Discord account that can manage that server, make sure the bot is still in the server, and confirm your server permissions include dashboard access.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>What can the admin dashboard configure?</h3>
+                                <p>The dashboard can configure supported server channels such as talk, pet, logs, announcements, events, Daily Wordle, anonymous statements, and counting.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>Why do some commands fail in DMs?</h3>
+                                <p>Server-specific commands need a guild context, permissions, and saved server settings. Use those commands inside a Discord server instead of direct messages.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>How do I set a talk channel?</h3>
+                                <p>Use <code>/talkchannel</code> or the admin dashboard. The talk channel is where Meow Bot is intended to respond naturally to normal chat.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>Will Meow Bot reply everywhere?</h3>
+                                <p>No. It is designed around configured talk channels, direct mentions, and supported interactive features rather than replying to every message in every channel.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>How do I stop AI replies?</h3>
+                                <p>Remove or disable the talk channel with <code>/talkchannel</code>, adjust permissions, or avoid using bot mentions where AI replies are expected.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>How do I clear conversation memory?</h3>
+                                <p>Use <code>/clearmemory</code> to clear saved conversation memory connected to your bot chat experience.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>How do I control my data participation?</h3>
+                                <p>Use <code>/mydata</code> for available personal data and participation controls, including opt-out choices supported by the bot.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>What message content does the bot read?</h3>
+                                <p>Message content is used for features that need typed input, such as talk-channel replies, game answers, counting, reaction triggers, and active channel-based games.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>How do automatic reactions work?</h3>
+                                <p>Automatic reactions respond to supported message patterns when enabled. Admins can adjust reaction categories, cooldowns, density limits, muted periods, and rude reaction behavior with <code>/reactions</code>.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>How do I make reactions less noisy?</h3>
+                                <p>Use <code>/reactions</code> to disable categories, add cooldowns, reduce density, mute reactions temporarily, or turn off rude reaction types.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>How do I get animal images?</h3>
+                                <p>Use <code>/animals</code> for random animal images or pick a supported animal type with autocomplete. Use <code>/cat</code> and <code>/dog</code> for direct cat or dog image commands.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>Why does <code>/animals</code> not show every animal?</h3>
+                                <p>The bot only offers supported image-focused animal sources that pass filtering. Some animals or formats may be excluded if reliable safe images are not available.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>Why did I get a repeated animal image?</h3>
+                                <p>The bot tracks used animal image URLs for normal server use, but repeats can still happen when external sources return duplicates, a queue refills, or DM usage is not persisted.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>Can <code>/animals</code> return videos?</h3>
+                                <p>No. The animal command is image-focused. Video posts and non-image posts are filtered out before the bot sends a result.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>How do dog breed choices work?</h3>
+                                <p><code>/dog</code> supports breed autocomplete. Start typing a breed or sub-breed and choose one of the available suggestions.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>Why did a media command fail?</h3>
+                                <p>Media commands depend on external APIs and safe image sources. If a provider is slow, unavailable, rate limited, or returns unsafe content, the bot may skip or fail that request.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>How do movie recommendations work?</h3>
+                                <p><code>/movie</code> uses TMDB-backed discovery, watchlists, ratings, history, feedback, polls, comparisons, and taste overlap features when the movie API is available.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>Why are movie results unavailable?</h3>
+                                <p>Movie features require a working TMDB connection. If the API key or provider is unavailable, movie recommendations may be disabled until the service is restored.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>How do anime commands work?</h3>
+                                <p><code>/anime</code> supports info, recommendations, library browsing, public AniList imports, and character lookup through AniList-backed data.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>How do manga commands work?</h3>
+                                <p><code>/manga</code> supports info, recommendations, library browsing, and public AniList imports for reading lists and discovery.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>Does AniList import need my password?</h3>
+                                <p>No. The bot imports public AniList list data by username and selected list type. Do not share passwords or private account credentials.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>How does <code>/identity</code> work?</h3>
+                                <p><code>/identity</code> lets users set, view, or clear optional server-only identity card details such as nickname, DOB, gender or pronouns, country, height, vibes, spirit animal, and selected friends.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>Is my identity card global?</h3>
+                                <p>No. Identity cards are stored per server. Details set in one server are not meant to become a global profile for every server.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>Can I clear identity card fields?</h3>
+                                <p>Yes. Use <code>/identity clear</code> and choose the field you want to remove, or clear the whole card if you no longer want it stored for that server.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>How do Wordle games work?</h3>
+                                <p><code>/wordle</code> starts a normal Wordle round with configurable mode, word length, and theme options. <code>/dailywordle</code> runs the daily shared challenge.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>How do Daily Wordle announcements work?</h3>
+                                <p>Admins can set a Daily Wordle notification channel with <code>/dailywordlechannel</code> or the admin dashboard so new daily rounds can be announced in the server.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>What trivia modes are available?</h3>
+                                <p><code>/trivia</code> supports multiple-choice and single-answer modes. Hosts can configure rounds, timing, difficulty, categories, and auto-start settings through the setup flow.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>Why did trivia not accept my answer?</h3>
+                                <p>Check whether the round is still active, whether it is single-answer or multiple-choice mode, and whether your answer format matches the current mode.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>How do riddles work?</h3>
+                                <p>Riddle rounds accept typed answers in chat, limit attempts, and reward correct solves and placements during the active answer window.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>How does Hangman work?</h3>
+                                <p><code>/hangman</code> supports letter guesses or full-word guesses, with optional difficulty and solo or multiplayer modes.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>How does Scramble work?</h3>
+                                <p><code>/scramble</code> gives jumbled words for players to solve quickly, with configurable rounds, difficulty, and time per round.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>How does Word Chain work?</h3>
+                                <p><code>/wordchain</code> requires each valid word to start with the last letter of the previous valid word. Dictionary validation helps reject fake words.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>What modes does <code>/countrygame</code> include?</h3>
+                                <p><code>/countrygame</code> includes country guessing from clues, flag guessing, capital matching, progressive hints, and population comparison rounds.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>How does WTP work?</h3>
+                                <p><code>/wtp</code> runs Who's That Pokemon silhouette rounds. Use setup to choose the channel, start to begin, and stop to end the flow.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>How do guess-the-number games work?</h3>
+                                <p><code>/guessthenumber</code> starts a one-off number game in the current channel. <code>/guesschannel</code> creates a persistent channel-based guessing flow with limits and cooldowns.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>How does Guess The Nearest work?</h3>
+                                <p><code>/guessthenearest</code> starts a multiplayer nearest-number match where players submit guesses and scoring favors the closest answers.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>How do I stop an active game?</h3>
+                                <p>Use <code>/stopgame</code> for supported active game sessions in a channel, or use game-specific stop commands such as <code>/stopguess</code> or <code>/wtp stop</code>.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>How do social prompt commands work?</h3>
+                                <p><code>/truthordare</code>, <code>/wouldyourather</code>, <code>/nhie</code>, and <code>/paranoia</code> generate prompts meant to keep active conversations moving.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>Who can press Next on prompts?</h3>
+                                <p>Utility Next buttons for supported prompt commands are public, so anyone can continue the flow without needing the original command user.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>How do anonymous statements work?</h3>
+                                <p><code>/anonymousstatement</code> sends a server-routed anonymous message to a target using the configured anonymous channel and selected mood style.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>How do I set up counting?</h3>
+                                <p>Use <code>/counting setup</code> or the admin dashboard to choose a counting channel. The bot tracks the current number, high score, participants, goals, and saves.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>Why did counting reset?</h3>
+                                <p>Counting can reset when someone posts the wrong number or the same person counts twice in a row and no saves are available.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>Can counting be moved without losing progress?</h3>
+                                <p>Use <code>/counting move</code> to move counting to a new channel without resetting the active count. Changing the counting channel from dashboard setup may reset active state.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>What are counting saves and goals?</h3>
+                                <p>Counting saves can protect a run from mistakes while available. Counting goals let servers set reward milestones for a shared counting run.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>How do I start with pets?</h3>
+                                <p>Use <code>/pet</code> to open the pet panel. Set a pet channel with <code>/petchannel</code> if you want egg events and pet-channel activity in a dedicated place.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>How do pet egg claims work?</h3>
+                                <p>Daily pet eggs appear as claim buttons in the configured pet channel. Use the button flow rather than old text claim shortcuts.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>Can I upload a custom pet image?</h3>
+                                <p>Use <code>/petimage</code> to upload or clear an image for your current pet, subject to Discord attachment limits and bot validation.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>What happens if I neglect my pet?</h3>
+                                <p>The pet system includes care timers, mood, progression consequences, and ghost-pet cleanup. Use <code>/petfuneral</code> if you need to release a ghost pet and move on.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>How do pet fights work?</h3>
+                                <p><code>/petfight</code> challenges another user to a pet fight. Pet stats, progression, abilities, and equipment can affect battle outcomes.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>How do tournaments work?</h3>
+                                <p><code>/tournament create</code>, <code>/tournament join</code>, and <code>/tournament status</code> support tournament flows such as pet-fight brackets with entry fees.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>How do coins work?</h3>
+                                <p>Coins are earned from daily rewards, games, quests, events, and other activity. They can be spent or risked across shops, pets, PvP, gambling, lotteries, and progression systems.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>How do daily rewards work?</h3>
+                                <p>Use <code>/daily</code> to claim daily coins and maintain streak progress. Streaks are part of the broader progression system.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>How do quests work?</h3>
+                                <p><code>/quests</code> shows daily objectives that encourage repeat activity and reward users for interacting with supported systems.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>How do shop and inventory work?</h3>
+                                <p><code>/shop</code> lets users buy supported items, badges, titles, and progression-related goods. <code>/inventory</code> shows owned items.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>How does trading work?</h3>
+                                <p><code>/trade</code> lets users offer one owned badge or title and request one from another user, creating a structured item trade proposal.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>How does gambling work?</h3>
+                                <p><code>/gamble</code> includes slots, roulette, dice, and coinflip with command-defined bet limits. Gambling uses bot coins, not real money.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>How does Blackjack work?</h3>
+                                <p><code>/blackjack</code> runs a coin-based game against the dealer with a required bet inside the configured command limits.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>How do PvP challenges work?</h3>
+                                <p><code>/pvp</code> supports coinflip, dice, and rock-paper-scissors challenges against another user with a coin amount.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>How do lotteries work?</h3>
+                                <p><code>/lottery</code> supports weekly and event lotteries with ticket buying, visual dashboards, history, and automatic winner announcements.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>Who can start lotteries?</h3>
+                                <p>Lottery start flows may require server authority depending on the lottery mode and server configuration. Public users can interact with active lottery ticket flows.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>How do XP and coin events work?</h3>
+                                <p><code>/event</code> opens the event panel for XP and coin boosts. Admin controls and public event activity depend on server configuration.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>How do leaderboards work?</h3>
+                                <p><code>/leaderboard</code> can show server or global rankings for supported categories such as coins, XP, streaks, Wordle, movies, achievements, and counting.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>Why is my leaderboard rank missing?</h3>
+                                <p>You may not have enough tracked activity in that category yet, or the leaderboard scope may be set to a server where your relevant data is not present.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>How do achievements work?</h3>
+                                <p><code>/achievements</code> shows achievement progress. Achievements are tied to supported game, economy, pet, and activity milestones.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>How do activity logs work?</h3>
+                                <p><code>/activitylog</code> shows recent tracked rewards and game results so users can review what recently changed on their account.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>How do reminders work?</h3>
+                                <p><code>/reminder</code> toggles automatic reminder DMs on or off for supported reminder behavior.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>How do update posts work?</h3>
+                                <p><code>/changelog</code> and <code>/announcements</code> show saved bot updates. Admins can route public update posts through the configured announcement channel.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>Why is the website Updates page empty?</h3>
+                                <p>The Updates page fetches saved announcement and changelog data from the bot API. It may show loading or empty states if the API is unreachable or no posts are saved.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>How do feature requests and bug reports work?</h3>
+                                <p>Use <code>/featureandbug</code> to submit game feature requests, utility feature requests, or bug reports. Use <code>/myrequests</code> to review recent submissions.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>Will I get updates on my request?</h3>
+                                <p>Feature and bug reports include review status and update-delivery history when the owner reviews, accepts, declines, requests more information, implements, or resolves them.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>What permissions should the bot have?</h3>
+                                <p>The bot needs enough permission to view channels, send messages, use embeds, respond to slash commands, add reactions where needed, and access configured feature channels.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>Why can the bot see one channel but not another?</h3>
+                                <p>Discord channel permissions can override server-wide permissions. Check the specific channel's role overwrites for the bot role.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>Why does the dashboard show fewer channels?</h3>
+                                <p>The dashboard respects what the signed-in admin can see. Users without Administrator may only see channels visible to them through Discord permissions.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>What does <code>/serverinfo</code> show?</h3>
+                                <p><code>/serverinfo</code> summarizes the current Meow Bot setup for a server, including key configured channels and feature status.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>What does <code>/start</code> show?</h3>
+                                <p><code>/start</code> gives setup steps and important bot information for getting a server ready.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>What does <code>/help</code> show?</h3>
+                                <p><code>/help</code> lists command groups and points users toward major systems such as games, pets, economy, lookups, and server setup.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>What does <code>/howtoplay</code> do?</h3>
+                                <p><code>/howtoplay</code> explains supported game rules from inside Discord, including all games or a selected game category.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>How do dictionary and Wikipedia lookups work?</h3>
+                                <p><code>/dictionary</code> looks up words, while <code>/wikipedia</code> searches topics and returns concise article information when external lookup services respond.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>How do jokes and advice work?</h3>
+                                <p><code>/joke</code>, <code>/dadjoke</code>, and <code>/getadvice</code> use lightweight external or built-in sources to send quick social breaks.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>How does <code>/timetravel</code> work?</h3>
+                                <p><code>/timetravel</code> sends a themed scenario for eras such as Ancient Egypt, Medieval Europe, Wild West, Future 3000, Jurassic Period, or random mode.</p>
+                            </article>
+                            <article class="faq-item" data-faq-item>
+                                <h3>Why was my command response private?</h3>
+                                <p>Some settings, privacy, dashboard, feedback, reaction, and administrative commands intentionally respond ephemerally so only the command user sees the result.</p>
+                            </article>
+                            <article class="faq-item soft" data-faq-item>
+                                <h3>Can blocked users still use the bot?</h3>
+                                <p>No. The owner can restrict abusive users or servers. Slash interactions may receive a private notice, while normal text-message interactions can be silently ignored.</p>
+                            </article>
+                            <article class="faq-item warm" data-faq-item>
+                                <h3>Can data be deleted or reset?</h3>
+                                <p>Use <code>/mydata</code> for available user controls or contact support for deletion and policy requests. Admins may also have reset tools for some server-managed states.</p>
+                            </article>
+                            <article class="faq-item lime" data-faq-item>
+                                <h3>What should I include in a support request?</h3>
+                                <p>Include your Discord user ID if relevant, the server and channel, the command or feature involved, what you expected, what happened, and screenshots or copied errors if available.</p>
+                            </article>
+                            <article class="faq-item is-hidden" id="faqNoResults">
+                                <h3>No FAQ results found</h3>
+                                <p>Try searching for a command name, feature name, or a shorter keyword.</p>
                             </article>
                         </div>
+                        <div class="updates-pagination" id="faqPagination" aria-label="FAQ pagination"></div>
                     </div>
                 </div>
             </section>
@@ -3210,7 +4113,7 @@
                     </article>
                     <article class="legal-card warm">
                         <h3 class="card-title">Effective date</h3>
-                        <p>April 22, 2026</p>
+                        <p>May 3, 2026</p>
                         <h3 class="card-title">Summary</h3>
                         <p>Use of Meow Bot is revocable and subject to platform rules, applicable law, and actions necessary to protect the service and its users.</p>
                     </article>
@@ -3235,6 +4138,17 @@
                     <article class="legal-card soft">
                         <h3 class="card-title">Feature changes</h3>
                         <p>Commands, systems, rewards, pricing, balancing, progression loops, and other gameplay or service features may be added, removed, rebalanced, or retired over time.</p>
+                    </article>
+                </div>
+
+                <div class="grid two-grid" style="margin-top:14px;">
+                    <article class="legal-card">
+                        <h3 class="card-title">Dashboards and server authority</h3>
+                        <p>Admin dashboard access uses Discord OAuth and is limited to users with server authority such as owner, administrator, or Manage Server access. Server administrators are responsible for changes they make to channel settings, reaction controls, event routing, and other guild-specific configuration.</p>
+                    </article>
+                    <article class="legal-card soft">
+                        <h3 class="card-title">Safety and service controls</h3>
+                        <p>The operator may restrict access for abusive users or servers, disable unstable features, send operational notices, remove harmful update posts, or take other reasonable actions needed to protect the bot, users, servers, and infrastructure.</p>
                     </article>
                 </div>
 
@@ -3277,9 +4191,9 @@
                     </article>
                     <article class="legal-card soft">
                         <h3 class="card-title">Effective date</h3>
-                        <p>April 22, 2026</p>
+                        <p>May 3, 2026</p>
                         <h3 class="card-title">Summary</h3>
-                        <p>Meow Bot may process limited Discord-related data needed to provide features, maintain server settings, operate games, and protect service stability.</p>
+                        <p>Meow Bot may process limited Discord-related data needed to provide features, maintain server settings, operate games, run dashboards, and protect service stability.</p>
                     </article>
                 </div>
 
@@ -3289,11 +4203,15 @@
                         <ul>
                             <li>Discord user IDs, guild IDs, channel IDs, role IDs, and message IDs</li>
                             <li>Public profile details made available through Discord</li>
+                            <li>Discord OAuth profile, guild list, permission flags, and temporary dashboard session data for dashboard access</li>
                             <li>Guild-specific settings configured by administrators</li>
+                            <li>Optional server-only identity card details such as nickname, date of birth, age display, gender or pronouns, country, height, vibes, spirit animal, and selected friends</li>
                             <li>Command input, game interaction data, and message content used for supported gameplay or chat features</li>
                             <li>Progression data such as coins, XP, levels, streaks, quests, achievements, and inventory</li>
                             <li>Pet-related state such as egg ownership, pet lifecycle, mood, care timers, jobs, abilities, battles, pet image paths, and optional uploaded pet images</li>
                             <li>Movie-related state such as ratings, watched history, watchlists, overlap data, and poll participation</li>
+                            <li>Anime and manga library state, imported public AniList IDs, watch/read status, and related recommendation state</li>
+                            <li>Media delivery state such as used animal image URLs, cached lookup results, and external image source references</li>
                             <li>Feature requests, utility requests, bug reports, review status, and related update-delivery history</li>
                             <li>Reminder preferences, lottery entries, and guild event participation</li>
                             <li>Operational logs needed for debugging, moderation, abuse review, or security investigation</li>
@@ -3304,9 +4222,9 @@
                         <ul>
                             <li>To provide command responses and bot features</li>
                             <li>To store progression, game, pet, or guild configuration state</li>
-                            <li>To manage channel-based systems such as talk channels, pet channels, logs channels, and game-specific workflows</li>
+                            <li>To manage channel-based systems such as talk channels, pet channels, logs channels, dashboards, and game-specific workflows</li>
                             <li>To send optional reminder DMs or public server notifications for configured features</li>
-                            <li>To support AI replies, movie recommendations, dictionary lookups, Wikipedia lookups, and media-backed game prompts</li>
+                            <li>To support AI replies, movie recommendations, anime and manga lookups, dictionary lookups, Wikipedia lookups, media-backed commands, and game prompts</li>
                             <li>To investigate misuse, fraud, spam, or abuse</li>
                             <li>To improve reliability, security, and service quality</li>
                             <li>To comply with legal obligations when required</li>
@@ -3317,11 +4235,11 @@
                 <div class="grid two-grid" style="margin-top:14px;">
                     <article class="legal-card soft">
                         <h3 class="card-title">Third-party services</h3>
-                        <p>Some Meow Bot features rely on external services such as Discord, hosting and deployment providers, Groq for AI generation, TMDB for movie-related features, dictionaryapi.dev and Datamuse for word validation or dictionary support, Wikipedia for article lookups, PokeAPI for Pokemon-based game data, TheCatAPI and meme providers for media-backed content, and related infrastructure needed to serve the website update feed. Those providers may process request data needed to deliver those features.</p>
+                        <p>Some Meow Bot features rely on external services such as Discord and Discord OAuth, hosting and deployment providers, configured AI providers such as Groq, Google Gemini, Hugging Face, or OpenRouter, TMDB for movie features, AniList for anime and manga features, dictionaryapi.dev and Datamuse for word support, Wikipedia and Wikimedia Commons for article and image lookups, PokeAPI for WTP game data, Reddit JSON feeds, TheCatAPI, Cataas, dog.ceo, random animal APIs, meme providers, Pexels, Wallhaven, NASA, trivia APIs, joke APIs, advice APIs, and related infrastructure needed to serve dashboards and the website update feed. Those providers may process request data needed to deliver those features.</p>
                     </article>
                     <article class="legal-card warm">
                         <h3 class="card-title">Message content and feature scope</h3>
-                        <p>Meow Bot may read message content where necessary for active gameplay, AI chat features, answer handling, number guessing, pet catch events, or other interactive systems that depend on user text input.</p>
+                        <p>Meow Bot may read message content where necessary for active gameplay, AI chat features, talk-channel or mention replies, answer handling, counting, automatic reaction triggers, or other interactive systems that depend on user text input. Public <code>!</code> text commands are retired in the current build.</p>
                     </article>
                 </div>
 
@@ -3355,6 +4273,16 @@
                                         <td>Needed to link commands, progression, guild configuration, reminders, and feature access to the correct user or server.</td>
                                     </tr>
                                     <tr>
+                                        <td>Server identity cards</td>
+                                        <td>Optional nickname, date of birth, gender or pronouns, country, height, vibes, spirit animal, and selected friends</td>
+                                        <td>Needed to show server-only identity cards when users choose to set and view them.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dashboard and OAuth</td>
+                                        <td>Discord OAuth user details, guild list, server permission flags, and temporary dashboard sessions</td>
+                                        <td>Needed to authenticate admin dashboard access and show only servers the signed-in user can manage.</td>
+                                    </tr>
+                                    <tr>
                                         <td>Economy and progression</td>
                                         <td>Coins, XP, levels, streaks, quests, achievements, inventory, owned cosmetics</td>
                                         <td>Needed to preserve long-term progression, shop ownership, rankings, and gameplay rewards.</td>
@@ -3365,18 +4293,18 @@
                                         <td>Needed to run the pet progression system, public evolution events, and pet-related profile displays.</td>
                                     </tr>
                                     <tr>
-                                        <td>Movies</td>
-                                        <td>Ratings, watchlists, watched history, overlap and profile data</td>
-                                        <td>Needed to provide recommendations, comparisons, movie profile summaries, and saved discovery history.</td>
+                                        <td>Movies, anime, and manga</td>
+                                        <td>Ratings, watchlists, watched history, overlap data, saved anime or manga IDs, imported public AniList entries, and library statuses</td>
+                                        <td>Needed to provide recommendations, comparisons, media profile summaries, saved discovery history, and library browsing.</td>
                                     </tr>
                                     <tr>
                                         <td>Games and events</td>
-                                        <td>Wordle stats, lottery entries, tournament participation, active game state, scoreboards, feature requests, and update delivery records</td>
+                                        <td>Wordle stats, lottery entries, tournament participation, active game state, scoreboards, used media URLs, feature requests, and update delivery records</td>
                                         <td>Needed to operate commands, score systems, feedback workflows, lotteries, tournaments, and long-running game features.</td>
                                     </tr>
                                     <tr>
                                         <td>Configuration</td>
-                                        <td>Talk channel, pet channel, logs channel, announcement channel, Daily Wordle channel, reminder preference, reaction settings, guild settings</td>
+                                        <td>Talk channel, pet channel, logs channel, announcement channel, Daily Wordle channel, counting channel, reminder preference, reaction settings, app links, update posts, guild settings</td>
                                         <td>Needed to make the bot behave correctly inside each server and respect feature preferences, update routing, and server controls.</td>
                                     </tr>
                                 </tbody>
@@ -3388,11 +4316,11 @@
                 <div class="grid two-grid" style="margin-top:14px;">
                     <article class="legal-card">
                         <h3 class="card-title">Deletion and reset requests</h3>
-                        <p>If you want stored data removed or reset, contact support and include the relevant server context, your Discord ID if needed, and the type of data or feature involved. Administrative reset tools may also exist for some server-managed states.</p>
+                        <p>If you want stored data removed or reset, use <code>/mydata</code> where available or contact support and include the relevant server context, your Discord ID if needed, and the type of data or feature involved. Administrative reset tools may also exist for some server-managed states.</p>
                     </article>
                     <article class="legal-card soft">
                         <h3 class="card-title">Server administrators</h3>
-                        <p>Server administrators are responsible for how they configure Meow Bot in their servers, including channel setup, feature use, and whether the bot is made available to server members in a given context.</p>
+                        <p>Server administrators are responsible for how they configure Meow Bot in their servers, including dashboard changes, channel setup, feature use, and whether the bot is made available to server members in a given context.</p>
                     </article>
                 </div>
             </section>
@@ -3421,9 +4349,9 @@
                         <h3 class="card-title">Support topics</h3>
                         <ul>
                             <li>Invite and permission issues</li>
-                            <li>Setup help for talk, pet, or logs channels</li>
+                            <li>Setup help for the admin dashboard, talk, pet, logs, event, Daily Wordle, anonymous, or counting channels</li>
                             <li>Broken commands, missing replies, or game-state problems</li>
-                            <li>Profile, inventory, pet, movie, or economy questions</li>
+                            <li>Profile, identity card, inventory, pet, movie, anime, manga, animal image, or economy questions</li>
                             <li>Privacy, deletion, or policy requests</li>
                         </ul>
                     </article>
@@ -3560,18 +4488,28 @@
             }
 
             function applyTheme(theme) {
+                var allowedThemes = ["light", "dark", "pure-dark"];
+                if (allowedThemes.indexOf(theme) === -1) {
+                    theme = "light";
+                }
                 root.setAttribute("data-theme", theme);
-                themeToggle.textContent = theme === "dark" ? "Light mode" : "Dark mode";
+                themeToggle.textContent = theme === "light" ? "Dark mode" : theme === "dark" ? "Pure dark" : "Light mode";
                 localStorage.setItem(storageKey, theme);
             }
 
             applyTheme(savedTheme || "light");
 
             themeToggle.addEventListener("click", function () {
-                applyTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+                var currentTheme = root.getAttribute("data-theme") || "light";
+                applyTheme(currentTheme === "light" ? "dark" : currentTheme === "dark" ? "pure-dark" : "light");
             });
 
             var tabLinks = Array.prototype.slice.call(document.querySelectorAll(".tab-link[data-target]"));
+            var pageHost = document.querySelector("main");
+            var reducedMotionQuery = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
+            var pageSwitchTimer = null;
+            var pageCleanupTimer = null;
+            var pageTransitionVariants = ["pagefx-slide", "pagefx-zoom", "pagefx-wipe", "pagefx-split", "pagefx-stack", "pagefx-focus"];
             var pages = {
                 home: document.getElementById("page-home"),
                 commands: document.getElementById("page-commands"),
@@ -3582,6 +4520,7 @@
                 privacy: document.getElementById("page-privacy"),
                 contact: document.getElementById("page-contact")
             };
+            var pageOrder = Object.keys(pages);
 
             var footerPageMap = {
                 home: 0,
@@ -3600,6 +4539,62 @@
                 });
             }
 
+            function scrollToPageTop() {
+                function applyScroll() {
+                    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+                    document.documentElement.scrollTop = 0;
+                    document.body.scrollTop = 0;
+                }
+
+                applyScroll();
+                requestAnimationFrame(applyScroll);
+                window.setTimeout(applyScroll, 80);
+            }
+
+            function prefersReducedMotion() {
+                return !!(reducedMotionQuery && reducedMotionQuery.matches);
+            }
+
+            function getRandomPageTransition() {
+                return pageTransitionVariants[Math.floor(Math.random() * pageTransitionVariants.length)];
+            }
+
+            function removePageTransitionClasses(element) {
+                element.classList.remove("page-suck", "page-throw");
+                pageTransitionVariants.forEach(function (variant) {
+                    element.classList.remove(variant);
+                });
+            }
+
+            function removeHostTransitionClasses() {
+                if (!pageHost) {
+                    return;
+                }
+
+                pageHost.classList.remove("blackhole-suck", "blackhole-throw");
+                pageTransitionVariants.forEach(function (variant) {
+                    pageHost.classList.remove(variant);
+                });
+            }
+
+            function clearPageTransitionState() {
+                if (pageSwitchTimer) {
+                    window.clearTimeout(pageSwitchTimer);
+                    pageSwitchTimer = null;
+                }
+
+                if (pageCleanupTimer) {
+                    window.clearTimeout(pageCleanupTimer);
+                    pageCleanupTimer = null;
+                }
+
+                removeHostTransitionClasses();
+
+                Object.keys(pages).forEach(function (key) {
+                    removePageTransitionClasses(pages[key]);
+                });
+            }
+
             function setActiveTab(target, options) {
                 var config = options || {};
                 var activePage = pages[target];
@@ -3608,26 +4603,75 @@
                     return;
                 }
 
-                Object.keys(pages).forEach(function (key) {
-                    pages[key].classList.toggle("active", key === target);
-                });
+                var previousTarget = pageOrder.find(function (key) {
+                    return pages[key] && pages[key].classList.contains("active");
+                }) || "home";
+                var previousPage = pages[previousTarget];
+                var shouldAnimate = previousPage && previousTarget !== target && !prefersReducedMotion();
+
+                clearPageTransitionState();
 
                 tabLinks.forEach(function (link) {
                     link.classList.toggle("active", link.getAttribute("data-target") === target);
+                    link.classList.remove("nav-pulse");
                 });
+
+                var pulseTarget = config.trigger && config.trigger.classList && config.trigger.classList.contains("tab-link")
+                    ? config.trigger
+                    : tabLinks.find(function (link) { return link.getAttribute("data-target") === target; });
+                if (pulseTarget) {
+                    void pulseTarget.offsetWidth;
+                    pulseTarget.classList.add("nav-pulse");
+                    window.setTimeout(function () {
+                        pulseTarget.classList.remove("nav-pulse");
+                    }, 650);
+                }
 
                 setFooterPage(footerPageMap[target] || 0);
-
-                requestAnimationFrame(function () {
-                    activePage.scrollIntoView({ behavior: "auto", block: "start" });
-                    window.scrollBy(0, -12);
-                });
+                scrollToPageTop();
 
                 if (config.updateHash !== false) {
                     if (window.location.hash !== "#" + target) {
                         history.pushState(null, "", "#" + target);
                     }
                 }
+
+                if (!shouldAnimate) {
+                    Object.keys(pages).forEach(function (key) {
+                        pages[key].classList.toggle("active", key === target);
+                    });
+                    return;
+                }
+
+                var transitionVariant = getRandomPageTransition();
+
+                previousPage.classList.add("active");
+                void previousPage.offsetWidth;
+                previousPage.classList.add("page-suck", transitionVariant);
+                if (pageHost) {
+                    pageHost.classList.add("blackhole-suck", transitionVariant);
+                }
+
+                pageSwitchTimer = window.setTimeout(function () {
+                    pageSwitchTimer = null;
+                    Object.keys(pages).forEach(function (key) {
+                        pages[key].classList.remove("active");
+                        removePageTransitionClasses(pages[key]);
+                    });
+
+                    activePage.classList.add("active", "page-throw", transitionVariant);
+                    if (pageHost) {
+                        pageHost.classList.remove("blackhole-suck");
+                        pageHost.classList.add("blackhole-throw");
+                    }
+                    scrollToPageTop();
+
+                    pageCleanupTimer = window.setTimeout(function () {
+                        pageCleanupTimer = null;
+                        removePageTransitionClasses(activePage);
+                        removeHostTransitionClasses();
+                    }, 380);
+                }, 190);
             }
 
             document.addEventListener("click", function (event) {
@@ -3644,11 +4688,10 @@
                 }
 
                 event.preventDefault();
-                setActiveTab(target, { updateHash: true });
-
                 if (topbar.classList.contains("nav-collapsed") || window.innerWidth <= 820) {
                     closeMobileMenu();
                 }
+                setActiveTab(target, { updateHash: true, trigger: trigger });
             });
 
             mobileMenuToggle.addEventListener("click", function () {
@@ -3777,6 +4820,76 @@
                 });
             }
 
+            var faqSearch = document.getElementById("faqSearch");
+            var faqSearchStatus = document.getElementById("faqSearchStatus");
+            var faqItems = Array.prototype.slice.call(document.querySelectorAll("[data-faq-item]"));
+            var faqNoResults = document.getElementById("faqNoResults");
+            var faqPagination = document.getElementById("faqPagination");
+            var faqPageSize = 12;
+            var faqPage = 0;
+
+            function filterFaqItems() {
+                if (!faqSearch || !faqItems.length) {
+                    return;
+                }
+
+                var value = faqSearch.value.trim().toLowerCase();
+                var matchingItems = faqItems.filter(function (item) {
+                    return value === "" || item.textContent.toLowerCase().indexOf(value) !== -1;
+                });
+                var totalPages = Math.max(1, Math.ceil(matchingItems.length / faqPageSize));
+                faqPage = Math.max(0, Math.min(faqPage, totalPages - 1));
+                var pageStart = faqPage * faqPageSize;
+                var pageItems = new Set(matchingItems.slice(pageStart, pageStart + faqPageSize));
+
+                faqItems.forEach(function (item) {
+                    item.classList.toggle("is-hidden", !pageItems.has(item));
+                });
+
+                if (faqNoResults) {
+                    faqNoResults.classList.toggle("is-hidden", matchingItems.length !== 0);
+                }
+
+                if (faqSearchStatus) {
+                    if (!matchingItems.length) {
+                        faqSearchStatus.textContent = "No matching FAQ answers.";
+                    } else if (matchingItems.length === 1) {
+                        faqSearchStatus.textContent = "Showing 1 matching FAQ answer.";
+                    } else {
+                        faqSearchStatus.textContent = "Showing " + (pageStart + 1) + "-" + Math.min(pageStart + faqPageSize, matchingItems.length) + " of " + matchingItems.length + (value === "" ? " FAQ answers." : " matching FAQ answers.");
+                    }
+                }
+
+                if (faqPagination) {
+                    faqPagination.innerHTML = totalPages > 1 && matchingItems.length > 0
+                        ? '<button class="updates-page-button" type="button" data-faq-page="prev"' + (faqPage === 0 ? ' disabled' : '') + '>Prev</button>' +
+                          '<div class="updates-page-indicator">Page ' + (faqPage + 1) + ' / ' + totalPages + '</div>' +
+                          '<button class="updates-page-button" type="button" data-faq-page="next"' + (faqPage >= totalPages - 1 ? ' disabled' : '') + '>Next</button>'
+                        : "";
+                }
+            }
+
+            if (faqSearch) {
+                faqSearch.addEventListener("input", function () {
+                    faqPage = 0;
+                    filterFaqItems();
+                });
+                filterFaqItems();
+            }
+
+            if (faqPagination) {
+                faqPagination.addEventListener("click", function (event) {
+                    var button = event.target.closest("[data-faq-page]");
+                    if (!button || button.disabled) {
+                        return;
+                    }
+
+                    faqPage += button.getAttribute("data-faq-page") === "next" ? 1 : -1;
+                    filterFaqItems();
+                    scrollToPageTop();
+                });
+            }
+
             var copyEmailButton = document.getElementById("copyEmailButton");
             var copyEmailStatus = document.getElementById("copyEmailStatus");
 
@@ -3829,6 +4942,10 @@
 
             function getStatsEndpoints() {
                 return getApiEndpoints("/api/stats");
+            }
+
+            function getLinksEndpoints() {
+                return getApiEndpoints("/api/links");
             }
 
             function getHealthEndpoints() {
@@ -4141,6 +5258,28 @@
                 }
             }
 
+            async function hydrateAppLinks() {
+                var endpoints = getLinksEndpoints();
+
+                for (var i = 0; i < endpoints.length; i += 1) {
+                    try {
+                        var response = await fetch(endpoints[i], { headers: { "Accept": "application/json" } });
+                        if (!response.ok) {
+                            continue;
+                        }
+
+                        var payload = await response.json();
+                        var appLinks = payload && (payload.appLinks || payload.links);
+                        if (!appLinks || typeof appLinks !== "object") {
+                            continue;
+                        }
+
+                        applyAppLinks(appLinks);
+                        return;
+                    } catch (_) {}
+                }
+            }
+
             async function hydrateBotStatus() {
                 var endpoints = getHealthEndpoints();
 
@@ -4219,21 +5358,28 @@
                 if (pageButton) {
                     var pageSection = pageButton.getAttribute("data-updates-section");
                     var direction = pageButton.getAttribute("data-updates-page");
-                    if (!pageSection || !updateSections[pageSection]) {
+                    if (pageButton.disabled || !pageSection || !updateSections[pageSection]) {
                         return;
                     }
+                    var didPageChange = false;
                     if (direction === "prev" && updateSections[pageSection].page > 0) {
                         updateSections[pageSection].page -= 1;
                         renderUpdateSection(pageSection, updateSections[pageSection].items);
+                        didPageChange = true;
                     }
                     if (direction === "next") {
                         updateSections[pageSection].page += 1;
                         renderUpdateSection(pageSection, updateSections[pageSection].items);
+                        didPageChange = true;
+                    }
+                    if (didPageChange) {
+                        scrollToPageTop();
                     }
                 }
             });
 
             setActiveUpdatesView("announcements");
+            hydrateAppLinks();
             hydrateLiveStats();
             hydrateBotStatus();
             hydrateUpdates();

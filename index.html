@@ -499,9 +499,6 @@
         }
 
         @supports (content-visibility: auto) {
-            .panel,
-            .slideshow-panel,
-            .home-section-panel,
             .info-card,
             .doc-card,
             .legal-card,
@@ -512,16 +509,11 @@
             .quickstart-item,
             .contact-box,
             .update-item,
-            .table-wrap,
-            .discord-card,
-            .home-server-widget {
+            .table-wrap {
                 content-visibility: auto;
                 contain-intrinsic-size: 340px;
             }
 
-            .home-landing,
-            .slideshow-panel,
-            .home-section-panel,
             .table-wrap {
                 contain-intrinsic-size: 720px;
             }
@@ -2194,15 +2186,14 @@
         }
 
         .home-metrics-row {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 14px;
             margin-top: 28px;
         }
 
         .home-metric {
-            flex: 1 1 220px;
-            min-width: 180px;
+            min-width: 0;
             padding: 20px 18px;
             border-radius: 22px;
             border: 1px solid var(--line);
@@ -2211,9 +2202,11 @@
 
         .home-metric strong {
             display: block;
+            min-height: 1em;
             font-size: clamp(2.2rem, 5vw, 4rem);
             line-height: 0.94;
             letter-spacing: -0.07em;
+            font-variant-numeric: tabular-nums;
         }
 
         .home-metric span {
@@ -2357,7 +2350,25 @@
             }
 
             .slideshow-window {
+                height: auto !important;
                 min-height: 0;
+                overflow: visible;
+                transition: none;
+            }
+
+            .slide {
+                position: relative;
+                inset: auto;
+                display: none;
+                opacity: 1;
+                transform: none;
+                pointer-events: auto;
+                transition: none;
+            }
+
+            .slide.active {
+                display: grid;
+                transform: none;
             }
 
             .slide-shot {
@@ -2435,7 +2446,7 @@
             }
 
             .slide {
-                inset: 18px 18px 18px;
+                inset: auto;
             }
 
             .slideshow-window {
@@ -2532,6 +2543,16 @@
 
             .section-title {
                 font-size: clamp(1.8rem, 11vw, 3rem);
+            }
+
+            .home-metrics-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                margin-top: 20px;
+            }
+
+            .home-metric {
+                padding: 16px;
             }
 
             .slide-copy h4 {
@@ -4651,9 +4672,19 @@
             var nextSlideButton = document.getElementById("nextSlide");
             var activeSlide = 0;
             var slideTimer = null;
+            var slideshowAutoQuery = window.matchMedia ? window.matchMedia("(min-width: 821px)") : null;
+
+            function shouldAutoRotateSlides() {
+                return !prefersReducedMotion() && (!slideshowAutoQuery || slideshowAutoQuery.matches);
+            }
 
             function syncSlideshowHeight() {
                 if (!slideshowWindow || !slides.length) {
+                    return;
+                }
+
+                if (slideshowAutoQuery && !slideshowAutoQuery.matches) {
+                    slideshowWindow.style.height = "";
                     return;
                 }
 
@@ -4692,6 +4723,10 @@
             function restartSlides() {
                 if (slideTimer) {
                     clearInterval(slideTimer);
+                    slideTimer = null;
+                }
+                if (!shouldAutoRotateSlides()) {
+                    return;
                 }
                 slideTimer = setInterval(function () {
                     showSlide(activeSlide + 1);
@@ -4701,6 +4736,9 @@
             showSlide(0);
             restartSlides();
             window.addEventListener("resize", syncSlideshowHeight);
+            if (slideshowAutoQuery && typeof slideshowAutoQuery.addEventListener === "function") {
+                slideshowAutoQuery.addEventListener("change", restartSlides);
+            }
 
             prevSlideButton.addEventListener("click", function () {
                 showSlide(activeSlide - 1);

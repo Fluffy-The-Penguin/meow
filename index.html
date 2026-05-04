@@ -4449,6 +4449,8 @@
             var pageSwitchTimer = null;
             var pageCleanupTimer = null;
             var pageTransitionVariants = ["pagefx-slide", "pagefx-zoom", "pagefx-stack"];
+            var savedReloadScroll = null;
+            var shouldRestoreReloadScroll = false;
             var pages = {
                 home: document.getElementById("page-home"),
                 commands: document.getElementById("page-commands"),
@@ -4477,6 +4479,53 @@
                     page.classList.toggle("active", i === index);
                 });
             }
+
+            function getScrollStorageKey() {
+                return "meow-scroll:" + window.location.pathname + window.location.hash;
+            }
+
+            try {
+                var navigationEntry = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
+                var navigationType = navigationEntry && navigationEntry.type ? navigationEntry.type : "";
+                shouldRestoreReloadScroll = navigationType === "reload" || navigationType === "back_forward";
+                savedReloadScroll = JSON.parse(sessionStorage.getItem(getScrollStorageKey()) || "null");
+            } catch (_) {}
+
+            function rememberScrollPosition() {
+                try {
+                    sessionStorage.setItem(getScrollStorageKey(), JSON.stringify({
+                        x: window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft || 0,
+                        y: window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0,
+                        t: Date.now()
+                    }));
+                } catch (_) {}
+            }
+
+            function restoreReloadScrollPosition() {
+                if (!shouldRestoreReloadScroll || !savedReloadScroll || !Number.isFinite(Number(savedReloadScroll.y))) {
+                    return;
+                }
+
+                var age = Date.now() - Number(savedReloadScroll.t || 0);
+                if (age > 10 * 60 * 1000) {
+                    return;
+                }
+
+                function applyScroll() {
+                    window.scrollTo({
+                        top: Number(savedReloadScroll.y) || 0,
+                        left: Number(savedReloadScroll.x) || 0,
+                        behavior: "auto"
+                    });
+                }
+
+                applyScroll();
+                requestAnimationFrame(applyScroll);
+                window.setTimeout(applyScroll, 120);
+                window.setTimeout(applyScroll, 450);
+            }
+
+            window.addEventListener("beforeunload", rememberScrollPosition);
 
             function scrollToPageTop() {
                 function applyScroll() {
@@ -4546,7 +4595,9 @@
                     return pages[key] && pages[key].classList.contains("active");
                 }) || "home";
                 var previousPage = pages[previousTarget];
-                var shouldAnimate = previousPage && previousTarget !== target && !prefersReducedMotion();
+                var pageChanged = previousTarget !== target;
+                var shouldScroll = config.scroll !== false && pageChanged;
+                var shouldAnimate = previousPage && pageChanged && config.animate !== false && !prefersReducedMotion();
 
                 clearPageTransitionState();
 
@@ -4567,7 +4618,9 @@
                 }
 
                 setFooterPage(footerPageMap[target] || 0);
-                scrollToPageTop();
+                if (shouldScroll) {
+                    scrollToPageTop();
+                }
 
                 if (config.updateHash !== false) {
                     if (window.location.hash !== "#" + target) {
@@ -4603,7 +4656,9 @@
                         pageHost.classList.remove("blackhole-suck");
                         pageHost.classList.add("blackhole-throw");
                     }
-                    scrollToPageTop();
+                    if (shouldScroll) {
+                        scrollToPageTop();
+                    }
 
                     pageCleanupTimer = window.setTimeout(function () {
                         pageCleanupTimer = null;
@@ -4648,16 +4703,24 @@
                 });
             }
 
-            function applyHashTab() {
+            function applyHashTab(options) {
+                var config = options || {};
                 var hashTarget = window.location.hash.replace("#", "");
 
                 if (hashTarget && pages[hashTarget]) {
-                    setActiveTab(hashTarget, { updateHash: false });
+                    setActiveTab(hashTarget, {
+                        updateHash: false,
+                        scroll: config.scroll !== false,
+                        animate: config.animate !== false
+                    });
                 }
             }
 
-            window.addEventListener("hashchange", applyHashTab);
-            applyHashTab();
+            window.addEventListener("hashchange", function () {
+                applyHashTab({ scroll: true, animate: true });
+            });
+            applyHashTab({ scroll: false, animate: false });
+            restoreReloadScrollPosition();
 
             window.addEventListener("resize", function () {
                 syncNavCollapse();

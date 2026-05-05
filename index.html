@@ -5090,6 +5090,10 @@
                     return { className: "is-online", label: "Online" };
                 }
 
+                if (payload && payload.status === "ok") {
+                    return { className: "is-online", label: "Online" };
+                }
+
                 if (startup.lastGatewayIssue || startup.lastRecoveryAt || issues.indexOf("discord_not_ready") !== -1) {
                     return { className: "is-reconnecting", label: "Reconnecting" };
                 }

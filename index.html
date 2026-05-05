@@ -257,17 +257,6 @@
             box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
         }
 
-        .tab-link.nav-pulse::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            background: linear-gradient(110deg, transparent 0%, color-mix(in srgb, var(--accent) 28%, transparent) 45%, transparent 78%);
-            transform: translateX(-130%);
-            animation: navPillSweep 0.55s ease both;
-            pointer-events: none;
-        }
-
         .top-actions {
             display: flex;
             align-items: center;
@@ -355,6 +344,27 @@
             align-items: center;
             justify-content: center;
             white-space: nowrap;
+        }
+
+        .pill-button.invite-gradient {
+            position: relative;
+            overflow: hidden;
+            border-color: transparent;
+            background: linear-gradient(120deg, #6f35ff 0%, #21d4fd 38%, #b721ff 72%, #6f35ff 100%);
+            background-size: 240% 240%;
+            color: #ffffff;
+            font-weight: 900;
+            box-shadow: 0 12px 26px rgba(111, 53, 255, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.24) inset;
+            animation: inviteGradientFlow 3.8s ease-in-out infinite;
+        }
+
+        .pill-button.invite-gradient::after {
+            content: "";
+            position: absolute;
+            inset: 2px;
+            border-radius: inherit;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            pointer-events: none;
         }
 
         .status-pill {
@@ -596,9 +606,24 @@
         }
 
         .cta-primary {
-            background: var(--surface-dark);
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(120deg, #6f35ff 0%, #21d4fd 38%, #b721ff 72%, #6f35ff 100%);
+            background-size: 240% 240%;
             color: #ffffff;
             border-color: transparent;
+            font-weight: 900;
+            box-shadow: 0 16px 34px rgba(111, 53, 255, 0.24), 0 0 0 1px rgba(255, 255, 255, 0.28) inset;
+            animation: inviteGradientFlow 3.8s ease-in-out infinite;
+        }
+
+        .cta-primary::after {
+            content: "";
+            position: absolute;
+            inset: 2px;
+            border-radius: inherit;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            pointer-events: none;
         }
 
         .cta-support {
@@ -606,11 +631,11 @@
             overflow: hidden;
             padding: 0 18px;
             border-color: transparent;
-            background: linear-gradient(120deg, #ffe38f 0%, #ff95b8 28%, #8bdcff 56%, #ffe38f 100%);
+            background: linear-gradient(120deg, #f59e0b 0%, #f97316 34%, #7c2d12 68%, #f59e0b 100%);
             background-size: 220% 220%;
-            color: #18130c;
+            color: #fffaf2;
             font-weight: 900;
-            box-shadow: 0 16px 34px rgba(255, 149, 184, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+            box-shadow: 0 16px 34px rgba(249, 115, 22, 0.24), 0 0 0 1px rgba(255, 255, 255, 0.3) inset;
             transform: translateY(-1px);
             animation: supportGradientFlow 3.6s ease-in-out infinite;
         }
@@ -624,17 +649,55 @@
             pointer-events: none;
         }
 
+        .cta-vote {
+            position: relative;
+            overflow: hidden;
+            border-color: transparent;
+            background: linear-gradient(120deg, #ff2f6d 0%, #ff5a3d 34%, #b5123f 68%, #ff2f6d 100%);
+            background-size: 240% 240%;
+            color: #ffffff;
+            font-weight: 900;
+            box-shadow: 0 16px 34px rgba(255, 47, 109, 0.26), 0 0 0 1px rgba(255, 255, 255, 0.28) inset;
+            animation: voteGradientFlow 3.2s ease-in-out infinite;
+        }
+
+        .cta-vote::after {
+            content: "";
+            position: absolute;
+            inset: 2px;
+            border-radius: inherit;
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            pointer-events: none;
+        }
+
         html[data-theme="dark"] .cta-primary {
             color: #ffffff;
-            background: #6f5fe8;
-            box-shadow: none;
+            background: linear-gradient(120deg, #7c5cff 0%, #19c7ff 40%, #d05cff 74%, #7c5cff 100%);
+            background-size: 240% 240%;
+            box-shadow: 0 12px 28px rgba(124, 92, 255, 0.2);
+        }
+
+        html[data-theme="dark"] .pill-button.invite-gradient,
+        html[data-theme="pure-dark"] .pill-button.invite-gradient {
+            color: #ffffff;
+            background: linear-gradient(120deg, #7c5cff 0%, #19c7ff 40%, #d05cff 74%, #7c5cff 100%);
+            background-size: 240% 240%;
+            box-shadow: 0 10px 22px rgba(124, 92, 255, 0.2);
         }
 
         html[data-theme="dark"] .cta-secondary.cta-support {
-            color: #0b1020;
-            background: linear-gradient(120deg, #ffe66f 0%, #ff73b7 30%, #74f2ff 58%, #ffe66f 100%);
+            color: #fffaf2;
+            background: linear-gradient(120deg, #d97706 0%, #ea580c 34%, #7c2d12 70%, #d97706 100%);
             background-size: 220% 220%;
-            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+            box-shadow: 0 10px 22px rgba(249, 115, 22, 0.18);
+        }
+
+        html[data-theme="dark"] .cta-secondary.cta-vote,
+        html[data-theme="pure-dark"] .cta-secondary.cta-vote {
+            color: #ffffff;
+            background: linear-gradient(120deg, #ff2b62 0%, #ff6848 36%, #9b1038 70%, #ff2b62 100%);
+            background-size: 240% 240%;
+            box-shadow: 0 12px 28px rgba(255, 47, 109, 0.2);
         }
 
         html[data-theme="dark"] .cta-secondary,
@@ -1414,16 +1477,25 @@
             100% { background-position: 0% 50%; }
         }
 
-        @keyframes navPillSweep {
-            from { transform: translateX(-130%); }
-            to { transform: translateX(130%); }
+        @keyframes inviteGradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes voteGradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         @media (prefers-reduced-motion: reduce) {
             .page.page-suck,
             .page.page-throw,
+            .cta-primary,
+            .pill-button.invite-gradient,
             .cta-support,
-            .tab-link.nav-pulse::after {
+            .cta-vote {
                 animation: none;
             }
 
@@ -1931,9 +2003,11 @@
             width: 100%;
             border-radius: 26px;
             overflow: hidden;
-            border: 1px solid var(--line);
-            box-shadow: var(--shadow);
-            background: color-mix(in srgb, var(--surface) 92%, transparent);
+            border: 1px solid rgba(88, 101, 242, 0.28);
+            box-shadow: 0 24px 70px rgba(88, 101, 242, 0.14);
+            background:
+                radial-gradient(circle at 12% 8%, rgba(88, 101, 242, 0.24), transparent 30%),
+                linear-gradient(135deg, #f8f7ff 0%, #eef1ff 58%, #e5eaff 100%);
             position: relative;
         }
 
@@ -1942,8 +2016,11 @@
         }
 
         html[data-theme="dark"] .home-server-widget {
-            background: #141a36;
-            box-shadow: none;
+            border-color: rgba(126, 139, 255, 0.28);
+            background:
+                radial-gradient(circle at 12% 8%, rgba(88, 101, 242, 0.36), transparent 32%),
+                linear-gradient(135deg, #151936 0%, #202653 58%, #111629 100%);
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
         }
 
         html[data-theme="dark"] .home-server-widget::before {
@@ -1967,6 +2044,7 @@
             gap: 10px;
             font-weight: 800;
             font-size: 1rem;
+            color: #1f2454;
         }
 
         .home-server-card-kicker::before {
@@ -1974,14 +2052,14 @@
             width: 14px;
             height: 14px;
             border-radius: 999px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-2));
-            box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent) 14%, transparent);
+            background: #5865f2;
+            box-shadow: 0 0 0 8px rgba(88, 101, 242, 0.16), 0 0 22px rgba(88, 101, 242, 0.45);
             flex: 0 0 14px;
         }
 
         .home-server-card-copy {
             margin: 0;
-            color: var(--muted);
+            color: #3f466f;
             line-height: 1.55;
             font-size: 0.95rem;
         }
@@ -1996,9 +2074,9 @@
         .home-server-card-tag {
             padding: 8px 12px;
             border-radius: 999px;
-            border: 1px solid var(--line);
-            background: color-mix(in srgb, var(--surface-soft) 38%, var(--surface));
-            color: var(--muted);
+            border: 1px solid rgba(88, 101, 242, 0.22);
+            background: rgba(88, 101, 242, 0.1);
+            color: #303681;
             font-size: 0.82rem;
             font-weight: 700;
             letter-spacing: 0.02em;
@@ -2008,22 +2086,39 @@
             display: flex;
             justify-content: flex-end;
             padding: 10px 14px 12px;
-            background: color-mix(in srgb, var(--surface) 92%, transparent);
-            border-top: 1px solid var(--line);
+            background: rgba(88, 101, 242, 0.1);
+            border-top: 1px solid rgba(88, 101, 242, 0.2);
         }
 
         .home-server-link {
             min-height: 42px;
             padding: 0 18px;
             border-radius: 999px;
-            border: 1px solid var(--line);
-            background: color-mix(in srgb, var(--surface-soft) 55%, var(--surface));
-            color: var(--text);
+            border: 1px solid rgba(88, 101, 242, 0.52);
+            background: #5865f2;
+            color: #ffffff;
             font-size: 0.95rem;
-            font-weight: 700;
+            font-weight: 850;
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 12px 28px rgba(88, 101, 242, 0.22);
+        }
+
+        html[data-theme="dark"] .home-server-card-kicker,
+        html[data-theme="dark"] .home-server-card-copy,
+        html[data-theme="dark"] .home-server-card-tag {
+            color: #eef1ff;
+        }
+
+        html[data-theme="dark"] .home-server-card-tag {
+            border-color: rgba(205, 214, 255, 0.18);
+            background: rgba(88, 101, 242, 0.18);
+        }
+
+        html[data-theme="dark"] .home-server-link-row {
+            background: rgba(7, 10, 28, 0.34);
+            border-top-color: rgba(205, 214, 255, 0.14);
         }
 
         .home-landing > *,
@@ -2138,6 +2233,7 @@
             gap: 18px;
             justify-self: end;
             width: 100%;
+            position: relative;
         }
 
         .hero-side-icon {
@@ -3042,7 +3138,7 @@
 
             <div class="top-actions">
                 <button class="theme-toggle" id="themeToggle" type="button">Dark mode</button>
-                <a class="pill-button" href="https://discord.com/oauth2/authorize?client_id=1488940777190199386" target="_blank" rel="noopener noreferrer">Invite Bot</a>
+                <a class="pill-button invite-gradient" href="https://discord.com/oauth2/authorize?client_id=1488940777190199386" target="_blank" rel="noopener noreferrer">Invite Bot</a>
             </div>
         </header>
 
@@ -3062,8 +3158,8 @@
                             <p class="home-lead">Meow Bot brings cat-personality chat, party games, daily progression, movie picks, quick lookups, server tools, public events, and a deep pet system into one Discord bot built for active communities.</p>
                             <div class="cta-row">
                                 <a class="cta-primary" href="https://discord.com/oauth2/authorize?client_id=1488940777190199386" target="_blank" rel="noopener noreferrer">Invite Meow Bot</a>
+                                <a class="cta-secondary cta-vote" data-app-link="vote" href="https://top.gg/bot/1488940777190199386" target="_blank" rel="noopener noreferrer">Vote on Top.gg</a>
                                 <a class="cta-secondary cta-support" data-app-link="support" href="https://www.patreon.com/cw/FluffyThePenguin/membership" target="_blank" rel="noopener noreferrer">Support Meow Bot</a>
-                                <button class="cta-secondary tab-link" data-target="commands" type="button">Explore Commands</button>
                             </div>
                             <div class="home-left-decor">
                                 <div class="home-server-widget">
@@ -4603,19 +4699,7 @@
 
                 tabLinks.forEach(function (link) {
                     link.classList.toggle("active", link.getAttribute("data-target") === target);
-                    link.classList.remove("nav-pulse");
                 });
-
-                var pulseTarget = config.trigger && config.trigger.classList && config.trigger.classList.contains("tab-link")
-                    ? config.trigger
-                    : tabLinks.find(function (link) { return link.getAttribute("data-target") === target; });
-                if (pulseTarget) {
-                    void pulseTarget.offsetWidth;
-                    pulseTarget.classList.add("nav-pulse");
-                    window.setTimeout(function () {
-                        pulseTarget.classList.remove("nav-pulse");
-                    }, 650);
-                }
 
                 setFooterPage(footerPageMap[target] || 0);
                 if (shouldScroll) {

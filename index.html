@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/2.png">
+    <link rel="apple-touch-icon" href="/2.png">
     <title>Meow Bot</title>
     <script>
         (function () {
@@ -710,17 +712,33 @@
         }
 
         html[data-theme="pure-dark"] .cta-primary {
-            color: #000000;
-            background: #f7f7f7;
-            box-shadow: none;
+            color: #ffffff;
+            background: linear-gradient(120deg, #111827 0%, #2563eb 34%, #06b6d4 68%, #111827 100%);
+            background-size: 240% 240%;
+            box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.32) inset, 0 14px 30px rgba(37, 99, 235, 0.2);
+        }
+
+        html[data-theme="pure-dark"] .pill-button.invite-gradient {
+            color: #ffffff;
+            background: linear-gradient(120deg, #111827 0%, #2563eb 34%, #06b6d4 68%, #111827 100%);
+            background-size: 240% 240%;
+            box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.3) inset, 0 10px 22px rgba(37, 99, 235, 0.18);
         }
 
         html[data-theme="pure-dark"] .cta-secondary.cta-support {
-            color: #000000;
-            background: linear-gradient(120deg, #ffffff 0%, #cfcfcf 28%, #ffffff 56%, #9f9f9f 100%);
+            color: #fff8e7;
+            background: linear-gradient(120deg, #17120a 0%, #b45309 34%, #fbbf24 68%, #17120a 100%);
             background-size: 220% 220%;
-            border-color: #ffffff;
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.16);
+            border-color: rgba(251, 191, 36, 0.38);
+            box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.26) inset, 0 12px 28px rgba(180, 83, 9, 0.18);
+        }
+
+        html[data-theme="pure-dark"] .cta-secondary.cta-vote {
+            color: #ffffff;
+            background: linear-gradient(120deg, #17040a 0%, #be123c 34%, #fb7185 68%, #17040a 100%);
+            background-size: 240% 240%;
+            border-color: rgba(251, 113, 133, 0.38);
+            box-shadow: 0 0 0 1px rgba(251, 113, 133, 0.26) inset, 0 12px 28px rgba(190, 18, 60, 0.18);
         }
 
         html[data-theme="pure-dark"] .cta-secondary,
@@ -2023,6 +2041,15 @@
             box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
         }
 
+        html[data-theme="pure-dark"] .home-server-widget {
+            border-color: rgba(88, 101, 242, 0.42);
+            background:
+                radial-gradient(circle at 14% 10%, rgba(88, 101, 242, 0.32), transparent 34%),
+                radial-gradient(circle at 88% 90%, rgba(35, 39, 42, 0.95), transparent 42%),
+                linear-gradient(135deg, #02030a 0%, #0b1024 54%, #000000 100%);
+            box-shadow: 0 24px 80px rgba(88, 101, 242, 0.16), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+        }
+
         html[data-theme="dark"] .home-server-widget::before {
             display: none;
         }
@@ -2111,14 +2138,36 @@
             color: #eef1ff;
         }
 
+        html[data-theme="pure-dark"] .home-server-card-kicker,
+        html[data-theme="pure-dark"] .home-server-card-copy,
+        html[data-theme="pure-dark"] .home-server-card-tag {
+            color: #f5f7ff;
+        }
+
         html[data-theme="dark"] .home-server-card-tag {
             border-color: rgba(205, 214, 255, 0.18);
+            background: rgba(88, 101, 242, 0.18);
+        }
+
+        html[data-theme="pure-dark"] .home-server-card-tag {
+            border-color: rgba(88, 101, 242, 0.34);
             background: rgba(88, 101, 242, 0.18);
         }
 
         html[data-theme="dark"] .home-server-link-row {
             background: rgba(7, 10, 28, 0.34);
             border-top-color: rgba(205, 214, 255, 0.14);
+        }
+
+        html[data-theme="pure-dark"] .home-server-link-row {
+            background: rgba(88, 101, 242, 0.1);
+            border-top-color: rgba(88, 101, 242, 0.24);
+        }
+
+        html[data-theme="pure-dark"] .home-server-link {
+            border-color: rgba(88, 101, 242, 0.72);
+            background: linear-gradient(120deg, #5865f2 0%, #4752c4 100%);
+            box-shadow: 0 12px 32px rgba(88, 101, 242, 0.28);
         }
 
         .home-landing > *,

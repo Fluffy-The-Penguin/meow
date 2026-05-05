@@ -2715,6 +2715,17 @@
                 grid-template-columns: 1fr;
             }
 
+            .faq-list,
+            .faq-item {
+                min-width: 0;
+            }
+
+            .faq-item {
+                content-visibility: visible;
+                contain-intrinsic-size: auto;
+                overflow-wrap: anywhere;
+            }
+
             .showcase-copy {
                 padding: 24px 20px;
             }

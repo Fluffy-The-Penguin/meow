@@ -1,6 +1,6 @@
 "use strict";
 
-const DEFAULT_STATS_URL = "http://fi6.bot-hosting.net:21448/api/stats";
+const DEFAULT_STATS_URL = "https://meow-bot.apps.bot-hosting.cloud/api/stats";
 
 function resolveUpstreamUrl(pathname, env = process.env) {
   const baseUrl = env.BOT_API_BASE_URL || env.BOT_STATS_API_URL || DEFAULT_STATS_URL;
